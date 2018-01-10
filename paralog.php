@@ -378,7 +378,7 @@ if (!class_exists('Paralog')) {
             $query = $wpdb->prepare(
                 "SELECT winchman_name, COUNT(*) AS winchman_count "
                 . "FROM " . $this->table_name('logs') . " "
-                . "WHERE YEAR(takeoff) = %d "
+                . "WHERE YEAR(takeoff) = %d AND winchman_name IS NOT NULL"
                 . "GROUP BY winchman_name;",
                 $year
             );
