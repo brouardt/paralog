@@ -31,7 +31,7 @@ Les développement se situent sur [GitHub](https://github.com/brouardt/paralog),
 2. Téléverser le contenu de `paralog.zip` vers le dossier `/wp-content/plugins/`
 3. Activez l'extension dans le menu 'Extensions' de WordPress.
 
-## Frequently Asked Questions
+## Questions fréquentes
 
 #### Y-a-t-il un shortcode pour afficher et gérer les journaux ?
 
