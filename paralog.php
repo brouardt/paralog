@@ -597,7 +597,7 @@ if (!class_exists('Paralog')) {
          */
         public function list_logs()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_log.php');
+            require_once($this->plugin_dir . '/includes/paralog_log.php');
             $class = new Paralog_Log();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
@@ -622,7 +622,7 @@ if (!class_exists('Paralog')) {
 
         public function form_log()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_log.php');
+            require_once($this->plugin_dir . '/includes/paralog_log.php');
             $class = new Paralog_Log();
             $class->form_edit();
         }
@@ -632,7 +632,7 @@ if (!class_exists('Paralog')) {
          */
         public function list_sites()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_site.php');
+            require_once($this->plugin_dir . '/includes/paralog_site.php');
             $class = new Paralog_Site();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
@@ -657,7 +657,7 @@ if (!class_exists('Paralog')) {
 
         public function form_site()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_site.php');
+            require_once($this->plugin_dir . '/includes/paralog_site.php');
             $class = new Paralog_Site();
             $class->form_edit();
         }
@@ -667,7 +667,7 @@ if (!class_exists('Paralog')) {
          */
         public function list_lines()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_line.php');
+            require_once($this->plugin_dir . '/includes/paralog_line.php');
             $class = new Paralog_Line();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
@@ -692,7 +692,7 @@ if (!class_exists('Paralog')) {
 
         public function form_line()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_line.php');
+            require_once($this->plugin_dir . '/includes/paralog_line.php');
             $class = new Paralog_Line();
             $class->form_edit();
         }
@@ -702,7 +702,7 @@ if (!class_exists('Paralog')) {
          */
         public function list_persons()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_person.php');
+            require_once($this->plugin_dir . '/includes/paralog_person.php');
             $class = new Paralog_Person();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
@@ -727,7 +727,7 @@ if (!class_exists('Paralog')) {
 
         public function form_person()
         {
-            require_once($this->plugin_dir . '/includes/Paralog_person.php');
+            require_once($this->plugin_dir . '/includes/paralog_person.php');
             $class = new Paralog_Person();
             $class->form_edit();
         }
