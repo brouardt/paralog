@@ -1,0 +1,15 @@
+/* 
+    Created on : 7 déc. 2017, 20:50:10
+    Author     : Thierry Brouard <thierry@brouard.pro>
+*/
+@media screen {
+    .wl_gris_clair {
+        color: grey;
+    }
+}
+
+@media print {
+    .noprint {
+        display: none;
+    }
+}
