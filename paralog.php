@@ -57,6 +57,8 @@ if (!class_exists('Paralog')) {
             add_action('init', array($this, 'load_language'));
 
             add_action('admin_menu', array($this, 'paralog_menu'));
+            add_action('admin_bar_menu', array($this,'admin_paralog_bar_menu'));
+
             add_action('admin_enqueue_scripts', array($this, 'register_styles'));
 
             register_activation_hook(__FILE__, array(__CLASS__, 'on_activation'));
@@ -326,6 +328,22 @@ if (!class_exists('Paralog')) {
         }
 
         /**
+         * @name admin_paralog_bar_menu
+         * @global object wp_admin_bar
+         */
+        public function admin_paralog_bar_menu()
+        {
+            global $wp_admin_bar;
+
+            $wp_admin_bar->add_menu(array(
+                'parent' => 'new-content',
+                'id' => 'paralog-admin-bar',
+                'title' => __('Décollage', PL_DOMAIN),
+                'href' => admin_url('admin.php?page=paralog-logs-form')
+            ));
+        }
+
+        /**
          * @name stats_sites
          * @global object $wpdb
          * @param integer $year
@@ -342,6 +360,7 @@ if (!class_exists('Paralog')) {
                 . "GROUP BY site_name;",
                 $year
             );
+
             return $wpdb->get_results($query, ARRAY_A);
         }
 
@@ -362,6 +381,7 @@ if (!class_exists('Paralog')) {
                 . "GROUP BY line_name;",
                 $year
             );
+
             return $wpdb->get_results($query, ARRAY_A);
         }
 
@@ -378,10 +398,11 @@ if (!class_exists('Paralog')) {
             $query = $wpdb->prepare(
                 "SELECT winchman_name, COUNT(*) AS winchman_count "
                 . "FROM " . $this->table_name('logs') . " "
-                . "WHERE YEAR(takeoff) = %d AND winchman_name IS NOT NULL"
+                . "WHERE YEAR(takeoff) = %d AND winchman_name IS NOT NULL "
                 . "GROUP BY winchman_name;",
                 $year
             );
+
             return $wpdb->get_results($query, ARRAY_A);
         }
 
@@ -402,6 +423,7 @@ if (!class_exists('Paralog')) {
                 . "GROUP BY pilot_name;",
                 $year
             );
+
             return $wpdb->get_results($query, ARRAY_A);
         }
 
@@ -422,6 +444,7 @@ if (!class_exists('Paralog')) {
                 . "GROUP BY site_name;",
                 $year
             );
+
             return $wpdb->get_results($query, ARRAY_A);
         }
 
@@ -437,6 +460,7 @@ if (!class_exists('Paralog')) {
             $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
                 . "FROM " . $this->table_name('logs') . " "
                 . "GROUP BY YEAR(takeoff);";
+                
             return $wpdb->get_results($query, ARRAY_A);
         }
 
