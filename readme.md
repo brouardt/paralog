@@ -12,7 +12,7 @@ Journal des décollages / treuillés.
 
 ## Description
 
-Cette application vous permettra de gérer, comme le recommande notre fédération, la FFVL, de tenir à jour un journal des treuillés.
+Cette application vous permettra de tenir à jour, comme le recommande la FFVL, un journal des treuillés.
 
 * gestion des sites
 * gestion des lignes ou lieux de décollage
@@ -35,7 +35,7 @@ Les développement se situent sur [GitHub](https://github.com/brouardt/paralog),
 
 #### Y-a-t-il un shortcode pour afficher et gérer les journaux ?
 
-pour le moment le shortcode n'est pas actif, la sasie et le consultation se font à travers la partie admin.
+pour le moment le shortcode n'est pas actif, la saisie et le consultation se font à travers la partie admin.
 
 ## Copies d'écrans
 
