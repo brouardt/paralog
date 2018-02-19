@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/winchlog  
 
+## [1.1.7]
+### Correction
+- La gestion de la sauvegarde du champ "passenger_name" type VARCHAR(129) DEFAULT NULL ne prenait pas correctement en compte la valeur (vide).
+
 ## [1.1] - 2018-01-02
 ### Ajout
 - formulaire (ajout et modification) de line, personne et journaux de treuillé.
