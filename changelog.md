@@ -2,7 +2,7 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/winchlog  
 
-## [1.1.7]
+## [1.1.7] - 2018-02-19
 ### Correction
 - La gestion de la sauvegarde du champ "passenger_name" type VARCHAR(129) DEFAULT NULL ne prenait pas correctement en compte la valeur (vide).
 
