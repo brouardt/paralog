@@ -218,6 +218,10 @@ class Paralog_Log extends WP_List_Table
                 
                 unset($item['winchman_id'], $item['pilot_id']);
 
+                if (trim($item['passenger_name'] == '')) {
+                    $item['passenger_name'] = null;
+                }
+
                 if ($item['log_id'] == 0) {
                     $result = $wpdb->insert($table, $item);
                     $item['log_id'] = $wpdb->insert_id;

@@ -7,7 +7,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/index.php/2018/01/10/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.1.5
+ * Version:           1.1.7
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -29,7 +29,7 @@ if (!class_exists('WP_List_Table')) {
 
 if (!class_exists('Paralog')) {
     define('PL_VERSION', '1.1.2');
-    define('PL_DB_VERSION', '1.5');
+    define('PL_DB_VERSION', '1.7');
     define('PL_DOMAIN', 'paralog');
     define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
 
@@ -57,7 +57,7 @@ if (!class_exists('Paralog')) {
             add_action('init', array($this, 'load_language'));
 
             add_action('admin_menu', array($this, 'paralog_menu'));
-            add_action('admin_bar_menu', array($this,'admin_paralog_bar_menu'));
+            add_action('admin_bar_menu', array($this, 'admin_paralog_bar_menu'));
 
             add_action('admin_enqueue_scripts', array($this, 'register_styles'));
 
@@ -73,6 +73,7 @@ if (!class_exists('Paralog')) {
         {
             load_plugin_textdomain(PL_DOMAIN, false, $this->plugin_dir . '/languages');
         }
+                
 
         /**
          * @name register_styles
@@ -245,13 +246,13 @@ if (!class_exists('Paralog')) {
             $table = self::table_name('logs');
             $query = $wpdb->prepare(
                     "INSERT INTO $table (log_id, site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff) VALUES "
-                    . "(1, 'Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, '', 95, '2017-10-10 15:06:07'), "
-                    . "(2, 'Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, '', 95, '2017-10-10 15:14:45'), "
-                    . "(3, 'Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, '', 95, '2018-01-10 15:50:21'), "
-                    . "(4, 'Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, '', 90, '2017-10-10 15:18:47'), "
-                    . "(5, 'Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, '', 105, '2018-01-10 15:36:55'), "
-                    . "(6, 'Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, '', 90, '2018-01-10 15:38:48'), "
-                    . "(7, 'Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, '', 93, '2018-01-10 15:39:23');",
+                    . "(1, 'Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07'), "
+                    . "(2, 'Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45'), "
+                    . "(3, 'Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21'), "
+                    . "(4, 'Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47'), "
+                    . "(5, 'Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55'), "
+                    . "(6, 'Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48'), "
+                    . "(7, 'Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23');",
                     array(
                         $p,
                         $p,
@@ -500,7 +501,7 @@ if (!class_exists('Paralog')) {
                 <h1><?= _e("À propos de", PL_DOMAIN) . " Paralog"; ?></h1>
                 <h2><?= _e("Journaux des décollages / treuillés", PL_DOMAIN); ?></h2>
                 <div class="notice inline notice-info">
-                    <p><?= _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour le treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN); ?></p>
+                    <p><?= _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN); ?></p>
                     <?= _e("Notions", PL_DOMAIN); ?>
                     <ul class="ul-square">
                         <li><?= _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>', PL_DOMAIN); ?>.</li>
