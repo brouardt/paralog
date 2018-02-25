@@ -58,7 +58,7 @@ class Paralog_Log extends WP_List_Table
             ));
         }
 
-        return sprintf('%1$s %2$s', $item['site_name'], $this->row_actions($actions));
+        return sprintf('%1$s %2$s', $item['takeoff'], $this->row_actions($actions));
     }
 
     protected function get_bulk_actions()
