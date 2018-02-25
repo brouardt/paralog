@@ -43,7 +43,7 @@ class Paralog_Log extends WP_List_Table
         return $columns;
     }
 
-    public function column_site_name($item)
+    public function column_takeoff($item)
     {
         $actions = array();
 
