@@ -31,12 +31,12 @@ class Paralog_Log extends WP_List_Table
         }
 
         $columns = array_merge($columns, array(
+            'takeoff' => __("Décollage", PL_DOMAIN),
             'site_name' => __("Site", PL_DOMAIN),
             'line_name' => __("Ligne", PL_DOMAIN),
             'winchman_name' => __("Treuilleur", PL_DOMAIN),
             'pilot_name' => __("Pilote", PL_DOMAIN),
             'passenger_name' => __("Passager", PL_DOMAIN),
-            'takeoff' => __("Décollage", PL_DOMAIN),
             'log_id' => __("Vol N°", PL_DOMAIN)
         ));
 
@@ -165,13 +165,13 @@ class Paralog_Log extends WP_List_Table
     protected function get_sortable_columns()
     {
         $sortable_columns = array(
+            'takeoff' => array('takeoff', false),
             'log_id' => array('log_id', false),
             'site_name' => array('site_name', false),
             'line_name' => array('line_name', false),
             'winchman_name' => array('winchman_name', false),
             'pilot_name' => array('pilot_name', false),
-            'passenger_name' => array('passenger_name', false),
-            'takeoff' => array('takeoff', false)
+            'passenger_name' => array('passenger_name', false)
         );
 
         return $sortable_columns;
