@@ -22,7 +22,7 @@ class Paralog_Person extends WP_List_Table
 
     public function get_columns()
     {
-        if (current_user_can('delete_posts')) {
+        if (current_user_can('delete_others_posts')) {
             $columns = array(
                 'cb' => '<input type="checkbox" />'
             );
@@ -46,12 +46,12 @@ class Paralog_Person extends WP_List_Table
     {
         $actions = array();
 
-        if (current_user_can('edit_posts')) {
+        if (current_user_can('edit_others_posts')) {
             $actions = array_merge($actions, array(
                 'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">' . __('Modifier', PL_DOMAIN) . '</a>', $_REQUEST['page'], $item['person_id'], $this->get_pagenum())
             ));
         }
-        if (current_user_can('delete_posts')) {
+        if (current_user_can('delete_others_posts')) {
             $actions = array_merge($actions, array(
                 'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">' . __('Supprimer', PL_DOMAIN) . '</a>', $_REQUEST['page'], 'delete', $item['person_id'])
             ));
@@ -62,7 +62,7 @@ class Paralog_Person extends WP_List_Table
 
     protected function get_bulk_actions()
     {
-        if (current_user_can('delete_posts')) {
+        if (current_user_can('delete_others_posts')) {
             $bulk_actions = array(
                 'delete' => __('Supprimer', PL_DOMAIN)
             );
@@ -82,7 +82,7 @@ class Paralog_Person extends WP_List_Table
     {
         global $wpdb;
 
-        if ('delete' === $this->current_action() && current_user_can('delete_posts')) {
+        if ('delete' === $this->current_action() && current_user_can('delete_others_posts')) {
             $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (is_array($ids)) {
                 $ids = implode(',', $ids);
