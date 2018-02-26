@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/winchlog  
 
+## [1.2.0] - 2018-02-25
+### Modification
+- La première colonne des journaux de décollage devient la date et heure de décollage
+
 ## [1.1.7] - 2018-02-19
 ### Correction
 - La gestion de la sauvegarde du champ "passenger_name" type VARCHAR(129) DEFAULT NULL ne prenait pas correctement en compte la valeur (vide).
