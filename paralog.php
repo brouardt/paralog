@@ -7,7 +7,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/index.php/2018/01/10/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.2.0
+ * Version:           1.2.1
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -525,7 +525,7 @@ if (!class_exists('Paralog')) {
                                  . '<button type="submit" class="page-title-action">ajouter de données de démonstration</button></p>';
                         } ?>
                     <h3><?= _e("Les sites", PL_DOMAIN); ?></h3>
-                    <table class="wp-list-table widefat fixed striped">
+                    <table class="table widefat fixed striped">
                         <thead>
                             <tr>
                                 <th><?= _e("Nom des sites", PL_DOMAIN); ?></th>
@@ -542,7 +542,7 @@ if (!class_exists('Paralog')) {
                         </tbody>
                     </table>
                     <h3><?= _e("Les lignes", PL_DOMAIN); ?></h3>
-                    <table class="wp-list-table widefat fixed striped">
+                    <table class="table widefat fixed striped">
                         <thead>
                             <tr>
                                 <th><?= _e("Nom des lignes", PL_DOMAIN); ?></th>
@@ -559,7 +559,7 @@ if (!class_exists('Paralog')) {
                         </tbody>
                     </table>
                     <h3><?= _e("Les treuilleurs", PL_DOMAIN); ?></h3>
-                    <table class="wp-list-table widefat fixed striped">
+                    <table class="table widefat fixed striped">
                         <thead>
                             <tr>
                                 <th><?= _e("Nom des treuilleurs", PL_DOMAIN); ?></th>
@@ -576,7 +576,7 @@ if (!class_exists('Paralog')) {
                         </tbody>
                     </table>
                     <h3><?= _e("Les pilotes", PL_DOMAIN); ?></h3>
-                    <table class="wp-list-table widefat fixed striped">
+                    <table class="table widefat fixed striped">
                         <thead>
                             <tr>
                                 <th><?= _e("Nom des pilotes", PL_DOMAIN); ?></th>
@@ -593,7 +593,7 @@ if (!class_exists('Paralog')) {
                         </tbody>
                     </table>
                     <h3><?= _e("Les passagers", PL_DOMAIN); ?></h3>
-                    <table class="wp-list-table widefat fixed striped">
+                    <table class="table widefat fixed striped">
                         <thead>
                             <tr>
                                 <th><?= _e("Nom des sites", PL_DOMAIN); ?></th>
