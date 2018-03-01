@@ -58,7 +58,7 @@ class Paralog_Person extends WP_List_Table
             ));
         }
 
-        return sprintf('%1$s %2$s', $item['firstname'], $this->row_actions($actions));
+        return sprintf('%1$s %2$s', trim($item['firstname'] + ' ' + $item['lastname']), $this->row_actions($actions));
     }
 
     protected function get_bulk_actions()
@@ -136,10 +136,6 @@ class Paralog_Person extends WP_List_Table
     protected function column_default($item, $column_name)
     {
         switch ($column_name) {
-            case 'name':
-                return trim($item['firstname'] . ' ' . $item['lastname']);
-            /*case 'firstname':
-            case 'lastname':*/
             case 'pilot_type':
             case 'licence':
             case 'winchman':
@@ -153,8 +149,6 @@ class Paralog_Person extends WP_List_Table
     protected function get_sortable_columns()
     {
         $sortable_columns = array(
-            /*'firstname' => array('firstname', false),
-            'lastname' => array('lastname', false),*/
             'name' => array('lastname', true),
             'pilot_type' => array('pilot_type', false),
             'licence' => array('licence', false),
