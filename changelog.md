@@ -1,8 +1,8 @@
 # Change Log
 Contributors: brouardt  
-Author URI: https://github.com/brouardt/winchlog  
+Author URI: https://github.com/brouardt/paralog  
 
-## [1.2.0] - 2018-02-25
+## [1.2.1] - 2018-02-25
 ### Modification
 - La première colonne des journaux de décollage devient la date et heure de décollage
 
