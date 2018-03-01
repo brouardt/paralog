@@ -31,8 +31,9 @@ class Paralog_Person extends WP_List_Table
         }
 
         $columns = array_merge($columns, array(
-            'firstname' => __("Prénom", PL_DOMAIN),
-            'lastname' => __("Nom", PL_DOMAIN),
+            'name' => __("Prénom + Nom", PL_DOMAIN),
+            /*'firstname' => __("Prénom", PL_DOMAIN),
+            'lastname' => __("Nom", PL_DOMAIN),*/
             'pilot_type' => __("Statut pilote", PL_DOMAIN),
             'licence' => __("Licence", PL_DOMAIN),
             'winchman' => __("Treuilleur", PL_DOMAIN),
@@ -42,7 +43,7 @@ class Paralog_Person extends WP_List_Table
         return $columns;
     }
 
-    public function column_firstname($item)
+    public function column_name($item)
     {
         $actions = array();
 
@@ -135,8 +136,10 @@ class Paralog_Person extends WP_List_Table
     protected function column_default($item, $column_name)
     {
         switch ($column_name) {
-            case 'firstname':
-            case 'lastname':
+            case 'name':
+                return trim($item['firstname'] . ' ' . $item['lastname']);
+            /*case 'firstname':
+            case 'lastname':*/
             case 'pilot_type':
             case 'licence':
             case 'winchman':
@@ -150,8 +153,9 @@ class Paralog_Person extends WP_List_Table
     protected function get_sortable_columns()
     {
         $sortable_columns = array(
-            'firstname' => array('firstname', false),
-            'lastname' => array('lastname', false),
+            /*'firstname' => array('firstname', false),
+            'lastname' => array('lastname', false),*/
+            'name' => array('lastname', true),
             'pilot_type' => array('pilot_type', false),
             'licence' => array('licence', false),
             'winchman' => array('winchman', false),

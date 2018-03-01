@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.2.2] - 2018-03-01
+### Modification
+- La première colonne des personnes regroupe désormais le prénom et le nom. Ce qui rend plus lisible les pilotes sur écran de téléphone
+
 ## [1.2.1] - 2018-02-25
 ### Modification
 - La première colonne des journaux de décollage devient la date et heure de décollage
