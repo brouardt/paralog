@@ -58,7 +58,7 @@ class Paralog_Person extends WP_List_Table
             ));
         }
 
-        return sprintf('%1$s %2$s', trim($item['firstname'] + ' ' + $item['lastname']), $this->row_actions($actions));
+        return sprintf('%1$s %2$s', trim($item['firstname'] . ' ' . $item['lastname']), $this->row_actions($actions));
     }
 
     protected function get_bulk_actions()
