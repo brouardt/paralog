@@ -1,4 +1,4 @@
-# Journal des décollages de parapentistes
+# Journal des décollages / treuillés de parapentistes
 Contributors: brouardt  
 Author URI: https://thierry.brouard.pro/  
 Plugin URL: https://thierry.brouard.pro/2018/01/paralog/ 
