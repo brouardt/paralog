@@ -36,8 +36,7 @@ class Paralog_Log extends WP_List_Table
             'line_name' => __("Ligne", PL_DOMAIN),
             'winchman_name' => __("Treuilleur", PL_DOMAIN),
             'pilot_name' => __("Pilote", PL_DOMAIN),
-            'passenger_name' => __("Passager", PL_DOMAIN),
-            'log_id' => __("Vol N°", PL_DOMAIN)
+            'passenger_name' => __("Passager", PL_DOMAIN)
         ));
 
         return $columns;
@@ -141,7 +140,6 @@ class Paralog_Log extends WP_List_Table
     protected function column_default($item, $column_name)
     {
         switch ($column_name) {
-            case 'log_id':
             case 'site_name':
             case 'line_name':
             case 'passenger_name':
@@ -166,7 +164,6 @@ class Paralog_Log extends WP_List_Table
     {
         $sortable_columns = array(
             'takeoff' => array('takeoff', false),
-            'log_id' => array('log_id', false),
             'site_name' => array('site_name', false),
             'line_name' => array('line_name', false),
             'winchman_name' => array('winchman_name', false),
