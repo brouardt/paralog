@@ -36,8 +36,8 @@ if (!class_exists('Paralog')) {
     /**
      * @name Paralog
      */
-    class Paralog {
-
+    class Paralog
+    {
         const admin_slug = 'paralog-admin';
 
         public $plugin_dir;
@@ -48,7 +48,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name __construct
          */
-        public function __construct() {
+        public function __construct()
+        {
             $this->plugin_dir = untrailingslashit(plugin_dir_path(__FILE__));
             $this->plugin_url = untrailingslashit(plugins_url(basename(plugin_dir_path(__FILE__)), basename(__FILE__)));
             $this->plugin_name = plugin_basename(__FILE__);
@@ -68,14 +69,16 @@ if (!class_exists('Paralog')) {
         /**
          * @name lang
          */
-        public function load_language() {
+        public function load_language()
+        {
             load_plugin_textdomain(PL_DOMAIN, false, $this->plugin_dir . '/languages');
         }
 
         /**
          * @name register_styles
          */
-        public function register_styles() {
+        public function register_styles()
+        {
             wp_register_style(PL_DOMAIN, plugins_url('paralog/css/style.css'));
             wp_enqueue_style(PL_DOMAIN);
         }
@@ -86,7 +89,8 @@ if (!class_exists('Paralog')) {
          * @param string $name
          * @return string
          */
-        public static function table_name($name) {
+        public static function table_name($name)
+        {
             global $wpdb;
 
             return $wpdb->prefix . 'pl_' . $name;
@@ -97,7 +101,8 @@ if (!class_exists('Paralog')) {
          * @global object $wpdb
          * @global string $charset_collate
          */
-        public static function on_activation() {
+        public static function on_activation()
+        {
             global $wpdb, $charset_collate;
 
             $options = get_option(PL_DOMAIN);
@@ -145,7 +150,8 @@ if (!class_exists('Paralog')) {
                     . "winchman enum(%s,%s) NOT NULL DEFAULT %s, "
                     . "winchman_type enum(%s,%s) DEFAULT NULL, "
                     . "PRIMARY KEY (person_id) "
-                    . ") $charset_collate", array(
+                    . ") $charset_collate",
+                    array(
                     $p, $e, $p,
                     $o, $n, $n,
                     $t, $e
@@ -169,7 +175,8 @@ if (!class_exists('Paralog')) {
                     . "total_flying_weight SMALLINT(5) UNSIGNED DEFAULT NULL, "
                     . "takeoff DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', "
                     . "PRIMARY KEY (log_id) "
-                    . ") $charset_collate", array(
+                    . ") $charset_collate",
+                    array(
                     $t, $e,
                     $p, $e, $p
                     )
@@ -186,7 +193,8 @@ if (!class_exists('Paralog')) {
             }
         }
 
-        public static function insert_demo_datas() {
+        public static function insert_demo_datas()
+        {
             global $wpdb;
 
             $p = __('pilote', PL_DOMAIN);
@@ -223,7 +231,8 @@ if (!class_exists('Paralog')) {
                 . "(2, 'Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s), "
                 . "(3, 'Quentin', 'COURTOIS', %s, '1604781B', %s, NULL), "
                 . "(4, 'Bernard', 'MAUDET', %s, '0062282X', %s, %s), "
-                . "(5, 'Carlos', 'MESQUITA', %s, '1302566G', %s, NULL);", array(
+                . "(5, 'Carlos', 'MESQUITA', %s, '1302566G', %s, NULL);",
+                array(
                 $p, $o, $e,
                 $p, $o, $t,
                 $p, $n,
@@ -242,7 +251,8 @@ if (!class_exists('Paralog')) {
                 . "(4, 'Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47'), "
                 . "(5, 'Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55'), "
                 . "(6, 'Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48'), "
-                . "(7, 'Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23');", array(
+                . "(7, 'Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23');",
+                array(
                 $p,
                 $p,
                 $p,
@@ -262,7 +272,8 @@ if (!class_exists('Paralog')) {
          * @global object $wpdb
          * @param string $query
          */
-        private function my_query($query) {
+        private function my_query($query)
+        {
             global $wpdb;
 
             if (!empty($wpdb->dbh)) {
@@ -279,7 +290,8 @@ if (!class_exists('Paralog')) {
          * @global object $wpdb
          * @return array
          */
-        private function my_fetchrow() {
+        private function my_fetchrow()
+        {
             global $wpdb;
 
             $row = null;
@@ -300,7 +312,8 @@ if (!class_exists('Paralog')) {
          * @global $wpdb
          * @param integer $year
          */
-        public function export_csv($year) {
+        public function export_csv($year)
+        {
             global $wpdb;
 
             if (headers_sent()) {
@@ -369,7 +382,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name on_deactivation
          */
-        public static function on_deactivation() {
+        public static function on_deactivation()
+        {
             $options = get_option(PL_DOMAIN);
 
             $options['active'] = 'off';
@@ -382,7 +396,8 @@ if (!class_exists('Paralog')) {
          * @name on_uninstall
          * @global object $wpdb
          */
-        public static function on_uninstall() {
+        public static function on_uninstall()
+        {
             global $wpdb;
 
             foreach (self::$tables as $table) {
@@ -396,7 +411,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name paralog_menu
          */
-        public function paralog_menu() {
+        public function paralog_menu()
+        {
             $allowed_group = 'edit_posts'; // 'manage_options'
 
             if (function_exists('add_menu_page')) {
@@ -427,7 +443,8 @@ if (!class_exists('Paralog')) {
          * @name admin_paralog_bar_menu
          * @global object wp_admin_bar
          */
-        public function admin_paralog_bar_menu() {
+        public function admin_paralog_bar_menu()
+        {
             global $wp_admin_bar;
 
             $wp_admin_bar->add_menu(array(
@@ -444,7 +461,8 @@ if (!class_exists('Paralog')) {
          * @param integer $year
          * @return array
          */
-        private function stats_sites($year) {
+        private function stats_sites($year)
+        {
             global $wpdb;
 
             $sites = '';
@@ -455,7 +473,8 @@ if (!class_exists('Paralog')) {
                         "SELECT site_name, COUNT(*) AS site_count "
                         . "FROM " . $this->table_name('logs') . " "
                         . "WHERE YEAR(takeoff) = %d "
-                        . "GROUP BY site_name;", $year
+                        . "GROUP BY site_name;",
+                        $year
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS site_count "
@@ -477,7 +496,8 @@ if (!class_exists('Paralog')) {
          * @param integer $year
          * @return array
          */
-        private function stats_lines($year) {
+        private function stats_lines($year)
+        {
             global $wpdb;
 
             $lines = '';
@@ -488,7 +508,8 @@ if (!class_exists('Paralog')) {
                         "SELECT line_name, COUNT(*) AS line_count "
                         . "FROM " . $this->table_name('logs') . " "
                         . "WHERE YEAR(takeoff) = %d "
-                        . "GROUP BY line_name;", $year
+                        . "GROUP BY line_name;",
+                        $year
                     );
                 } else {
                     $query = "SELECT line_name, COUNT(*) AS line_count "
@@ -510,7 +531,8 @@ if (!class_exists('Paralog')) {
          * @param integer $year
          * @return array
          */
-        private function stats_winchmen($year) {
+        private function stats_winchmen($year)
+        {
             global $wpdb;
 
             $winchmen = '';
@@ -522,7 +544,8 @@ if (!class_exists('Paralog')) {
                         . "FROM " . $this->table_name('logs') . " "
                         . "WHERE YEAR(takeoff) = %d "
                         . "AND winchman_name IS NOT NULL "
-                        . "GROUP BY winchman_name;", $year
+                        . "GROUP BY winchman_name;",
+                        $year
                     );
                 } else {
                     $query = "SELECT winchman_name, COUNT(*) AS winchman_count "
@@ -545,7 +568,8 @@ if (!class_exists('Paralog')) {
          * @param integer $year
          * @return array
          */
-        private function stats_pilots($year) {
+        private function stats_pilots($year)
+        {
             global $wpdb;
 
             $pilots = '';
@@ -556,7 +580,8 @@ if (!class_exists('Paralog')) {
                         "SELECT pilot_name, COUNT(*) AS pilot_count "
                         . "FROM " . $this->table_name('logs') . " "
                         . "WHERE YEAR(takeoff) = %d "
-                        . "GROUP BY pilot_name;", $year
+                        . "GROUP BY pilot_name;",
+                        $year
                     );
                 } else {
                     $query = "SELECT pilot_name, COUNT(*) AS pilot_count "
@@ -578,7 +603,8 @@ if (!class_exists('Paralog')) {
          * @param integer $year
          * @return array
          */
-        private function stats_passengers($year) {
+        private function stats_passengers($year)
+        {
             global $wpdb;
 
             $passengers = '';
@@ -590,7 +616,8 @@ if (!class_exists('Paralog')) {
                         . "FROM " . $this->table_name('logs') . " "
                         . "WHERE YEAR(takeoff) = %d "
                         . "AND passenger_name IS NOT NULL "
-                        . "GROUP BY site_name;", $year
+                        . "GROUP BY site_name;",
+                        $year
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS passenger_count "
@@ -612,7 +639,8 @@ if (!class_exists('Paralog')) {
          * @global object $wpdb
          * @return array
          */
-        private function years_takeoff() {
+        private function years_takeoff()
+        {
             global $wpdb;
 
             $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
@@ -626,7 +654,8 @@ if (!class_exists('Paralog')) {
          * @name about
          * @global object $wpdb
          */
-        public function about() {
+        public function about()
+        {
             $param_year = isset($_GET['annee']) ? $_GET['annee'] : '';
             $demo_datas = isset($_GET['demo']) ? $_GET['demo'] : '0';
             $export = isset($_GET['export']) ? $_GET['export'] : '0';
@@ -653,8 +682,7 @@ if (!class_exists('Paralog')) {
             $lines = $this->stats_lines($param_year);
             $winchmen = $this->stats_winchmen($param_year);
             $pilots = $this->stats_pilots($param_year);
-            $passengers = $this->stats_passengers($param_year);
-            ?>
+            $passengers = $this->stats_passengers($param_year); ?>
             <div class="wrap">
                 <h1><?= _e("À propos de", PL_DOMAIN) . " Paralog"; ?></h1>
                 <h2><?= _e("Journaux des décollages / treuillés", PL_DOMAIN); ?></h2>
@@ -681,10 +709,9 @@ if (!class_exists('Paralog')) {
                     if ($demo_datas == '1') {
                         echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
                     }
-                    if (!empty($param_year)) {
-                        echo '<p>' . __('exporter les données sélectionné', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-                    }
-                    ?>
+            if (!empty($param_year)) {
+                echo '<p>' . __('exporter les données sélectionné', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
+            } ?>
                     <h3><?= _e("Les sites", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
@@ -781,7 +808,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name list_logs
          */
-        public function list_logs() {
+        public function list_logs()
+        {
             require_once($this->plugin_dir . '/includes/paralog_log.php');
             $class = new Paralog_Log();
             $class->prepare_items();
@@ -791,8 +819,7 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
-            ?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?= _e("Gestion des décollages / treuillés", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter un décollage / treuillé", PL_DOMAIN); ?></a>
                 <?= $message; ?>
@@ -800,14 +827,14 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$class->search_box('search', 'search_id');
-                    $class->display();
-                    ?>
+                    $class->display(); ?>
                 </form>
             </div>
             <?php
         }
 
-        public function form_log() {
+        public function form_log()
+        {
             require_once($this->plugin_dir . '/includes/paralog_log.php');
             $class = new Paralog_Log();
             $class->form_edit();
@@ -816,7 +843,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name list_sites
          */
-        public function list_sites() {
+        public function list_sites()
+        {
             require_once($this->plugin_dir . '/includes/paralog_site.php');
             $class = new Paralog_Site();
             $class->prepare_items();
@@ -826,8 +854,7 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
-            ?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?= _e("Gestion des sites", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter un site", PL_DOMAIN); ?></a>
                 <?= $message; ?>
@@ -835,14 +862,14 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$site->search_box('search', 'search_id');
-                    $class->display();
-                    ?>
+                    $class->display(); ?>
                 </form>
             </div>
             <?php
         }
 
-        public function form_site() {
+        public function form_site()
+        {
             require_once($this->plugin_dir . '/includes/paralog_site.php');
             $class = new Paralog_Site();
             $class->form_edit();
@@ -851,7 +878,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name list_lines
          */
-        public function list_lines() {
+        public function list_lines()
+        {
             require_once($this->plugin_dir . '/includes/paralog_line.php');
             $class = new Paralog_Line();
             $class->prepare_items();
@@ -861,8 +889,7 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
-            ?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?= _e("Gestion des lignes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter une ligne", PL_DOMAIN); ?></a>
                 <?= $message; ?>
@@ -870,14 +897,14 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$site->search_box('search', 'search_id');
-                    $class->display();
-                    ?>
+                    $class->display(); ?>
                 </form>
             </div>
             <?php
         }
 
-        public function form_line() {
+        public function form_line()
+        {
             require_once($this->plugin_dir . '/includes/paralog_line.php');
             $class = new Paralog_Line();
             $class->form_edit();
@@ -886,7 +913,8 @@ if (!class_exists('Paralog')) {
         /**
          * @name list_persons
          */
-        public function list_persons() {
+        public function list_persons()
+        {
             require_once($this->plugin_dir . '/includes/paralog_person.php');
             $class = new Paralog_Person();
             $class->prepare_items();
@@ -896,8 +924,7 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
-            ?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?= _e("Gestion des personnes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter une personne", PL_DOMAIN); ?></a>
                 <?= $message; ?>
@@ -905,20 +932,21 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$site->search_box('search', 'search_id');
-                    $class->display();
-                    ?>
+                    $class->display(); ?>
                 </form>
             </div>
             <?php
         }
 
-        public function form_person() {
+        public function form_person()
+        {
             require_once($this->plugin_dir . '/includes/paralog_person.php');
             $class = new Paralog_Person();
             $class->form_edit();
         }
 
-        public static function add_options() {
+        public static function add_options()
+        {
             $option = 'per_page';
             $args = array(
                 'label' => __("nombre d'enregistrements"),
@@ -928,9 +956,7 @@ if (!class_exists('Paralog')) {
 
             add_screen_option($option, $args);
         }
-
     }
-
 }
 
 global $paralog;
