@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.2.4] - 2018-03-03
+### Ajout
+- Exportation des données brutes depuis la page "A propos de"
+
 ## [1.2.3] - 2018-03-01
 ### Modification
 - La première colonne des personnes regroupe désormais le prénom et le nom. Ce qui rend plus lisible les pilotes sur écran de téléphone
