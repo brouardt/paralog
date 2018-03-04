@@ -7,7 +7,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.2.5
+ * Version:           1.2.7
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if (!class_exists('WP_List_Table')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.2.3');
+    define('PL_VERSION', '1.2.7');
     define('PL_DB_VERSION', '1.7');
     define('PL_DOMAIN', 'paralog');
     define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
@@ -346,17 +346,10 @@ if (!class_exists('Paralog')) {
 
             fwrite($out, $bom, strlen($bom));
 
-            $head = array(
-                'site_name',
-                'line_name',
-                'winchman_name',
-                'winchman_type',
-                'pilot_name',
-                'pilot_type',
-                'passenger_name',
-                'total_flying_weight',
-                'takeoff'
-            );
+            $query = "SHOW COLUMNS FROM " . Paralog::table_name('logs') . " WHERE Field <> 'log_id';";
+            $columns = $wpdb->get_results($query, ARRAY_A);
+            $head = array_column($columns, 'Field');
+            
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
             $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs');
@@ -696,7 +689,6 @@ if (!class_exists('Paralog')) {
                 </div>
                 <form name="statistiques" method="get" action="">
                     <input type="hidden" name="page" value="<?= self::admin_slug; ?>" />
-                    <input type="hidden" name="demo" value="<?= $demo_datas; ?>" />
                     <h2><?= _e("Statistiques", PL_DOMAIN); ?></h2>
                     <label><?= _e("Année", PL_DOMAIN); ?> : 
                         <select name="annee" onchange="submit();">
@@ -707,11 +699,11 @@ if (!class_exists('Paralog')) {
                     </label>
                     <?php
                     if ($demo_datas == '1') {
-                        echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
+                        echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
                     }
-            if (!empty($param_year)) {
-                echo '<p>' . __('exporter les données sélectionné', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-            } ?>
+                    if (!empty($param_year)) {
+                        echo '<p>' . __('exporter les données sélectionné', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
+                    } ?>
                     <h3><?= _e("Les sites", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
