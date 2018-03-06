@@ -26,10 +26,19 @@ Cette extension a été développé initialement pour WordPress. Cependant rien 
 Les développement se situent sur [GitHub](https://github.com/brouardt/paralog), alors n'hésitez pas à le reprendre.
 
 ## Installation
+### Méthode 1 (via FTP)
 
-1. Désarchivez `paralog.zip`
-2. Téléverser le contenu de `paralog.zip` vers le dossier `/wp-content/plugins/`
-3. Activez l'extension dans le menu 'Extensions' de WordPress.
+1. Télécharger `paralog.zip`
+2. Désarchivez `paralog.zip`
+3. Téléverser le contenu de `paralog.zip` vers le dossier `/wp-content/plugins/`
+4. Activez l'extension dans le menu 'Extensions' de WordPress.
+
+### Méthode 2 (via ajout d'extension wordpress)
+
+1. Télécharger `paralog.zip`
+2. Téléverser `paralog.zip` dans la zone de dépots de fichier dans Extensions | ajouter | téléverser une extension | choisir un fichier
+3. Cliquez sur installer
+4. Activez l'extension dans le menu 'Extensions' de WordPress.
 
 ## Questions fréquentes
 
