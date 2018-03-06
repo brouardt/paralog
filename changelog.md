@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.2.7] - 2018-03-04
+### Modification
+- Amélioration de l'export. Extraction des noms de colonnes de table automatique et exportation sequentielle.
+
 ## [1.2.4] - 2018-03-03
 ### Ajout
 - Exportation des données brutes depuis la page "A propos de"
