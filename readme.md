@@ -18,6 +18,7 @@ Cette application vous permettra de tenir à jour, comme le recommande la FFVL, 
 * gestion des lignes ou lieux de décollage
 * gestion des pilotes
 * enregistrement et consultation des treuillés ou décollages
+* exportation des enregistrements au format csv
 
 ### Developeurs
 
