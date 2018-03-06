@@ -7,7 +7,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.2.7
+ * Version:           1.2.8
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if (!class_exists('WP_List_Table')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.2.7');
+    define('PL_VERSION', '1.2.8');
     define('PL_DB_VERSION', '1.7');
     define('PL_DOMAIN', 'paralog');
     define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
@@ -352,14 +352,15 @@ if (!class_exists('Paralog')) {
             
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
-            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs');
+            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs') . " ";
 
             if (is_numeric($year)) {
-                $sql .= " WHERE YEAR(takeoff) = %d";
+                $sql .= "WHERE YEAR(takeoff) = %d ";
                 $query = $wpdb->prepare($sql, $year);
             } else {
                 $query = $sql;
             }
+            $sql .= "ORDER BY takeoff DESC;";
 
             $this->my_query($query);
 
@@ -701,9 +702,9 @@ if (!class_exists('Paralog')) {
                     if ($demo_datas == '1') {
                         echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
                     }
-                    if (!empty($param_year)) {
-                        echo '<p>' . __('exporter les données sélectionné', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-                    } ?>
+            if (!empty($param_year)) {
+                echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
+            } ?>
                     <h3><?= _e("Les sites", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>

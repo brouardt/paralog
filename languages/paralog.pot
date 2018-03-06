@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Paralog\n"
-"POT-Creation-Date: 2018-03-03 16:50+0100\n"
+"POT-Creation-Date: 2018-03-06 13:19+0100\n"
 "PO-Revision-Date: 2018-01-02 20:13+0100\n"
 "Last-Translator: Thierry Brouard <thierry@brouard.pro>\n"
 "Language-Team: \n"
@@ -99,7 +99,7 @@ msgstr ""
 msgid "personnes"
 msgstr ""
 
-#: includes/paralog_log.php:34 paralog.php:409
+#: includes/paralog_log.php:34 paralog.php:447
 msgid "Décollage"
 msgstr ""
 
@@ -300,221 +300,185 @@ msgstr ""
 msgid "Le nom du site st obligatoire"
 msgstr ""
 
-#: paralog.php:309
-msgid "site_name"
-msgstr ""
-
-#: paralog.php:310
-msgid "line_name"
-msgstr ""
-
-#: paralog.php:311
-msgid "winchman_name"
-msgstr ""
-
-#: paralog.php:312
-msgid "winchman_type"
-msgstr ""
-
-#: paralog.php:313
-msgid "pilot_name"
-msgstr ""
-
-#: paralog.php:314
-msgid "pilot_type"
-msgstr ""
-
-#: paralog.php:315
-msgid "passenger_name"
-msgstr ""
-
-#: paralog.php:316
-msgid "total_flying_weight"
-msgstr ""
-
-#: paralog.php:317
-msgid "takeoff"
-msgstr ""
-
-#: paralog.php:375
+#: paralog.php:413
 msgid "Journaux de décollages / treuillés"
 msgstr ""
 
-#: paralog.php:375
+#: paralog.php:413
 msgid "Paralog"
 msgstr ""
 
-#: paralog.php:377
+#: paralog.php:415
 msgid "À propos de Paralog"
 msgstr ""
 
-#: paralog.php:377 paralog.php:643
+#: paralog.php:415 paralog.php:681
 msgid "À propos de"
 msgstr ""
 
-#: paralog.php:379
+#: paralog.php:417
 msgid "Journaux Paralog"
 msgstr ""
 
-#: paralog.php:379
+#: paralog.php:417
 msgid "Les journaux"
 msgstr ""
 
-#: paralog.php:381 paralog.php:780
+#: paralog.php:419 paralog.php:817
 msgid "Ajouter un décollage / treuillé"
 msgstr ""
 
-#: paralog.php:383
+#: paralog.php:421
 msgid "Personnes Paralog"
 msgstr ""
 
-#: paralog.php:383
+#: paralog.php:421
 msgid "Les personnes"
 msgstr ""
 
-#: paralog.php:385 paralog.php:885
+#: paralog.php:423 paralog.php:922
 msgid "Ajouter une personne"
 msgstr ""
 
-#: paralog.php:387
+#: paralog.php:425
 msgid "Lignes Paralog"
 msgstr ""
 
-#: paralog.php:387 paralog.php:688
+#: paralog.php:425 paralog.php:725
 msgid "Les lignes"
 msgstr ""
 
-#: paralog.php:389 paralog.php:850
+#: paralog.php:427 paralog.php:887
 msgid "Ajouter une ligne"
 msgstr ""
 
-#: paralog.php:391
+#: paralog.php:429
 msgid "Sites Paralog"
 msgstr ""
 
-#: paralog.php:391 paralog.php:671
+#: paralog.php:429 paralog.php:708
 msgid "Les sites"
 msgstr ""
 
-#: paralog.php:393 paralog.php:815
+#: paralog.php:431 paralog.php:852
 msgid "Ajouter un site"
 msgstr ""
 
-#: paralog.php:443 paralog.php:478 paralog.php:515 paralog.php:550
-#: paralog.php:587 paralog.php:629
+#: paralog.php:481 paralog.php:516 paralog.php:553 paralog.php:588
+#: paralog.php:625 paralog.php:667
 msgid "aucune donnée"
 msgstr ""
 
-#: paralog.php:633
+#: paralog.php:671
 msgid "choisissez une année"
 msgstr ""
 
-#: paralog.php:634
+#: paralog.php:672
 msgid "toutes les années"
 msgstr ""
 
-#: paralog.php:644
+#: paralog.php:682
 msgid "Journaux des décollages / treuillés"
 msgstr ""
 
-#: paralog.php:646
+#: paralog.php:684
 msgid "Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief."
 msgstr ""
 
-#: paralog.php:647
+#: paralog.php:685
 msgid "Notions"
 msgstr ""
 
-#: paralog.php:649
+#: paralog.php:687
 msgid "Le site : correspond au lieu de manière générale <span class=\"PL_gris_clair\">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>"
 msgstr ""
 
-#: paralog.php:650
+#: paralog.php:688
 msgid "La ligne : représente la ligne du treuil <span class=\"PL_gris_clair\">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class=\"PL_gris_clair\">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class=\"PL_gris_clair\">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>"
 msgstr ""
 
-#: paralog.php:656
+#: paralog.php:693
 msgid "Statistiques"
 msgstr ""
 
-#: paralog.php:657
+#: paralog.php:694
 msgid "Année"
 msgstr ""
 
-#: paralog.php:666
+#: paralog.php:703
 msgid "aucune donnée à visualiser ?"
 msgstr ""
 
-#: paralog.php:666
+#: paralog.php:703
 msgid "ajouter de données de démonstration"
 msgstr ""
 
-#: paralog.php:669
-msgid "exporter les données sélectionné"
+#: paralog.php:706
+msgid "exporter les données sélectionnées"
 msgstr ""
 
-#: paralog.php:669
+#: paralog.php:706
 msgid "exporter"
 msgstr ""
 
-#: paralog.php:675 paralog.php:743
+#: paralog.php:712 paralog.php:780
 msgid "Nom des sites"
 msgstr ""
 
-#: paralog.php:676 paralog.php:693 paralog.php:710 paralog.php:727
-#: paralog.php:744
+#: paralog.php:713 paralog.php:730 paralog.php:747 paralog.php:764
+#: paralog.php:781
 msgid "Quantité"
 msgstr ""
 
-#: paralog.php:692
+#: paralog.php:729
 msgid "Nom des lignes"
 msgstr ""
 
-#: paralog.php:705
+#: paralog.php:742
 msgid "Les treuilleurs"
 msgstr ""
 
-#: paralog.php:709
+#: paralog.php:746
 msgid "Nom des treuilleurs"
 msgstr ""
 
-#: paralog.php:722
+#: paralog.php:759
 msgid "Les pilotes"
 msgstr ""
 
-#: paralog.php:726
+#: paralog.php:763
 msgid "Nom des pilotes"
 msgstr ""
 
-#: paralog.php:739
+#: paralog.php:776
 msgid "Les passagers"
 msgstr ""
 
-#: paralog.php:758
+#: paralog.php:795
 msgid "Nombre de décollages ou de treuillés"
 msgstr ""
 
-#: paralog.php:773 paralog.php:808 paralog.php:843 paralog.php:878
+#: paralog.php:810 paralog.php:845 paralog.php:880 paralog.php:915
 #, php-format
 msgid "Élément(s) supprimé(s): %d"
 msgstr ""
 
-#: paralog.php:780
+#: paralog.php:817
 msgid "Gestion des décollages / treuillés"
 msgstr ""
 
-#: paralog.php:815
+#: paralog.php:852
 msgid "Gestion des sites"
 msgstr ""
 
-#: paralog.php:850
+#: paralog.php:887
 msgid "Gestion des lignes"
 msgstr ""
 
-#: paralog.php:885
+#: paralog.php:922
 msgid "Gestion des personnes"
 msgstr ""
 
-#: paralog.php:908
+#: paralog.php:945
 msgid "nombre d'enregistrements"
 msgstr ""

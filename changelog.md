@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.2.8] - 2018-03-06
+### Modification
+- Exportation des données par dates de décollage descendantes
+
 ## [1.2.7] - 2018-03-04
 ### Modification
 - Amélioration de l'export. Extraction des noms de colonnes de table automatique et exportation sequentielle.
