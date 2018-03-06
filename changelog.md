@@ -4,7 +4,7 @@ Author URI: https://github.com/brouardt/paralog
 
 ## [1.2.8] - 2018-03-06
 ### Modification
-- Exportation des données par dates de décollage descendantes
+- Exportation des données par dates de décollage décroissantes
 
 ## [1.2.7] - 2018-03-04
 ### Modification
