@@ -352,15 +352,15 @@ if (!class_exists('Paralog')) {
             
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
-            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs') . " ";
+            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs');
 
             if (is_numeric($year)) {
-                $sql .= "WHERE YEAR(takeoff) = %d ";
+                $sql .= " WHERE YEAR(takeoff) = %d";
                 $query = $wpdb->prepare($sql, $year);
             } else {
-                $query = $sql;
+                $query = $sql ;
             }
-            $sql .= "ORDER BY takeoff DESC;";
+            $query .= " ORDER BY takeoff DESC;";
 
             $this->my_query($query);
 
