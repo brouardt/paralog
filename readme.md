@@ -46,13 +46,6 @@ Les développement se situent sur [GitHub](https://github.com/brouardt/paralog),
 
 pour le moment le shortcode n'est pas actif, la saisie et le consultation se font à travers la partie admin.
 
-## Copies d'écrans
-
-1. écran des statistiques
-2. vue des décollages / treuillés
-3. formulaire de saisie des décollages
-4. formulaire de saisie des personnels navigants
-
 ## Suivi des modifications
 
 voir le fichier changelog.md
