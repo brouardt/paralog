@@ -48,4 +48,4 @@ Author URI: https://github.com/brouardt/paralog
 
 ## [1.0.0] - 2017-11-30
 ### Ajout
-- CRéation du squelette de l'application en mode Objet.
+- Création du squelette de l'application en mode Objet.
