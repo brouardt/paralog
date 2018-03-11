@@ -7,7 +7,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.2.9
+ * Version:           1.3.1
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -28,8 +28,8 @@ if (!class_exists('WP_List_Table')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.2.9');
-    define('PL_DB_VERSION', '1.7');
+    define('PL_VERSION', '1.3.1');
+    define('PL_DB_VERSION', '1.8');
     define('PL_DOMAIN', 'paralog');
     define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
 
@@ -121,8 +121,9 @@ if (!class_exists('Paralog')) {
                  */
                 $table = self::table_name('sites');
                 $query = "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "site_id TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "name VARCHAR(64) DEFAULT NULL, "
+                    . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "name varchar(64) DEFAULT NULL, "
+                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (site_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -131,8 +132,9 @@ if (!class_exists('Paralog')) {
                  */
                 $table = self::table_name('lines');
                 $query = "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "line_id TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "name VARCHAR(32) DEFAULT NULL, "
+                    . "line_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "name varchar(32) DEFAULT NULL, "
+                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (line_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -149,6 +151,7 @@ if (!class_exists('Paralog')) {
                     . "licence varchar(10) DEFAULT NULL, "
                     . "winchman enum(%s,%s) NOT NULL DEFAULT %s, "
                     . "winchman_type enum(%s,%s) DEFAULT NULL, "
+                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (person_id) "
                     . ") $charset_collate",
                     array(
@@ -164,16 +167,17 @@ if (!class_exists('Paralog')) {
                 $table = self::table_name('logs');
                 $query = $wpdb->prepare(
                     "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "log_id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "site_name VARCHAR(64) DEFAULT NULL, "
-                    . "line_name VARCHAR(32) DEFAULT NULL, "
-                    . "winchman_name VARCHAR(129) DEFAULT NULL, "
-                    . "winchman_type ENUM(%s,%s) DEFAULT NULL, "
-                    . "pilot_name VARCHAR(129) DEFAULT NULL, "
-                    . "pilot_type ENUM(%s,%s) NOT NULL DEFAULT %s, "
-                    . "passenger_name VARCHAR(129) DEFAULT NULL, "
-                    . "total_flying_weight SMALLINT(5) UNSIGNED DEFAULT NULL, "
-                    . "takeoff DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', "
+                    . "log_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "site_name varchar(64) DEFAULT NULL, "
+                    . "line_name varchar(32) DEFAULT NULL, "
+                    . "winchman_name varchar(129) DEFAULT NULL, "
+                    . "winchman_type enum(%s,%s) DEFAULT NULL, "
+                    . "pilot_name varchar(129) DEFAULT NULL, "
+                    . "pilot_type enum(%s,%s) NOT NULL DEFAULT %s, "
+                    . "passenger_name varchar(129) DEFAULT NULL, "
+                    . "total_flying_weight smallint(5) UNSIGNED DEFAULT NULL, "
+                    . "takeoff datetime NOT NULL DEFAULT '0000-00-00 00:00:00', "
+                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (log_id) "
                     . ") $charset_collate",
                     array(
@@ -196,6 +200,8 @@ if (!class_exists('Paralog')) {
         public static function insert_demo_datas()
         {
             global $wpdb;
+            
+            $user_id = get_current_user_id();
 
             $p = __('pilote', PL_DOMAIN);
             $t = __('treuilleur', PL_DOMAIN);
@@ -204,62 +210,83 @@ if (!class_exists('Paralog')) {
             $n = __('non', PL_DOMAIN);
 
             $table = self::table_name('sites');
-            $query = "INSERT INTO $table (site_id, name) VALUES "
-                . "(1, 'Mont Bouquet'), "
-                . "(2, 'Aslonnes \"Le Fort\"'), "
-                . "(3, 'Annecy'), "
-                . "(4, 'Massognes / Jarzay');";
+            $query = $wpdb->prepare(
+                  "INSERT INTO $table (name, user_id) VALUES "
+                . "('Mont Bouquet', %d), "
+                . "('Aslonnes \"Le Fort\"', %d), "
+                . "('Annecy', %d), "
+                . "('Massognes / Jarzay', %d);",
+                array(
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id
+                )
+                );
             $wpdb->query($query);
 
             $table = self::table_name('lines');
-            $query = "INSERT INTO $table (line_id, name) VALUES "
-                . "(1, 'Déco EST'), "
-                . "(2, 'Déco SUD'), "
-                . "(3, 'Planfait'), "
-                . "(4, 'Montmin'), "
-                . "(5, 'Coche Cabane'), "
-                . "(6, 'Treuil 1B'), "
-                . "(7, 'Treuil 2B - ligne rouge'), "
-                . "(8, 'Treuil 2B - ligne verte'), "
-                . "(9, 'Dévidoir 3B');";
+            $query = $wpdb->prepare(
+                  "INSERT INTO $table (name, user_id) VALUES "
+                . "('Déco EST', %d), "
+                . "('Déco SUD', %d), "
+                . "('Planfait', %d), "
+                . "('Montmin', %d), "
+                . "('Coche Cabane', %d), "
+                . "('Treuil 1B', %d), "
+                . "('Treuil 2B - ligne rouge', %d), "
+                . "('Treuil 2B - ligne verte', %d), "
+                . "('Dévidoir 3B', %d);",
+                array(
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id,
+                    $user_id
+                )
+                );
             $wpdb->query($query);
 
             $table = self::table_name('persons');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (person_id, firstname, lastname, pilot_type, licence, winchman, winchman_type) VALUES "
-                . "(1, 'Thierry', 'BROUARD', %s, '1309710X', %s, %s), "
-                . "(2, 'Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s), "
-                . "(3, 'Quentin', 'COURTOIS', %s, '1604781B', %s, NULL), "
-                . "(4, 'Bernard', 'MAUDET', %s, '0062282X', %s, %s), "
-                . "(5, 'Carlos', 'MESQUITA', %s, '1302566G', %s, NULL);",
+                "INSERT INTO $table (firstname, lastname, pilot_type, licence, winchman, winchman_type, user_id) VALUES "
+                . "('Thierry', 'BROUARD', %s, '1309710X', %s, %s, %d), "
+                . "('Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s, %d), "
+                . "('Quentin', 'COURTOIS', %s, '1604781B', %s, NULL, %d), "
+                . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d), "
+                . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d);",
                 array(
-                $p, $o, $e,
-                $p, $o, $t,
-                $p, $n,
-                $p, $o, $t,
-                $p, $n,
+                $p, $o, $e, $user_id,
+                $p, $o, $t, $user_id,
+                $p, $n, $user_id,
+                $p, $o, $t, $user_id,
+                $p, $n, $user_id
                 )
             );
             $wpdb->query($query);
 
             $table = self::table_name('logs');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (log_id, site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff) VALUES "
-                . "(1, 'Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07'), "
-                . "(2, 'Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45'), "
-                . "(3, 'Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21'), "
-                . "(4, 'Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47'), "
-                . "(5, 'Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55'), "
-                . "(6, 'Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48'), "
-                . "(7, 'Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23');",
+                "INSERT INTO $table (site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff, user_id) VALUES "
+                . "('Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07', %d), "
+                . "('Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45', %d), "
+                . "('Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21', %d), "
+                . "('Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47', %d), "
+                . "('Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55', %d), "
+                . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d), "
+                . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d);",
                 array(
-                $p,
-                $p,
-                $p,
-                $p,
-                $e, $p,
-                $t, $e,
-                $t, $p
+                $p, $user_id,
+                $p, $user_id,
+                $p, $user_id,
+                $p, $user_id,
+                $e, $p, $user_id,
+                $t, $e, $user_id,
+                $t, $p, $user_id
                 )
             );
             $wpdb->query($query);
@@ -267,6 +294,34 @@ if (!class_exists('Paralog')) {
             return true;
         }
 
+        /**
+         * @name on_deactivation
+         */
+        public static function on_deactivation()
+        {
+            $options = get_option(PL_DOMAIN);
+
+            $options['active'] = 'off';
+            $options['datetime'] = current_time('mysql');
+
+            update_option(PL_DOMAIN, $options, 'no');
+        }
+
+        /**
+         * @name on_uninstall
+         * @global object $wpdb
+         */
+        public static function on_uninstall()
+        {
+            global $wpdb;
+
+            foreach (self::$tables as $table) {
+                $name = self::table_name($table);
+                $wpdb->query("DROP TABLE IF EXISTS $name;");
+            }
+
+            delete_option(PL_DOMAIN);
+        }
         /**
          * @name my_query
          * @global object $wpdb
@@ -371,35 +426,6 @@ if (!class_exists('Paralog')) {
             $wpdb->flush();
             fclose($out);
             exit;
-        }
-
-        /**
-         * @name on_deactivation
-         */
-        public static function on_deactivation()
-        {
-            $options = get_option(PL_DOMAIN);
-
-            $options['active'] = 'off';
-            $options['datetime'] = current_time('mysql');
-
-            update_option(PL_DOMAIN, $options, 'no');
-        }
-
-        /**
-         * @name on_uninstall
-         * @global object $wpdb
-         */
-        public static function on_uninstall()
-        {
-            global $wpdb;
-
-            foreach (self::$tables as $table) {
-                $name = self::table_name($table);
-                $wpdb->query("DROP TABLE IF EXISTS $name;");
-            }
-
-            delete_option(PL_DOMAIN);
         }
 
         /**

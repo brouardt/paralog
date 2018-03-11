@@ -160,6 +160,7 @@ class Paralog_Line extends WP_List_Table
         $default = array(
             'line_id' => 0,
             'name' => '',
+            'user_id' => get_current_user_id()
         );
 
         if (isset($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], basename(__FILE__))) {

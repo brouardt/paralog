@@ -175,7 +175,8 @@ class Paralog_Person extends WP_List_Table
             'pilot_type' => __('pilote', PL_DOMAIN),
             'licence' => '',
             'winchman' => __('non', PL_DOMAIN),
-            'winchman_type' => null
+            'winchman_type' => null,
+            'user_id' => get_current_user_id()
         );
 
         if (isset($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], basename(__FILE__))) {

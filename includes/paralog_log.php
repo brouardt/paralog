@@ -194,7 +194,8 @@ class Paralog_Log extends WP_List_Table
             'pilot_id' => null,
             'passenger_name' => '',
             'total_flying_weight' => null,
-            'takeoff' => null
+            'takeoff' => null,
+            'user_id' => get_current_user_id()
         );
 
         if (isset($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], basename(__FILE__))) {

@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.1] - 2018-03-11
+## Ajout
+- Insertion du user_id actif dans les tables de sauvegarde.
+
 ## [1.2.9] - 2018-03-11
 ### Ajout
 - Création d'un cookie pour memorisation temporaire (durée: 12H) du site et de la ligne de vol. Afin d'éviter toute saisies superflues dans le journal de log, lorsque l'on se trouve toute la journée sur le même site.
