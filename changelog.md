@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.2.9] - 2018-03-11
+### Ajout
+- Création d'un cookie pour memorisation temporaire (durée: 12H) du site et de la ligne de vol. Afin d'éviter toute saisies superflues dans le journal de log, lorsque l'on se trouve toute la journée sur le même site.
+
 ## [1.2.8] - 2018-03-06
 ### Modification
 - Exportation des données par dates de décollage décroissantes

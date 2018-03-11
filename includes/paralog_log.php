@@ -18,6 +18,7 @@ class Paralog_Log extends WP_List_Table
             'plural' => __('personnes', PL_DOMAIN), //plural name of the listed records
             'ajax' => false                    //does this table support ajax?
         ));
+
     }
 
     public function get_columns()
@@ -183,6 +184,8 @@ class Paralog_Log extends WP_List_Table
         $message = '';
         $notice = '';
 
+        $wmid = null;
+
         $default = array(
             'log_id' => 0,
             'site_name' => '',
@@ -210,7 +213,7 @@ class Paralog_Log extends WP_List_Table
                 $pilot = $this->person_name_type($_REQUEST['pilot_id'], 'pilot_type');
                 $item['pilot_name'] = $pilot->name;
                 $item['pilot_type'] = $pilot->type;
-
+                
                 $item['takeoff'] = date('Y-m-d H:i:s');
                 
                 unset($item['winchman_id'], $item['pilot_id']);
@@ -235,12 +238,19 @@ class Paralog_Log extends WP_List_Table
                         $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
                     }
                 }
+                $this->set_cookie('pl_site_name', $item['site_name']);
+                $this->set_cookie('pl_line_name', $item['line_name']);
+                $this->set_cookie('pl_winchman_name', $item['winchman_name']);
             } else {
                 // if $item_valid not true it contains error message(s)
                 $notice = $item_valid;
             }
         } else {
             // if this is not post back we load item to edit or give new one to create
+            $default['site_name'] = $this->get_cookie('pl_site_name','');
+            $default['line_name'] = $this->get_cookie('pl_line_name','');
+            $default['winchman_name'] = $this->get_cookie('pl_winchman_name','');
+
             $item = $default;
             if (isset($_REQUEST['id'])) {
                 $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE log_id = %d", $_REQUEST['id']), ARRAY_A);
@@ -450,5 +460,25 @@ class Paralog_Log extends WP_List_Table
         $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE person_id = %d;", $id);
 
         return $wpdb->get_row($query, OBJECT);
+    }
+
+    /**
+     * @name set_cookie
+     * @param string $name
+     * @param mixed $value
+     */
+    private function set_cookie($name, $value) {
+        setcookie($name, $value, strtotime('+12 hours'), COOKIEPATH, COOKIE_DOMAIN);
+    }
+
+    /**
+     * @name get_cookie
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    private function get_cookie($name, $default = NULL)
+    {
+        return isset($_COOKIE[$name]) ? stripslashes($_COOKIE[$name]) : $default;
     }
 }
