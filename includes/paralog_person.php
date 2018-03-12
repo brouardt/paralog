@@ -61,6 +61,17 @@ class Paralog_Person extends WP_List_Table
         return sprintf('%1$s %2$s', trim($item['firstname'] . ' ' . $item['lastname']), $this->row_actions($actions));
     }
 
+    public function column_licence($item)
+    {
+        if (!empty($item['licence'])) {
+            $column = sprintf('<a href="https://intranet.ffvl.fr/licences/%1$s" target="_blank">%1$s</a>', $item['licence']);
+        } else {
+            $column = '';
+        }
+        
+        return $column;
+    }
+
     protected function get_bulk_actions()
     {
         if (current_user_can('delete_others_posts')) {
@@ -137,7 +148,6 @@ class Paralog_Person extends WP_List_Table
     {
         switch ($column_name) {
             case 'pilot_type':
-            case 'licence':
             case 'winchman':
             case 'winchman_type':
                 return $item[$column_name];
