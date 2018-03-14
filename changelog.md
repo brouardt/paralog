@@ -2,7 +2,6 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
-
 ## [1.3.2] - 2018-03-12
 ## Ajout
 - Dans la vue Personne, le numéro de licence est lié au site de la FFVL.
