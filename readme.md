@@ -41,12 +41,6 @@ Les développement se situent sur [GitHub](https://github.com/brouardt/paralog),
 3. Cliquez sur installer
 4. Activez l'extension dans le menu 'Extensions' de WordPress.
 
-## Questions fréquentes
-
-#### Y-a-t-il un shortcode pour afficher et gérer les journaux ?
-
-pour le moment le shortcode n'est pas actif, la saisie et le consultation se font à travers la partie admin.
-
 ## Suivi des modifications
 
 voir le fichier changelog.md

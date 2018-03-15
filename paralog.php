@@ -440,19 +440,19 @@ if (!class_exists('Paralog')) {
                 if (function_exists('add_submenu_page')) {
                     add_submenu_page(self::admin_slug, __("À propos de Paralog", PL_DOMAIN), __("À propos de", PL_DOMAIN), $allowed_group, self::admin_slug, array($this, 'about'));
 
-                    $logs_hook = add_submenu_page(self::admin_slug, __("Journaux Paralog", PL_DOMAIN), __("Les journaux", PL_DOMAIN), $allowed_group, 'paralog-logs', array($this, 'list_logs'));
+                    $logs_hook = add_submenu_page(self::admin_slug, __("Décollages Paralog", PL_DOMAIN), __("Décollages", PL_DOMAIN), $allowed_group, 'paralog-logs', array($this, 'list_logs'));
                     add_action("load-$logs_hook", array($this, 'add_options'));
                     add_submenu_page('paralog-logs', __("Ajouter un décollage / treuillé", PL_DOMAIN), __("Ajouter un décollage / treuillé", PL_DOMAIN), $allowed_group, 'paralog-logs-form', array($this, 'form_log'));
 
-                    $persons_hook = add_submenu_page(self::admin_slug, __("Personnes Paralog", PL_DOMAIN), __("Les personnes", PL_DOMAIN), $allowed_group, 'paralog-persons', array($this, 'list_persons'));
+                    $persons_hook = add_submenu_page(self::admin_slug, __("Personnes Paralog", PL_DOMAIN), __("Personnes", PL_DOMAIN), $allowed_group, 'paralog-persons', array($this, 'list_persons'));
                     add_action("load-$persons_hook", array($this, 'add_options'));
                     add_submenu_page('paralog-persons', __("Ajouter une personne", PL_DOMAIN), __("Ajouter une personne", PL_DOMAIN), $allowed_group, 'paralog-persons-form', array($this, 'form_person'));
 
-                    $lines_hook = add_submenu_page(self::admin_slug, __("Lignes Paralog", PL_DOMAIN), __("Les lignes", PL_DOMAIN), $allowed_group, 'paralog-lines', array($this, 'list_lines'));
+                    $lines_hook = add_submenu_page(self::admin_slug, __("Lignes Paralog", PL_DOMAIN), __("Lignes", PL_DOMAIN), $allowed_group, 'paralog-lines', array($this, 'list_lines'));
                     add_action("load-$lines_hook", array($this, 'add_options'));
                     add_submenu_page('paralog-lines', __("Ajouter une ligne", PL_DOMAIN), __("Ajouter une ligne", PL_DOMAIN), $allowed_group, 'paralog-lines-form', array($this, 'form_line'));
 
-                    $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog", PL_DOMAIN), __("Les sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
+                    $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog", PL_DOMAIN), __("Sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
                     add_action("load-$sites_hook", array($this, 'add_options'));
                     add_submenu_page('paralog-sites', __("Ajouter un site", PL_DOMAIN), __("Ajouter un site", PL_DOMAIN), $allowed_group, 'paralog-sites-form', array($this, 'form_site'));
                 }
