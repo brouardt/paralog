@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.4] - 2018-03-15
+## Modification
+- Retrait de la colonne user_id dans l'exportation des données
+
 ## [1.3.3] - 2018-03-15
 ## Modification
 - Changements dans les textes et traductions.
