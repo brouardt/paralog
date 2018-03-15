@@ -403,6 +403,7 @@ if (!class_exists('Paralog')) {
 
             $query = "SHOW COLUMNS FROM " . Paralog::table_name('logs') . " WHERE Field <> 'log_id';";
             $columns = $wpdb->get_results($query, ARRAY_A);
+            $head = array_column($columns, 'Field');
             
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
