@@ -2,6 +2,12 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.5] - 2018-03-22
+## Modification
+- Prise en compte du format réel de la date et heure définie dans wordpress
+## Suppression
+- Retrait des traductions du format de date et heure
+
 ## [1.3.4] - 2018-03-15
 ## Modification
 - Retrait de la colonne user_id dans l'exportation des données
