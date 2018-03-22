@@ -14,7 +14,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       paralog
  * Domain Path:       /languages
- * Requires at least: 4.4
+ * Requires at least: 3.1.0
  * Stable tag:        4.9.4
  * Tested up to:      4.9.4
  * Requires PHP:      5.6
