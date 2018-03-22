@@ -2,7 +2,7 @@
 Contributors: brouardt  
 Author URI: https://thierry.brouard.pro/  
 Plugin URL: https://thierry.brouard.pro/2018/01/paralog/  
-Requires at Least: 4.4  
+Requires at Least: 3.1.0  
 Tested Up To: 4.9.4  
 Tags: treuil, ligne, parapente, pilote, journal  
 Stable tag: 1.0  
