@@ -49,12 +49,12 @@ class Paralog_Person extends WP_List_Table
 
         if (current_user_can('edit_others_posts')) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">' . __('Modifier', PL_DOMAIN) . '</a>', $_REQUEST['page'], $item['person_id'], $this->get_pagenum())
+                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">%s</a>', $_REQUEST['page'], $item['person_id'], $this->get_pagenum(), __('Modifier', PL_DOMAIN))
             ));
         }
         if (current_user_can('delete_others_posts')) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">' . __('Supprimer', PL_DOMAIN) . '</a>', $_REQUEST['page'], 'delete', $item['person_id'])
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['person_id'], __('Supprimer', PL_DOMAIN))
             ));
         }
 
@@ -231,7 +231,7 @@ class Paralog_Person extends WP_List_Table
         add_meta_box('person_form_meta_box', 'Donnée', array($this, 'person_form_meta_box_handler'), 'person', 'normal', 'default'); ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?= _e('Fiche de personnel', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum())) ?>"><?= _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e('Fiche de personnel', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -245,7 +245,7 @@ class Paralog_Person extends WP_List_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('person', 'normal', $item) ?>
-                            <input type="submit" value="<?= _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -265,23 +265,23 @@ class Paralog_Person extends WP_List_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="firstname"><?= _e('Prénom', PL_DOMAIN) ?></label>
+                        <label for="firstname"><?php _e('Prénom', PL_DOMAIN) ?></label>
                     </th>
                     <td>
-                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?= esc_attr($item['firstname']) ?>" size="50" maxlength="64" class="code" placeholder="<?= _e('ex: Thierry', PL_DOMAIN) ?>" required>
+                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?= esc_attr($item['firstname']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Thierry', PL_DOMAIN) ?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="lastname"><?= _e('Nom', PL_DOMAIN) ?></label>
+                        <label for="lastname"><?php _e('Nom', PL_DOMAIN) ?></label>
                     </th>
                     <td>
-                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?= esc_attr($item['lastname']) ?>" size="50" maxlength="64" class="code" placeholder="<?= _e('ex: Brouard', PL_DOMAIN) ?>" required>
+                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?= esc_attr($item['lastname']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Brouard', PL_DOMAIN) ?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label><?= _e('Type de pilote', PL_DOMAIN) ?></label>
+                        <label><?php _e('Type de pilote', PL_DOMAIN) ?></label>
                     </th>
                     <td>
                         <label><input name="pilot_type" type="radio" value="<?= $pilote ?>"<?= ($item['pilot_type'] == $pilote ? ' checked':'') ?>/> <?= $pilote ?></label>
@@ -290,15 +290,15 @@ class Paralog_Person extends WP_List_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="licence"><?= _e('Licence', PL_DOMAIN) ?></label>
+                        <label for="licence"><?php _e('Licence', PL_DOMAIN) ?></label>
                     </th>
                     <td>
-                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?= esc_attr($item['licence']) ?>" size="50" maxlength="10" class="code" placeholder="<?= _e('ex: 0000000X', PL_DOMAIN) ?>">
+                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?= esc_attr($item['licence']) ?>" size="50" maxlength="10" class="code" placeholder="<?php _e('ex: 0000000X', PL_DOMAIN) ?>">
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman"><?= _e('Treuilleur', PL_DOMAIN) ?></label>
+                        <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN) ?></label>
                     </th>
                     <td>
                         <label><input name="winchman" type="radio" value="<?= $oui ?>"<?= ($item['winchman'] == $oui ? ' checked':'') ?>/> <?= $oui ?></label>
@@ -307,7 +307,7 @@ class Paralog_Person extends WP_List_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman_type"><?= _e('Type de treuilleur', PL_DOMAIN) ?></label>
+                        <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN) ?></label>
                     </th>
                     <td>
                         <label><input name="winchman_type" type="radio" value="<?= $treuilleur ?>"<?= ($item['winchman_type'] == $treuilleur ? ' checked':'') ?>/> <?= $treuilleur ?></label>

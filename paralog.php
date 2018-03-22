@@ -704,20 +704,20 @@ if (!class_exists('Paralog')) {
             $pilots = $this->stats_pilots($param_year);
             $passengers = $this->stats_passengers($param_year); ?>
             <div class="wrap">
-                <h1><?= _e("À propos de", PL_DOMAIN) . " Paralog"; ?></h1>
-                <h2><?= _e("Journaux des décollages / treuillés", PL_DOMAIN); ?></h2>
+                <h1><?php _e("À propos de", PL_DOMAIN) . " Paralog"; ?></h1>
+                <h2><?php _e("Journaux des décollages / treuillés", PL_DOMAIN); ?></h2>
                 <div class="notice inline notice-info">
-                    <p><?= _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN); ?></p>
-                    <?= _e("Notions", PL_DOMAIN); ?>
+                    <p><?php _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN); ?></p>
+                    <?php _e("Notions", PL_DOMAIN); ?>
                     <ul class="ul-square">
-                        <li><?= _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>', PL_DOMAIN); ?>.</li>
-                        <li><?= _e('La ligne : représente la ligne du treuil <span class="PL_gris_clair">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="PL_gris_clair">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class="PL_gris_clair">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>', PL_DOMAIN); ?></li>
+                        <li><?php _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>', PL_DOMAIN); ?>.</li>
+                        <li><?php _e('La ligne : représente la ligne du treuil <span class="PL_gris_clair">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="PL_gris_clair">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class="PL_gris_clair">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>', PL_DOMAIN); ?></li>
                     </ul>
                 </div>
                 <form name="statistiques" method="get" action="">
                     <input type="hidden" name="page" value="<?= self::admin_slug; ?>" />
-                    <h2><?= _e("Statistiques", PL_DOMAIN); ?></h2>
-                    <label><?= _e("Année", PL_DOMAIN); ?> : 
+                    <h2><?php _e("Statistiques", PL_DOMAIN); ?></h2>
+                    <label><?php _e("Année", PL_DOMAIN); ?> : 
                         <select name="annee" onchange="submit();">
                             <?php foreach ($years as $year) : ?>
                                 <option value="<?= $year['valeur']; ?>"<?= ($param_year == $year['valeur'] ? 'selected' : '') ?>><?= $year['libelle']; ?></option>
@@ -731,12 +731,12 @@ if (!class_exists('Paralog')) {
             if (!empty($param_year)) {
                 echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
             } ?>
-                    <h3><?= _e("Les sites", PL_DOMAIN); ?></h3>
+                    <h3><?php _e("Les sites", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?= _e("Nom des sites", PL_DOMAIN); ?></th>
-                                <th><?= _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
+                                <th><?php _e("Nom des sites", PL_DOMAIN); ?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -748,12 +748,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <h3><?= _e("Les lignes", PL_DOMAIN); ?></h3>
+                    <h3><?php _e("Les lignes", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?= _e("Nom des lignes", PL_DOMAIN); ?></th>
-                                <th><?= _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
+                                <th><?php _e("Nom des lignes", PL_DOMAIN); ?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -765,12 +765,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <h3><?= _e("Les treuilleurs", PL_DOMAIN); ?></h3>
+                    <h3><?php _e("Les treuilleurs", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?= _e("Nom des treuilleurs", PL_DOMAIN); ?></th>
-                                <th><?= _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
+                                <th><?php _e("Nom des treuilleurs", PL_DOMAIN); ?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -782,12 +782,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <h3><?= _e("Les pilotes", PL_DOMAIN); ?></h3>
+                    <h3><?php _e("Les pilotes", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?= _e("Nom des pilotes", PL_DOMAIN); ?></th>
-                                <th><?= _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
+                                <th><?php _e("Nom des pilotes", PL_DOMAIN); ?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -799,12 +799,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <h3><?= _e("Les passagers", PL_DOMAIN); ?></h3>
+                    <h3><?php _e("Les passagers", PL_DOMAIN); ?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?= _e("Nom des sites", PL_DOMAIN); ?></th>
-                                <th><?= _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
+                                <th><?php _e("Nom des sites", PL_DOMAIN); ?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN); ?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -818,7 +818,7 @@ if (!class_exists('Paralog')) {
                     </table>
                 </form>
                 <p>*
-                    <?= _e('Nombre de décollages ou de treuillés'); ?>
+                    <?php _e('Nombre de décollages ou de treuillés'); ?>
                 </p>
             </div>
             <?php
@@ -840,7 +840,7 @@ if (!class_exists('Paralog')) {
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?= _e("Gestion des décollages / treuillés", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter un décollage / treuillé", PL_DOMAIN); ?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?php _e("Ajouter un décollage / treuillé", PL_DOMAIN); ?></a>
                 <?= $message; ?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?= $page ?>">
@@ -875,7 +875,7 @@ if (!class_exists('Paralog')) {
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?= _e("Gestion des sites", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter un site", PL_DOMAIN); ?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des sites", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?php _e("Ajouter un site", PL_DOMAIN); ?></a>
                 <?= $message; ?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?= $page ?>">
@@ -910,7 +910,7 @@ if (!class_exists('Paralog')) {
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?= _e("Gestion des lignes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter une ligne", PL_DOMAIN); ?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des lignes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?php _e("Ajouter une ligne", PL_DOMAIN); ?></a>
                 <?= $message; ?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?= $page ?>">
@@ -945,7 +945,7 @@ if (!class_exists('Paralog')) {
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1; ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?= _e("Gestion des personnes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?= _e("Ajouter une personne", PL_DOMAIN); ?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des personnes", PL_DOMAIN); ?></h1> <a href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>" class="page-title-action"><?php _e("Ajouter une personne", PL_DOMAIN); ?></a>
                 <?= $message; ?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?= $page ?>">

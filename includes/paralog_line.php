@@ -43,12 +43,12 @@ class Paralog_Line extends WP_List_Table
 
         if (current_user_can('edit_others_posts')) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&&id=%d">' . __('Modifier', PL_DOMAIN) . '</a>', $_REQUEST['page'], $item['line_id'])
+                'edit' => sprintf('<a href="?page=%s-form&&id=%d">%s</a>', $_REQUEST['page'], $item['line_id'], __('Modifier', PL_DOMAIN))
             ));
         }
         if (current_user_can('delete_others_posts')) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">' . __('Supprimer', PL_DOMAIN) . '</a>', $_REQUEST['page'], 'delete', $item['line_id'])
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['line_id'], __('Supprimer', PL_DOMAIN))
             ));
         }
 
@@ -205,7 +205,7 @@ class Paralog_Line extends WP_List_Table
         add_meta_box('line_form_meta_box', 'Donnée', array($this, 'line_form_meta_box_handler'), 'line', 'normal', 'default'); ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?= _e('Fiche de ligne', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-lines&paged=%d', $this->get_pagenum())) ?>"><?= _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e('Fiche de ligne', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-lines&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -219,7 +219,7 @@ class Paralog_Line extends WP_List_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('line', 'normal', $item) ?>
-                            <input type="submit" value="<?= _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -235,10 +235,10 @@ class Paralog_Line extends WP_List_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="name"><?= _e('Nom de la ligne', PL_DOMAIN) ?></label>
+                        <label for="name"><?php _e('Nom de la ligne', PL_DOMAIN) ?></label>
                     </th>
                     <td>
-                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?= _e('ex: Treuil 1B - ligne A', PL_DOMAIN) ?>" required>
+                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Treuil 1B - ligne A', PL_DOMAIN) ?>" required>
                     </td>
                 </tr>
             </tbody>
