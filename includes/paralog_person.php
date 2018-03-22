@@ -16,7 +16,7 @@ class Paralog_Person extends WP_List_Table
         parent::__construct(array(
             'singular' => __('personne', PL_DOMAIN), //singular name of the listed records
             'plural' => __('personnes', PL_DOMAIN), //plural name of the listed records
-            'ajax' => false                    //does this table support ajax?
+            'ajax' => false, //does this table support ajax?
         ));
     }
 
@@ -24,7 +24,7 @@ class Paralog_Person extends WP_List_Table
     {
         if (current_user_can('delete_others_posts')) {
             $columns = array(
-                'cb' => '<input type="checkbox" />'
+                'cb' => '<input type="checkbox" />',
             );
         } else {
             $columns = array();
@@ -37,7 +37,7 @@ class Paralog_Person extends WP_List_Table
             'pilot_type' => __("Statut pilote", PL_DOMAIN),
             'licence' => __("Licence", PL_DOMAIN),
             'winchman' => __("Treuilleur", PL_DOMAIN),
-            'winchman_type' => __("Statut treuilleur", PL_DOMAIN)
+            'winchman_type' => __("Statut treuilleur", PL_DOMAIN),
         ));
 
         return $columns;
@@ -49,12 +49,12 @@ class Paralog_Person extends WP_List_Table
 
         if (current_user_can('edit_others_posts')) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">%s</a>', $_REQUEST['page'], $item['person_id'], $this->get_pagenum(), __('Modifier', PL_DOMAIN))
+                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">%s</a>', $_REQUEST['page'], $item['person_id'], $this->get_pagenum(), __('Modifier', PL_DOMAIN)),
             ));
         }
         if (current_user_can('delete_others_posts')) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['person_id'], __('Supprimer', PL_DOMAIN))
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['person_id'], __('Supprimer', PL_DOMAIN)),
             ));
         }
 
@@ -68,7 +68,7 @@ class Paralog_Person extends WP_List_Table
         } else {
             $column = '';
         }
-        
+
         return $column;
     }
 
@@ -76,7 +76,7 @@ class Paralog_Person extends WP_List_Table
     {
         if (current_user_can('delete_others_posts')) {
             $bulk_actions = array(
-                'delete' => __('Supprimer', PL_DOMAIN)
+                'delete' => __('Supprimer', PL_DOMAIN),
             );
         } else {
             $bulk_actions = array();
@@ -140,7 +140,7 @@ class Paralog_Person extends WP_List_Table
         $this->set_pagination_args(array(
             'total_items' => $total_items,
             'total_pages' => ceil($total_items / $per_page),
-            'per_page' => $per_page
+            'per_page' => $per_page,
         ));
     }
 
@@ -163,7 +163,7 @@ class Paralog_Person extends WP_List_Table
             'pilot_type' => array('pilot_type', false),
             'licence' => array('licence', false),
             'winchman' => array('winchman', false),
-            'winchman_type' => array('winchman_type', false)
+            'winchman_type' => array('winchman_type', false),
         );
 
         return $sortable_columns;
@@ -186,7 +186,7 @@ class Paralog_Person extends WP_List_Table
             'licence' => '',
             'winchman' => __('non', PL_DOMAIN),
             'winchman_type' => null,
-            'user_id' => get_current_user_id()
+            'user_id' => get_current_user_id(),
         );
 
         if (isset($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], basename(__FILE__))) {
@@ -228,96 +228,96 @@ class Paralog_Person extends WP_List_Table
                 }
             }
         }
-        add_meta_box('person_form_meta_box', 'Donnée', array($this, 'person_form_meta_box_handler'), 'person', 'normal', 'default'); ?>
+        add_meta_box('person_form_meta_box', 'Donnée', array($this, 'person_form_meta_box_handler'), 'person', 'normal', 'default');?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de personnel', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e('Fiche de personnel', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
-            <?php endif; ?>
+                <div id="notice" class="error"><p><?=$notice?></p></div>
+            <?php endif;?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
-            <?php endif; ?>
+                <div id="message" class="updated"><p><?=$message?></p></div>
+            <?php endif;?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="person_id" value="<?= esc_attr($item['person_id']) ?>"/>
+                <input type="hidden" name="nonce" value="<?=wp_create_nonce(basename(__FILE__))?>"/>
+                <input type="hidden" name="person_id" value="<?=esc_attr($item['person_id'])?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('person', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <?php do_meta_boxes('person', 'normal', $item)?>
+                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN);?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <?php
-    }
-    
+}
+
     public function person_form_meta_box_handler($item)
     {
         $treuilleur = __('treuilleur', PL_DOMAIN);
         $pilote = __('pilote', PL_DOMAIN);
         $eleve = __('élève', PL_DOMAIN);
         $oui = __('oui', PL_DOMAIN);
-        $non = __('non', PL_DOMAIN); ?>
+        $non = __('non', PL_DOMAIN);?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="firstname"><?php _e('Prénom', PL_DOMAIN) ?></label>
+                        <label for="firstname"><?php _e('Prénom', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?= esc_attr($item['firstname']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Thierry', PL_DOMAIN) ?>" required>
+                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?=esc_attr($item['firstname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Thierry', PL_DOMAIN)?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="lastname"><?php _e('Nom', PL_DOMAIN) ?></label>
+                        <label for="lastname"><?php _e('Nom', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?= esc_attr($item['lastname']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Brouard', PL_DOMAIN) ?>" required>
+                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?=esc_attr($item['lastname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Brouard', PL_DOMAIN)?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label><?php _e('Type de pilote', PL_DOMAIN) ?></label>
+                        <label><?php _e('Type de pilote', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <label><input name="pilot_type" type="radio" value="<?= $pilote ?>"<?= ($item['pilot_type'] == $pilote ? ' checked':'') ?>/> <?= $pilote ?></label>
-                        <label><input name="pilot_type" type="radio" value="<?= $eleve ?>"<?= ($item['pilot_type'] == $eleve ? ' checked':'') ?>/> <?= $eleve ?></label>
+                        <label><input name="pilot_type" type="radio" value="<?=$pilote?>"<?=($item['pilot_type'] == $pilote ? ' checked' : '')?>/> <?=$pilote?></label>
+                        <label><input name="pilot_type" type="radio" value="<?=$eleve?>"<?=($item['pilot_type'] == $eleve ? ' checked' : '')?>/> <?=$eleve?></label>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="licence"><?php _e('Licence', PL_DOMAIN) ?></label>
+                        <label for="licence"><?php _e('Licence', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?= esc_attr($item['licence']) ?>" size="50" maxlength="10" class="code" placeholder="<?php _e('ex: 0000000X', PL_DOMAIN) ?>">
+                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?=esc_attr($item['licence'])?>" size="50" maxlength="10" class="code" placeholder="<?php _e('ex: 0000000X', PL_DOMAIN)?>">
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN) ?></label>
+                        <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <label><input name="winchman" type="radio" value="<?= $oui ?>"<?= ($item['winchman'] == $oui ? ' checked':'') ?>/> <?= $oui ?></label>
-                        <label><input name="winchman" type="radio" value="<?= $non ?>"<?= ($item['winchman'] == $non ? ' checked':'') ?>/> <?= $non ?></label>
+                        <label><input name="winchman" type="radio" value="<?=$oui?>"<?=($item['winchman'] == $oui ? ' checked' : '')?>/> <?=$oui?></label>
+                        <label><input name="winchman" type="radio" value="<?=$non?>"<?=($item['winchman'] == $non ? ' checked' : '')?>/> <?=$non?></label>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN) ?></label>
+                        <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <label><input name="winchman_type" type="radio" value="<?= $treuilleur ?>"<?= ($item['winchman_type'] == $treuilleur ? ' checked':'') ?>/> <?= $treuilleur ?></label>
-                        <label><input name="winchman_type" type="radio" value="<?= $eleve ?>"<?= ($item['winchman_type'] == $eleve ? ' checked':'') ?>/> <?= $eleve ?></label>
+                        <label><input name="winchman_type" type="radio" value="<?=$treuilleur?>"<?=($item['winchman_type'] == $treuilleur ? ' checked' : '')?>/> <?=$treuilleur?></label>
+                        <label><input name="winchman_type" type="radio" value="<?=$eleve?>"<?=($item['winchman_type'] == $eleve ? ' checked' : '')?>/> <?=$eleve?></label>
                     </td>
                 </tr>
             </tbody>
         </table>
         <?php
-    }
+}
 
     private function form_validate($item)
     {
