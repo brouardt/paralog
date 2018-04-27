@@ -4,7 +4,7 @@ Author URI: https://github.com/brouardt/paralog
 
 ## [1.3.6] - 2018-04-22
 ## Modfication
-- Prise en compte des auteurs de documents (site, ligne, personnel, décollage). Ceux-ci pourront désormais modifier ou supprimer leurs document a posteriori.
+- Prise en compte des auteurs de documents (site, ligne, personnel, décollage). Ceux-ci pourront désormais modifier ou supprimer leurs documents.
 
 ## [1.3.5] - 2018-03-22
 ## Modification
