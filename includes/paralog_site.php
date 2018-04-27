@@ -3,15 +3,17 @@ if (!defined('ABSPATH')) {
     die("No direct access allowed");
 }
 
-require_once plugin_dir_path(__FILE__) . '/paralog_common.php';
+if (!class_exists('Paralog_Table')) {
+    require_once plugin_dir_path(__FILE__) . '/paralog_table.php';
+}
+
 /**
  * Description of paralog_site
  *
- * @author thier
+ * @author Thierry Brouard <thierry@brouard.pro>
  */
-class Paralog_Site extends WP_List_Table
+class Paralog_Site extends Paralog_Table
 {
-    use Paralog_Common;
 
     public function __construct()
     {
@@ -20,6 +22,9 @@ class Paralog_Site extends WP_List_Table
             'plural' => __('sites', PL_DOMAIN), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
+
+        $this->setTable('sites');
+        $this->setPrimary('site_id');
     }
 
     public function get_columns()
@@ -43,66 +48,20 @@ class Paralog_Site extends WP_List_Table
     {
         $actions = array();
         $user_id = get_current_user_id();
+        $primary = $this->getPrimary();
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item['site_id'], __('Modifier', PL_DOMAIN)),
+                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier', PL_DOMAIN)),
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['site_id'], __('Supprimer', PL_DOMAIN)),
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN)),
             ));
         }
 
         return sprintf('%1$s %2$s', $item['name'], $this->row_actions($actions));
-    }
-
-    protected function get_bulk_actions()
-    {
-        if (current_user_can('delete_others_posts')) {
-            $bulk_actions = array(
-                'delete' => __('Supprimer', PL_DOMAIN),
-            );
-        } else {
-            $bulk_actions = array();
-        }
-
-        return $bulk_actions;
-    }
-
-    protected function column_cb($item)
-    {
-        return sprintf('<input type="checkbox" name="id[]" value="%s" />', $item['site_id']);
-    }
-
-    public function process_bulk_action()
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('sites');
-        $clef_primaire = 'site_id';
-
-        if('delete'==$this->current_action()){
-            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
-            if (!empty($ids)) {
-                $query = '';
-                if (is_array($ids)){
-                    $ids = implode(',', $ids);
-                    $query = "DELETE FROM $table WHERE $clef_primaire IN($ids)";
-                } else {
-                    $is_author = $this->is_id_belong_to_user($table, $clef_primaire, $ids);
-                    if( $is_author ) 
-                    {
-                        $query = "DELETE FROM $table WHERE $clef_primaire = $ids";
-                    }
-                }
-                if( $query)
-                {
-                    $wpdb->query($query);
-                }
-            }
-        }
     }
 
     public function prepare_items()
@@ -121,14 +80,15 @@ class Paralog_Site extends WP_List_Table
         $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'name';
         $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'asc';
 
-        $table = Paralog::table_name('sites');
-
+        $table = $this->getTable();
+        
         $query = $wpdb->prepare(
             "SELECT "
             . "site_id, "
             . "name, "
             . "user_id "
             . "FROM $table "
+            . "WHERE deleted = 0 "
             . "ORDER BY $orderby $order "
             . "LIMIT %d OFFSET %d",
             $per_page,
@@ -136,7 +96,7 @@ class Paralog_Site extends WP_List_Table
         );
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(site_id) FROM $table");
+        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
@@ -168,7 +128,8 @@ class Paralog_Site extends WP_List_Table
     {
         global $wpdb;
 
-        $table = Paralog::table_name('sites');
+        $table = $this->getTable();
+        $primary = $this->getPrimary();
 
         $message = '';
         $notice = '';
@@ -187,16 +148,16 @@ class Paralog_Site extends WP_List_Table
             $item_valid = $this->form_validate($item);
 
             if ($item_valid === true) {
-                if ($item['site_id'] == 0) {
+                if ($item[$primary] == 0) {
                     $result = $wpdb->insert($table, $item);
-                    $item['site_id'] = $wpdb->insert_id;
+                    $item[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
                         $message = __("Site enregistré", PL_DOMAIN);
                     } else {
                         $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
                     }
                 } else {
-                    $result = $wpdb->update($table, $item, array('site_id' => $item['site_id']));
+                    $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
                     if ($result !== false) {
                         $message = __("Site mis à jour", PL_DOMAIN);
                     } else {
@@ -211,7 +172,7 @@ class Paralog_Site extends WP_List_Table
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE site_id = %d", $_REQUEST['id']), ARRAY_A);
+                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
@@ -230,7 +191,7 @@ class Paralog_Site extends WP_List_Table
             <?php endif; ?>
             <form id="form" method="post">
                 <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="site_id" value="<?= esc_attr($item['site_id']) ?>"/>
+                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">

@@ -3,11 +3,12 @@
  * @link              https://thierry.brouard.pro/
  * @since             1.0.0
  * @package           Paralog
+ * @author            Thierry Brouard <thierry@brouard.pro>
  *
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.3.6
+ * Version:           1.3.7
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -23,13 +24,9 @@ if (!defined('ABSPATH')) {
     die("No direct access allowed");
 }
 
-if (!class_exists('WP_List_Table')) {
-    require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
-}
-
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.3.6');
-    define('PL_DB_VERSION', '1.8');
+    define('PL_VERSION', '1.3.7');
+    define('PL_DB_VERSION', '1.9');
     define('PL_DOMAIN', 'paralog');
     define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
 
@@ -124,6 +121,7 @@ if (!class_exists('Paralog')) {
                     . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(64) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
                     . "PRIMARY KEY (site_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -135,6 +133,7 @@ if (!class_exists('Paralog')) {
                     . "line_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(32) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
                     . "PRIMARY KEY (line_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -152,6 +151,7 @@ if (!class_exists('Paralog')) {
                     . "winchman enum(%s,%s) NOT NULL DEFAULT %s, "
                     . "winchman_type enum(%s,%s) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
                     . "PRIMARY KEY (person_id) "
                     . ") $charset_collate",
                     array(
@@ -178,6 +178,7 @@ if (!class_exists('Paralog')) {
                     . "total_flying_weight smallint(5) UNSIGNED DEFAULT NULL, "
                     . "takeoff datetime NOT NULL DEFAULT '0000-00-00 00:00:00', "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
                     . "PRIMARY KEY (log_id) "
                     . ") $charset_collate",
                     array(
@@ -236,7 +237,7 @@ if (!class_exists('Paralog')) {
                 . "('Treuil 1B', %d), "
                 . "('Treuil 2B - ligne rouge', %d), "
                 . "('Treuil 2B - ligne verte', %d), "
-                . "('Dévidoir 3B', %d);",
+                . "('Dévidoir', %d);",
                 array(
                     $user_id,
                     $user_id,
@@ -401,21 +402,21 @@ if (!class_exists('Paralog')) {
 
             fwrite($out, $bom, strlen($bom));
 
-            $query = "SHOW COLUMNS FROM " . Paralog::table_name('logs') . " WHERE Field NOT IN ('log_id','user_id');";
+            $query = "SHOW COLUMNS FROM " . Paralog::table_name('logs') . " WHERE Field NOT IN ('log_id','user_id','deleted');";
             $columns = $wpdb->get_results($query, ARRAY_A);
             $head = array_column($columns, 'Field');
 
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
-            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs');
+            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs') . " WHERE deleted = 0 ";
 
             if (is_numeric($year)) {
-                $sql .= " WHERE YEAR(takeoff) = %d";
+                $sql .= "AND YEAR(takeoff) = %d ";
                 $query = $wpdb->prepare($sql, $year);
             } else {
                 $query = $sql;
             }
-            $query .= " ORDER BY takeoff DESC;";
+            $query .= "ORDER BY takeoff DESC;";
 
             $this->my_query($query);
 

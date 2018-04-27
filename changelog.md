@@ -2,6 +2,11 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.7] - 2018-04-27
+## Modification
+- Gestion des suppressions douces. Celles-ci seront seulement dans un état deleted avant 
+que l'administrateur ne les supprime définitivement
+
 ## [1.3.6] - 2018-04-22
 ## Modfication
 - Prise en compte des auteurs de documents (site, ligne, personnel, décollage). Ceux-ci pourront désormais modifier ou supprimer leurs documents.
