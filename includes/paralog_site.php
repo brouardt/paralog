@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) {
     die("No direct access allowed");
 }
 
+require_once plugin_dir_path(__FILE__) . '/paralog_common.php';
 /**
  * Description of paralog_site
  *
@@ -10,6 +11,8 @@ if (!defined('ABSPATH')) {
  */
 class Paralog_Site extends WP_List_Table
 {
+    use Paralog_Common;
+
     public function __construct()
     {
         parent::__construct(array(
@@ -39,13 +42,14 @@ class Paralog_Site extends WP_List_Table
     public function column_name($item)
     {
         $actions = array();
+        $user_id = get_current_user_id();
 
-        if (current_user_can('edit_others_posts')) {
+        if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item['site_id'], __('Modifier', PL_DOMAIN)),
             ));
         }
-        if (current_user_can('delete_others_posts')) {
+        if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['site_id'], __('Supprimer', PL_DOMAIN)),
             ));
@@ -76,15 +80,27 @@ class Paralog_Site extends WP_List_Table
     {
         global $wpdb;
 
-        if ('delete' === $this->current_action() && current_user_can('delete_others_posts')) {
-            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
-            if (is_array($ids)) {
-                $ids = implode(',', $ids);
-            }
+        $table = Paralog::table_name('sites');
+        $clef_primaire = 'site_id';
 
+        if('delete'==$this->current_action()){
+            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (!empty($ids)) {
-                $query = "DELETE FROM " . Paralog::table_name('sites') . " WHERE site_id IN($ids)";
-                $wpdb->query($query);
+                $query = '';
+                if (is_array($ids)){
+                    $ids = implode(',', $ids);
+                    $query = "DELETE FROM $table WHERE $clef_primaire IN($ids)";
+                } else {
+                    $is_author = $this->is_id_belong_to_user($table, $clef_primaire, $ids);
+                    if( $is_author ) 
+                    {
+                        $query = "DELETE FROM $table WHERE $clef_primaire = $ids";
+                    }
+                }
+                if( $query)
+                {
+                    $wpdb->query($query);
+                }
             }
         }
     }
@@ -108,7 +124,10 @@ class Paralog_Site extends WP_List_Table
         $table = Paralog::table_name('sites');
 
         $query = $wpdb->prepare(
-            "SELECT site_id, name "
+            "SELECT "
+            . "site_id, "
+            . "name, "
+            . "user_id "
             . "FROM $table "
             . "ORDER BY $orderby $order "
             . "LIMIT %d OFFSET %d",

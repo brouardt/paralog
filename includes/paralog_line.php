@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
     die("No direct access allowed");
 }
 
+require_once plugin_dir_path(__FILE__) . '/paralog_common.php';
 /**
  * Description of paralog_line
  *
@@ -11,6 +12,8 @@ if (!defined('ABSPATH')) {
  */
 class Paralog_Line extends WP_List_Table
 {
+    use Paralog_Common;
+
     public function __construct()
     {
         parent::__construct(array(
@@ -40,13 +43,14 @@ class Paralog_Line extends WP_List_Table
     public function column_name($item)
     {
         $actions = array();
+        $user_id = get_current_user_id();
 
-        if (current_user_can('edit_others_posts')) {
+        if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'edit' => sprintf('<a href="?page=%s-form&&id=%d">%s</a>', $_REQUEST['page'], $item['line_id'], __('Modifier', PL_DOMAIN))
             ));
         }
-        if (current_user_can('delete_others_posts')) {
+        if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['line_id'], __('Supprimer', PL_DOMAIN))
             ));
@@ -77,15 +81,27 @@ class Paralog_Line extends WP_List_Table
     {
         global $wpdb;
 
-        if ('delete' === $this->current_action() && current_user_can('delete_others_posts')) {
-            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
-            if (is_array($ids)) {
-                $ids = implode(',', $ids);
-            }
+        $table = Paralog::table_name('lines');
+        $clef_primaire = 'line_id';
 
+        if('delete'==$this->current_action()){
+            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (!empty($ids)) {
-                $query = "DELETE FROM " . Paralog::table_name('lines') . " WHERE line_id IN($ids)";
-                $wpdb->query($query);
+                $query = '';
+                if (is_array($ids)){
+                    $ids = implode(',', $ids);
+                    $query = "DELETE FROM $table WHERE $clef_primaire IN($ids)";
+                } else {
+                    $is_author = $this->is_id_belong_to_user($table, $clef_primaire, $ids);
+                    if( $is_author ) 
+                    {
+                        $query = "DELETE FROM $table WHERE $clef_primaire = $ids";
+                    }
+                }
+                if( $query)
+                {
+                    $wpdb->query($query);
+                }
             }
         }
     }
@@ -111,7 +127,8 @@ class Paralog_Line extends WP_List_Table
         $query = $wpdb->prepare(
             "SELECT "
             . "line_id, "
-            . "name "
+            . "name, "
+            . "user_id "
             . "FROM $table "
             . "ORDER BY $orderby $order "
             . "LIMIT %d OFFSET %d",

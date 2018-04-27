@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
     die("No direct access allowed");
 }
 
+require_once plugin_dir_path(__FILE__) . '/paralog_common.php';
 /**
  * Description of paralog_log
  *
@@ -11,6 +12,8 @@ if (!defined('ABSPATH')) {
  */
 class Paralog_Log extends WP_List_Table
 {
+    use Paralog_Common;
+
     private $datetime_format = null;
 
     public function __construct()
@@ -50,13 +53,14 @@ class Paralog_Log extends WP_List_Table
     public function column_takeoff($item)
     {
         $actions = array();
+        $user_id = get_current_user_id();
 
-        if (current_user_can('edit_others_posts')) {
+        if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item['log_id'], __('Modifier', PL_DOMAIN)),
             ));
         }
-        if (current_user_can('delete_others_posts')) {
+        if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
                 'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item['log_id'], __('Supprimer', PL_DOMAIN)),
             ));
@@ -87,15 +91,27 @@ class Paralog_Log extends WP_List_Table
     {
         global $wpdb;
 
-        if ('delete' === $this->current_action() && current_user_can('delete_others_posts')) {
-            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
-            if (is_array($ids)) {
-                $ids = implode(',', $ids);
-            }
+        $table = Paralog::table_name('logs');
+        $clef_primaire = 'log_id';
 
+        if('delete'==$this->current_action()){
+            $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (!empty($ids)) {
-                $query = "DELETE FROM " . Paralog::table_name('logs') . " WHERE log_id IN($ids)";
-                $wpdb->query($query);
+                $query = '';
+                if (is_array($ids)){
+                    $ids = implode(',', $ids);
+                    $query = "DELETE FROM $table WHERE $clef_primaire IN($ids)";
+                } else {
+                    $is_author = $this->is_id_belong_to_user($table, $clef_primaire, $ids);
+                    if( $is_author ) 
+                    {
+                        $query = "DELETE FROM $table WHERE $clef_primaire = $ids";
+                    }
+                }
+                if( $query)
+                {
+                    $wpdb->query($query);
+                }
             }
         }
     }
@@ -124,7 +140,8 @@ class Paralog_Log extends WP_List_Table
             . "site_name, line_name, "
             . "winchman_name, winchman_type, "
             . "pilot_name, pilot_type, passenger_name, "
-            . "takeoff "
+            . "takeoff, "
+            . "user_id "
             . "FROM $table "
             . "ORDER BY $orderby $order "
             . "LIMIT %d OFFSET %d",
@@ -229,14 +246,14 @@ class Paralog_Log extends WP_List_Table
                     $result = $wpdb->insert($table, $item);
                     $item['log_id'] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Treuillé enregistré", PL_DOMAIN);
+                        $message = __("Décollage enregistré", PL_DOMAIN);
                     } else {
                         $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
                     }
                 } else {
                     $result = $wpdb->update($table, $item, array('log_id' => $item['log_id']));
                     if ($result !== false) {
-                        $message = __("Treuillé mis à jour", PL_DOMAIN);
+                        $message = __("Décollage mis à jour", PL_DOMAIN);
                     } else {
                         $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
                     }
@@ -485,4 +502,5 @@ class Paralog_Log extends WP_List_Table
     {
         return isset($_COOKIE[$name]) ? stripslashes($_COOKIE[$name]) : $default;
     }
+
 }
