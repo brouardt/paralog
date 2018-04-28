@@ -109,7 +109,7 @@ class Paralog_Log extends Paralog_Table
         );
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table");
+        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE deleted = 0");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
@@ -397,7 +397,7 @@ class Paralog_Log extends Paralog_Table
 
         $table = Paralog::table_name('persons');
         $query = $wpdb->prepare(
-            "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table WHERE winchman LIKE %s ORDER BY lastname ASC, firstname ASC;",
+            "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table WHERE deleted = 0 AND winchman LIKE %s ORDER BY lastname ASC, firstname ASC;",
             __('oui', PL_DOMAIN)
         );
 
@@ -413,7 +413,7 @@ class Paralog_Log extends Paralog_Table
         global $wpdb;
 
         $table = Paralog::table_name('lines');
-        $query = "SELECT name FROM $table ORDER BY name;";
+        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name;";
 
         return $wpdb->get_results($query, ARRAY_A);
     }
@@ -437,7 +437,7 @@ class Paralog_Log extends Paralog_Table
         global $wpdb;
 
         $table = Paralog::table_name('persons');
-        $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE person_id = %d;", $id);
+        $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE deleted = 0 AND person_id = %d;", $id);
 
         return $wpdb->get_row($query, OBJECT);
     }
