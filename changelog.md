@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.8] - 2018-04-28
+## Correction
+- Ajout du filtre deleted = 0 dans les requêtes nécessitant sont usage.
+
 ## [1.3.7] - 2018-04-27
 ## Modification
 - Gestion des suppressions douces. Celles-ci seront seulement dans un état deleted avant 
