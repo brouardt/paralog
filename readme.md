@@ -3,7 +3,7 @@ Contributors: brouardt
 Author URI: https://thierry.brouard.pro/  
 Plugin URL: https://thierry.brouard.pro/2018/01/paralog/  
 Requires at Least: 3.1.0  
-Tested Up To: 4.9.4  
+Tested Up To: 4.9.5  
 Tags: treuil, ligne, parapente, pilote, journal  
 Stable tag: 1.0  
 License: GPLv2 or later  
@@ -14,11 +14,14 @@ Journal des décollages / treuillés.
 
 Cette application vous permettra de tenir à jour, comme le recommande la FFVL, un journal des treuillés.
 
-* gestion des sites
-* gestion des lignes ou lieux de décollage
-* gestion des pilotes
-* enregistrement et consultation des treuillés ou décollages
-* exportation des enregistrements au format csv
+* gestion des sites.
+* gestion des lignes ou lieux de décollage.
+* gestion des pilotes.
+* enregistrement et consultation des treuillés ou décollages.
+* exportation des enregistrements au format csv.
+
+L'application nécessite que l'utilisateur soit connecté au site, afin de l'identifier pour sauvegarder son identifiant lors des enregistrements de document et pour éviter que des systèmes automatiques viennent poluer le contenu. L'identification de l'utilisateur permettra à celui-ci de modifier ou de supprimer les documents dont il a été l'auteur. Les utilisateurs dont le rôles est éditeur peuvent modifier ou supprimer les documents de tous le monde. 
+Les suppressions ne sont pas définitive. Les documents sont marqués comme supprimé. Seul l'administrateur pourra les retirer de la base.
 
 ### Developeurs
 
