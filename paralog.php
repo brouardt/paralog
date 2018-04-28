@@ -16,8 +16,8 @@
  * Text Domain:       paralog
  * Domain Path:       /languages
  * Requires at least: 3.1.0
- * Stable tag:        4.9.4
- * Tested up to:      4.9.4
+ * Stable tag:        4.9.5
+ * Tested up to:      4.9.5
  * Requires PHP:      5.6
  * */
 if (!defined('ABSPATH')) {
@@ -121,7 +121,7 @@ if (!class_exists('Paralog')) {
                     . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(64) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (site_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -133,7 +133,7 @@ if (!class_exists('Paralog')) {
                     . "line_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(32) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (line_id) "
                     . ") $charset_collate";
                 dbDelta($query);
@@ -151,7 +151,7 @@ if (!class_exists('Paralog')) {
                     . "winchman enum(%s,%s) NOT NULL DEFAULT %s, "
                     . "winchman_type enum(%s,%s) DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (person_id) "
                     . ") $charset_collate",
                     array(
@@ -178,7 +178,7 @@ if (!class_exists('Paralog')) {
                     . "total_flying_weight smallint(5) UNSIGNED DEFAULT NULL, "
                     . "takeoff datetime NOT NULL DEFAULT '0000-00-00 00:00:00', "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT '0', "
+                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (log_id) "
                     . ") $charset_collate",
                     array(
@@ -212,11 +212,11 @@ if (!class_exists('Paralog')) {
 
             $table = self::table_name('sites');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (name, user_id) VALUES "
-                . "('Mont Bouquet', %d), "
-                . "('Aslonnes \"Le Fort\"', %d), "
-                . "('Annecy', %d), "
-                . "('Massognes / Jarzay', %d);",
+                "INSERT INTO $table (name, user_id, deleted) VALUES "
+                . "('Mont Bouquet', %d, 0), "
+                . "('Aslonnes \"Le Fort\"', %d, 0), "
+                . "('Annecy', %d, 0), "
+                . "('Massognes / Jarzay', %d, 0);",
                 array(
                     $user_id,
                     $user_id,
@@ -228,16 +228,16 @@ if (!class_exists('Paralog')) {
 
             $table = self::table_name('lines');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (name, user_id) VALUES "
-                . "('Déco EST', %d), "
-                . "('Déco SUD', %d), "
-                . "('Planfait', %d), "
-                . "('Montmin', %d), "
-                . "('Coche Cabane', %d), "
-                . "('Treuil 1B', %d), "
-                . "('Treuil 2B - ligne rouge', %d), "
-                . "('Treuil 2B - ligne verte', %d), "
-                . "('Dévidoir', %d);",
+                "INSERT INTO $table (name, user_id, deleted) VALUES "
+                . "('Déco EST', %d, 0), "
+                . "('Déco SUD', %d, 0), "
+                . "('Planfait', %d, 0), "
+                . "('Montmin', %d, 0), "
+                . "('Coche Cabane', %d, 0), "
+                . "('Treuil 1B', %d, 0), "
+                . "('Treuil 2B - ligne rouge', %d, 0), "
+                . "('Treuil 2B - ligne verte', %d, 0), "
+                . "('Dévidoir', %d, 0);",
                 array(
                     $user_id,
                     $user_id,
@@ -254,12 +254,12 @@ if (!class_exists('Paralog')) {
 
             $table = self::table_name('persons');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (firstname, lastname, pilot_type, licence, winchman, winchman_type, user_id) VALUES "
-                . "('Thierry', 'BROUARD', %s, '1309710X', %s, %s, %d), "
-                . "('Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s, %d), "
-                . "('Quentin', 'COURTOIS', %s, '1604781B', %s, NULL, %d), "
-                . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d), "
-                . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d);",
+                "INSERT INTO $table (firstname, lastname, pilot_type, licence, winchman, winchman_type, user_id, deleted) VALUES "
+                . "('Thierry', 'BROUARD', %s, '1309710X', %s, %s, %d, 0), "
+                . "('Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s, %d, 0), "
+                . "('Quentin', 'COURTOIS', %s, '1604781B', %s, NULL, %d, 0), "
+                . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d, 0), "
+                . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d, 0);",
                 array(
                     $p, $o, $e, $user_id,
                     $p, $o, $t, $user_id,
@@ -272,14 +272,14 @@ if (!class_exists('Paralog')) {
 
             $table = self::table_name('logs');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff, user_id) VALUES "
-                . "('Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07', %d), "
-                . "('Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45', %d), "
-                . "('Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21', %d), "
-                . "('Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47', %d), "
-                . "('Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55', %d), "
-                . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d), "
-                . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d);",
+                "INSERT INTO $table (site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff, user_id, deleted) VALUES "
+                . "('Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07', %d, 0), "
+                . "('Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45', %d, 0), "
+                . "('Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21', %d, 0), "
+                . "('Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47', %d, 0), "
+                . "('Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55', %d, 0), "
+                . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d, 0), "
+                . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d, 0);",
                 array(
                     $p, $user_id,
                     $p, $user_id,
@@ -401,14 +401,16 @@ if (!class_exists('Paralog')) {
             $echappement = "\\";
 
             fwrite($out, $bom, strlen($bom));
+            
+            $table = Paralog::table_name('logs');
 
-            $query = "SHOW COLUMNS FROM " . Paralog::table_name('logs') . " WHERE Field NOT IN ('log_id','user_id','deleted');";
+            $query = "SHOW COLUMNS FROM $table WHERE Field NOT IN ('log_id','user_id','deleted');";
             $columns = $wpdb->get_results($query, ARRAY_A);
             $head = array_column($columns, 'Field');
 
             fputcsv($out, $head, $separateur, $delimiteur, $echappement);
 
-            $sql = "SELECT " . implode(",", $head) . " FROM " . Paralog::table_name('logs') . " WHERE deleted = 0 ";
+            $sql = "SELECT " . implode(",", $head) . " FROM $table WHERE deleted = 0 ";
 
             if (is_numeric($year)) {
                 $sql .= "AND YEAR(takeoff) = %d ";
@@ -487,19 +489,22 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $sites = '';
+            $table = $this->table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
                     $query = $wpdb->prepare(
                         "SELECT site_name, COUNT(*) AS site_count "
-                        . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE YEAR(takeoff) = %d "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND YEAR(takeoff) = %d "
                         . "GROUP BY site_name;",
                         $year
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS site_count "
-                    . "FROM " . $this->table_name('logs') . " "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
                         . "GROUP BY site_name;";
                 }
                 $sites = $wpdb->get_results($query, ARRAY_A);
@@ -522,19 +527,22 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $lines = '';
+            $table = $this->table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
                     $query = $wpdb->prepare(
                         "SELECT line_name, COUNT(*) AS line_count "
-                        . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE YEAR(takeoff) = %d "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND YEAR(takeoff) = %d "
                         . "GROUP BY line_name;",
                         $year
                     );
                 } else {
                     $query = "SELECT line_name, COUNT(*) AS line_count "
-                    . "FROM " . $this->table_name('logs') . " "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
                         . "GROUP BY line_name;";
                 }
                 $lines = $wpdb->get_results($query, ARRAY_A);
@@ -557,21 +565,24 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $winchmen = '';
+            $table = $this->table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
                     $query = $wpdb->prepare(
                         "SELECT winchman_name, COUNT(*) AS winchman_count "
-                        . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE YEAR(takeoff) = %d "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND YEAR(takeoff) = %d "
                         . "AND winchman_name IS NOT NULL "
                         . "GROUP BY winchman_name;",
                         $year
                     );
                 } else {
                     $query = "SELECT winchman_name, COUNT(*) AS winchman_count "
-                    . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE winchman_name IS NOT NULL "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND winchman_name IS NOT NULL "
                         . "GROUP BY winchman_name;";
                 }
                 $winchmen = $wpdb->get_results($query, ARRAY_A);
@@ -594,19 +605,22 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $pilots = '';
+            $table = $this->table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
                     $query = $wpdb->prepare(
                         "SELECT pilot_name, COUNT(*) AS pilot_count "
-                        . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE YEAR(takeoff) = %d "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND YEAR(takeoff) = %d "
                         . "GROUP BY pilot_name;",
                         $year
                     );
                 } else {
                     $query = "SELECT pilot_name, COUNT(*) AS pilot_count "
-                    . "FROM " . $this->table_name('logs') . " "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
                         . "GROUP BY pilot_name;";
                 }
                 $pilots = $wpdb->get_results($query, ARRAY_A);
@@ -629,21 +643,24 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $passengers = '';
+            $table = " . $this->table_name('logs') . ";
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
                     $query = $wpdb->prepare(
                         "SELECT site_name, COUNT(*) AS passenger_count "
-                        . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE YEAR(takeoff) = %d "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND YEAR(takeoff) = %d "
                         . "AND passenger_name IS NOT NULL "
                         . "GROUP BY site_name;",
                         $year
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS passenger_count "
-                    . "FROM " . $this->table_name('logs') . " "
-                        . "WHERE passenger_name IS NOT NULL "
+                        . "FROM $table "
+                        . "WHERE deleted = 0 "
+                        . "AND passenger_name IS NOT NULL "
                         . "GROUP BY site_name;";
                 }
                 $passengers = $wpdb->get_results($query, ARRAY_A);
@@ -663,9 +680,12 @@ if (!class_exists('Paralog')) {
         private function years_takeoff()
         {
             global $wpdb;
+            
+            $table = $this->table_name('logs');
 
             $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
-            . "FROM " . $this->table_name('logs') . " "
+                . "FROM $table "
+                . "WHERE deleted = 0 "
                 . "GROUP BY YEAR(takeoff);";
 
             return $wpdb->get_results($query, ARRAY_A);
