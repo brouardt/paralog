@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.3.8
+ * Version:           1.3.9
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.3.8');
+    define('PL_VERSION', '1.3.9');
     define('PL_DB_VERSION', '1.9');
     define('PL_DOMAIN', 'paralog');
 
@@ -502,9 +502,9 @@ if (!class_exists('Paralog')) {
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS site_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "GROUP BY site_name;";
+                            . "FROM $table "
+                            . "WHERE deleted = 0 "
+                            . "GROUP BY site_name;";
                 }
                 $sites = $wpdb->get_results($query, ARRAY_A);
             }
@@ -540,9 +540,9 @@ if (!class_exists('Paralog')) {
                     );
                 } else {
                     $query = "SELECT line_name, COUNT(*) AS line_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "GROUP BY line_name;";
+                            . "FROM $table "
+                            . "WHERE deleted = 0 "
+                            . "GROUP BY line_name;";
                 }
                 $lines = $wpdb->get_results($query, ARRAY_A);
             }
@@ -579,10 +579,10 @@ if (!class_exists('Paralog')) {
                     );
                 } else {
                     $query = "SELECT winchman_name, COUNT(*) AS winchman_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND winchman_name IS NOT NULL "
-                        . "GROUP BY winchman_name;";
+                            . "FROM $table "
+                            . "WHERE deleted = 0 "
+                            . "AND winchman_name IS NOT NULL "
+                            . "GROUP BY winchman_name;";
                 }
                 $winchmen = $wpdb->get_results($query, ARRAY_A);
             }
@@ -618,9 +618,9 @@ if (!class_exists('Paralog')) {
                     );
                 } else {
                     $query = "SELECT pilot_name, COUNT(*) AS pilot_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "GROUP BY pilot_name;";
+                            . "FROM $table "
+                            . "WHERE deleted = 0 "
+                            . "GROUP BY pilot_name;";
                 }
                 $pilots = $wpdb->get_results($query, ARRAY_A);
             }
@@ -642,7 +642,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $passengers = '';
-            $table = " . $this->table_name('logs') . ";
+            $table = $this->table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -657,10 +657,10 @@ if (!class_exists('Paralog')) {
                     );
                 } else {
                     $query = "SELECT site_name, COUNT(*) AS passenger_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND passenger_name IS NOT NULL "
-                        . "GROUP BY site_name;";
+                            . "FROM $table "
+                            . "WHERE deleted = 0 "
+                            . "AND passenger_name IS NOT NULL "
+                            . "GROUP BY site_name;";
                 }
                 $passengers = $wpdb->get_results($query, ARRAY_A);
             }
@@ -683,9 +683,9 @@ if (!class_exists('Paralog')) {
             $table = $this->table_name('logs');
 
             $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
-                . "FROM $table "
-                . "WHERE deleted = 0 "
-                . "GROUP BY YEAR(takeoff);";
+                    . "FROM $table "
+                    . "WHERE deleted = 0 "
+                    . "GROUP BY YEAR(takeoff);";
 
             return $wpdb->get_results($query, ARRAY_A);
         }
@@ -745,12 +745,12 @@ if (!class_exists('Paralog')) {
                         </select>
                     </label>
                     <?php
-if ($demo_datas == '1') {
-                echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
-            }
-            if (!empty($param_year)) {
-                echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-            }?>
+                    if ($demo_datas == '1') {
+                        echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
+                    }
+                    if (!empty($param_year)) {
+                        echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
+                    }?>
                     <h3><?php _e("Les sites", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
@@ -865,8 +865,8 @@ if ($demo_datas == '1') {
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
-//$class->search_box('search', 'search_id');
-            $class->display();?>
+                    //$class->search_box('search', 'search_id');
+                    $class->display();?>
                 </form>
             </div>
             <?php
@@ -900,8 +900,8 @@ if ($demo_datas == '1') {
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
-//$site->search_box('search', 'search_id');
-            $class->display();?>
+                    //$site->search_box('search', 'search_id');
+                    $class->display();?>
                 </form>
             </div>
             <?php
@@ -935,8 +935,8 @@ if ($demo_datas == '1') {
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
-//$site->search_box('search', 'search_id');
-            $class->display();?>
+                        //$site->search_box('search', 'search_id');
+                    $class->display();?>
                 </form>
             </div>
             <?php

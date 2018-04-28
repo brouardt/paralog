@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.9] - 2018-04-28
+## Correction
+- Correction d'un bug du calcul statistique du nombre de passagers sur sites.
+
 ## [1.3.8] - 2018-04-28
 ## Correction
 - Ajout du filtre deleted = 0 dans les requêtes nécessitant sont usage.
