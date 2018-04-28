@@ -28,7 +28,6 @@ if (!class_exists('Paralog')) {
     define('PL_VERSION', '1.3.8');
     define('PL_DB_VERSION', '1.9');
     define('PL_DOMAIN', 'paralog');
-    define('PL_DATE_FORMAT', 'Y-m-d H:i:s');
 
     /**
      * @name Paralog
