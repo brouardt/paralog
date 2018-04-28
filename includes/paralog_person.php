@@ -117,7 +117,7 @@ class Paralog_Person extends Paralog_Table
         );
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table");
+        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE deleted = 0");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
