@@ -174,6 +174,8 @@ class Paralog_Log extends Paralog_Table
             'passenger_name' => '',
             'total_flying_weight' => null,
             'takeoff' => null,
+            'takeoff_date' => null,
+            'takeoff_time' => null,
             'user_id' => get_current_user_id(),
         );
 
@@ -194,24 +196,28 @@ class Paralog_Log extends Paralog_Table
                 $item['pilot_name'] = $pilot->name;
                 $item['pilot_type'] = $pilot->type;
 
-                $item['takeoff'] = current_time( 'mysql' );
-
-                unset($item['winchman_id'], $item['pilot_id']);
+                $datetime = new DateTime(current_time('mysql'));
+                $item['takeoff_date'] = empty($item['takeoff_date']) ? $datetime->format('Y-m-d') : $item['takeoff_date'];
+                $item['takeoff_time'] = empty($item['takeoff_time']) ? $datetime->format('H:i:s') : $item['takeoff_time'];
+                $item['takeoff'] = $item['takeoff_date'] . ' ' . $item['takeoff_time'];
 
                 if (trim($item['passenger_name'] == '')) {
                     $item['passenger_name'] = null;
                 }
+                
+                $row = $item;
+                unset($row['winchman_id'], $row['pilot_id'], $row['takeoff_date'], $row['takeoff_time']);
 
-                if ($item[$primary] == 0) {
-                    $result = $wpdb->insert($table, $item);
-                    $item[$primary] = $wpdb->insert_id;
+                if ($row[$primary] == 0) {
+                    $result = $wpdb->insert($table, $row);
+                    $row[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
                         $message = __("Décollage enregistré", PL_DOMAIN);
                     } else {
                         $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
                     }
                 } else {
-                    $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
+                    $result = $wpdb->update($table, $row, array($primary => $row[$primary]));
                     if ($result !== false) {
                         $message = __("Décollage mis à jour", PL_DOMAIN);
                     } else {
@@ -237,13 +243,22 @@ class Paralog_Log extends Paralog_Table
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
+                } else {
+                    $datetime = new DateTime($item['takeoff']);
+                    $item['takeoff_date'] = $datetime->format('Y-m-d');
+                    $item['takeoff_time'] = $datetime->format('H:i:s');
                 }
+            } else {
+                $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.", PL_DOMAIN);
             }
         }
         add_meta_box('log_form_meta_box', 'Journal', array($this, 'log_form_meta_box_handler'), 'log', 'normal', 'default');?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
+            <?php if(!empty($information)):  ?>
+                <div id="information" class="notice notice-info is-dismissible"><p><?=$information?></div>
+            <?php endif; ?>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?=$notice?></p></div>
             <?php endif;?>
@@ -342,6 +357,23 @@ class Paralog_Log extends Paralog_Table
                         <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em" value="<?=esc_attr($item['total_flying_weight'])?>" size="5" maxlength="4" class="code" placeholder="<?php _e('ex: 123', PL_DOMAIN)?>"/>
                     </td>
                 </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="takeoff_date"><?php _e('Date', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input id="takeoff_date" name="takeoff_date" type="date" value="<?=esc_attr($item['takeoff_date'])?>" class="code" /> 
+                    </td>
+                </tr>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input id="takeoff_time" name="takeoff_time" type="time" step="1" min="00:00:00" max="23:59:59" value="<?=esc_attr($item['takeoff_time'])?>" class="code" />
+                    </td>
+                </tr>
             </tbody>
         </table>
         <?php
@@ -366,6 +398,12 @@ class Paralog_Log extends Paralog_Table
         if (is_int($item['total_flying_weight'])) {
             $messages[] = __('Le poid total volant (PTV) est obligatoire', PL_DOMAIN);
         }
+        /*if(empty($item['takeoff_date'])) {
+            $messages[] = __('La date de décollage / treuillage est obligatoire', PL_DOMAIN);
+        }
+        if(empty($item['takeoff_time'])) {
+            $messages[] = __("L'heure de décollage / treuillage est obligatoire", PL_DOMAIN);
+        }*/
 
         if (empty($messages)) {
             return true;
