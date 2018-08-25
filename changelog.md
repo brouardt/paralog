@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.10] - 2018-08-25
+## Ajout
+- Saisie de la date et de l'heure de décollage / treuillage désormais possible.
+
 ## [1.3.9] - 2018-04-28
 ## Correction
 - Correction d'un bug du calcul statistique du nombre de passagers sur sites.
