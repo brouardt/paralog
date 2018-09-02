@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.3.10
+ * Version:           1.3.11
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -21,11 +21,11 @@
  * Requires PHP:      5.6
  * */
 if (!defined('ABSPATH')) {
-    die("No direct access allowed");
+    die('No direct access allowed');
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.3.10');
+    define('PL_VERSION', '1.3.11');
     define('PL_DB_VERSION', '1.9');
     define('PL_DOMAIN', 'paralog');
 
@@ -724,8 +724,9 @@ if (!class_exists('Paralog')) {
             $pilots = $this->stats_pilots($param_year);
             $passengers = $this->stats_passengers($param_year);?>
             <div class="wrap">
-                <h1><?php _e("À propos de", PL_DOMAIN) . " Paralog";?></h1>
+                <h1><?php _e("À propos de Paralog", PL_DOMAIN);?></h1>
                 <h2><?php _e("Journaux des décollages / treuillés", PL_DOMAIN);?></h2>
+                <h3><?php _e("Version", PL_DOMAIN);?> [<?php echo PL_VERSION;?>]</h3>
                 <div class="notice inline notice-info">
                     <p><?php _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN);?></p>
                     <?php _e("Notions", PL_DOMAIN);?>

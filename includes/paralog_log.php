@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) {
-    die("No direct access allowed");
+    die('No direct access allowed');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -30,6 +30,8 @@ class Paralog_Log extends Paralog_Table
         $this->setPrimary('log_id');
         
         $this->datetime_format = get_option('date_format') . ' ' . get_option('time_format');
+
+        add_action('init',array($this, 'define_cookies'));
     }
 
     public function get_columns()
@@ -224,9 +226,6 @@ class Paralog_Log extends Paralog_Table
                         $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
                     }
                 }
-                $this->set_cookie('pl_site_name', $item['site_name']);
-                $this->set_cookie('pl_line_name', $item['line_name']);
-                $this->set_cookie('pl_winchman_name', $item['winchman_name']);
             } else {
                 // if $item_valid not true it contains error message(s)
                 $notice = $item_valid;
@@ -389,21 +388,12 @@ class Paralog_Log extends Paralog_Table
         if (empty($item['line_name'])) {
             $messages[] = __('Le nom de la ligne est obligatoire', PL_DOMAIN);
         }
-        /*if (empty($item['winchman_id'])) {
-        $messages[] = __('Le nom du treuilleur est obligatoire', PL_DOMAIN);
-        }*/
         if (empty($item['pilot_id'])) {
             $messages[] = __('Le nom du pilote est obligatoire', PL_DOMAIN);
         }
         if (is_int($item['total_flying_weight'])) {
             $messages[] = __('Le poid total volant (PTV) est obligatoire', PL_DOMAIN);
         }
-        /*if(empty($item['takeoff_date'])) {
-            $messages[] = __('La date de décollage / treuillage est obligatoire', PL_DOMAIN);
-        }
-        if(empty($item['takeoff_time'])) {
-            $messages[] = __("L'heure de décollage / treuillage est obligatoire", PL_DOMAIN);
-        }*/
 
         if (empty($messages)) {
             return true;
@@ -481,13 +471,30 @@ class Paralog_Log extends Paralog_Table
     }
 
     /**
+     * @name define_cookies
+     */
+    public function define_cookies() 
+    {
+        $fields = array('site_name', 'line_name', 'winchman_name');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $expire = strtotime('+12 hours');
+            foreach($fields as $field) {
+                if( isset($_POST[$field])) {
+                    $this->set_cookie('pl_' . $field, $_POST[$field], $expire);
+                }
+            }
+        }
+    }
+
+    /**
      * @name set_cookie
      * @param string $name
      * @param mixed $value
      */
-    private function set_cookie($name, $value)
+    private function set_cookie($name, $value, $expire = 0)
     {
-        setcookie($name, $value, strtotime('+12 hours'), COOKIEPATH, COOKIE_DOMAIN);
+        setcookie($name, $value, $expire, COOKIEPATH, COOKIE_DOMAIN);
     }
 
     /**

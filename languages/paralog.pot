@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Paralog\n"
-"POT-Creation-Date: 2018-04-22 22:04+0200\n"
+"POT-Creation-Date: 2018-09-02 18:48+0200\n"
 "PO-Revision-Date: 2018-01-02 20:13+0100\n"
 "Last-Translator: Thierry Brouard <thierry@brouard.pro>\n"
 "Language-Team: \n"
@@ -18,468 +18,483 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: includes\n"
 
-#: includes/paralog_line.php:17 includes/paralog_log.php:41
+#: includes/paralog_line.php:22 includes/paralog_log.php:50
 msgid "Ligne"
 msgstr ""
 
-#: includes/paralog_line.php:18 paralog.php:451
+#: includes/paralog_line.php:23 paralog.php:453
 msgid "Lignes"
 msgstr ""
 
-#: includes/paralog_line.php:34 includes/paralog_person.php:285
-#: includes/paralog_site.php:33
+#: includes/paralog_line.php:42 includes/paralog_person.php:259
+#: includes/paralog_site.php:42
 msgid "Nom"
 msgstr ""
 
-#: includes/paralog_line.php:47 includes/paralog_log.php:57
-#: includes/paralog_person.php:53 includes/paralog_site.php:46
+#: includes/paralog_line.php:56 includes/paralog_log.php:67
+#: includes/paralog_person.php:60 includes/paralog_site.php:56
 msgid "Modifier"
 msgstr ""
 
-#: includes/paralog_line.php:52 includes/paralog_line.php:63
-#: includes/paralog_log.php:62 includes/paralog_log.php:73
-#: includes/paralog_person.php:58 includes/paralog_person.php:80
-#: includes/paralog_site.php:51 includes/paralog_site.php:62
+#: includes/paralog_line.php:61 includes/paralog_log.php:72
+#: includes/paralog_person.php:65 includes/paralog_site.php:61
+#: includes/paralog_table.php:69
 msgid "Supprimer"
 msgstr ""
 
-#: includes/paralog_line.php:180
+#: includes/paralog_line.php:156
 msgid "Ligne enregistrée"
 msgstr ""
 
-#: includes/paralog_line.php:182 includes/paralog_log.php:236
-#: includes/paralog_person.php:215 includes/paralog_site.php:181
+#: includes/paralog_line.php:158 includes/paralog_log.php:219
+#: includes/paralog_person.php:189 includes/paralog_site.php:158
 msgid "Un erreur est apparue lors de la sauvegarde"
 msgstr ""
 
-#: includes/paralog_line.php:187
+#: includes/paralog_line.php:163
 msgid "Ligne mise à jour"
 msgstr ""
 
-#: includes/paralog_line.php:189 includes/paralog_log.php:243
-#: includes/paralog_person.php:222 includes/paralog_site.php:188
+#: includes/paralog_line.php:165 includes/paralog_log.php:226
+#: includes/paralog_person.php:196 includes/paralog_site.php:165
 msgid "Un erreur est apparue lors de la mise à jour"
 msgstr ""
 
-#: includes/paralog_line.php:203 includes/paralog_log.php:264
-#: includes/paralog_person.php:236 includes/paralog_site.php:202
+#: includes/paralog_line.php:179 includes/paralog_log.php:244
+#: includes/paralog_person.php:210 includes/paralog_site.php:179
 msgid "Donnée introuvable"
 msgstr ""
 
-#: includes/paralog_line.php:210
+#: includes/paralog_line.php:186
 msgid "Fiche de ligne"
 msgstr ""
 
-#: includes/paralog_line.php:210 includes/paralog_log.php:271
-#: includes/paralog_person.php:243 includes/paralog_site.php:209
+#: includes/paralog_line.php:186 includes/paralog_log.php:257
+#: includes/paralog_person.php:217 includes/paralog_site.php:186
 msgid "retour à la liste"
 msgstr ""
 
-#: includes/paralog_line.php:224 includes/paralog_log.php:285
-#: includes/paralog_person.php:257 includes/paralog_site.php:223
+#: includes/paralog_line.php:200 includes/paralog_log.php:274
+#: includes/paralog_person.php:231 includes/paralog_site.php:200
 msgid "Sauver"
 msgstr ""
 
-#: includes/paralog_line.php:240 includes/paralog_log.php:317
+#: includes/paralog_line.php:216 includes/paralog_log.php:306
 msgid "Nom de la ligne"
 msgstr ""
 
-#: includes/paralog_line.php:243
+#: includes/paralog_line.php:219
 msgid "ex: Treuil 1B - ligne A"
 msgstr ""
 
-#: includes/paralog_line.php:256 includes/paralog_log.php:383
+#: includes/paralog_line.php:232 includes/paralog_log.php:389
 msgid "Le nom de la ligne est obligatoire"
 msgstr ""
 
-#: includes/paralog_log.php:21 includes/paralog_person.php:17
+#: includes/paralog_log.php:24 includes/paralog_person.php:22
 msgid "personne"
 msgstr ""
 
-#: includes/paralog_log.php:22 includes/paralog_person.php:18
+#: includes/paralog_log.php:25 includes/paralog_person.php:23
 msgid "personnes"
 msgstr ""
 
-#: includes/paralog_log.php:39 paralog.php:473
+#: includes/paralog_log.php:48 paralog.php:475
 msgid "Décollage"
 msgstr ""
 
-#: includes/paralog_log.php:40
+#: includes/paralog_log.php:49
 msgid "Site"
 msgstr ""
 
-#: includes/paralog_log.php:42 includes/paralog_person.php:39
-#: includes/paralog_person.php:310
+#: includes/paralog_log.php:51 includes/paralog_person.php:45
+#: includes/paralog_person.php:284
 msgid "Treuilleur"
 msgstr ""
 
-#: includes/paralog_log.php:43
+#: includes/paralog_log.php:52
 msgid "Pilote"
 msgstr ""
 
-#: includes/paralog_log.php:44
+#: includes/paralog_log.php:53
 msgid "Passager"
 msgstr ""
 
-#: includes/paralog_log.php:165 includes/paralog_person.php:270 paralog.php:115
+#: includes/paralog_log.php:141 includes/paralog_person.php:244 paralog.php:111
 #: paralog.php:208
 msgid "élève"
 msgstr ""
 
-#: includes/paralog_log.php:234
+#: includes/paralog_log.php:217
 msgid "Décollage enregistré"
 msgstr ""
 
-#: includes/paralog_log.php:241
+#: includes/paralog_log.php:224
 msgid "Décollage mis à jour"
 msgstr ""
 
-#: includes/paralog_log.php:271
+#: includes/paralog_log.php:251
+msgid "Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante."
+msgstr ""
+
+#: includes/paralog_log.php:257
 msgid "Fiche de décollage / treuillé"
 msgstr ""
 
-#: includes/paralog_log.php:304 includes/paralog_site.php:239
+#: includes/paralog_log.php:293 includes/paralog_site.php:216
 msgid "Nom du site"
 msgstr ""
 
-#: includes/paralog_log.php:330
+#: includes/paralog_log.php:319
 msgid "Nom du treuilleur"
 msgstr ""
 
-#: includes/paralog_log.php:343
+#: includes/paralog_log.php:332
 msgid "Nom du pilote"
 msgstr ""
 
-#: includes/paralog_log.php:356
+#: includes/paralog_log.php:345
 msgid "Nom du passager"
 msgstr ""
 
-#: includes/paralog_log.php:359
+#: includes/paralog_log.php:348
 msgid "ex: Joe-Henri BLACK"
 msgstr ""
 
-#: includes/paralog_log.php:364
+#: includes/paralog_log.php:353
 msgid "Poid total volant (PTV)"
 msgstr ""
 
-#: includes/paralog_log.php:367
+#: includes/paralog_log.php:356
 msgid "ex: 123"
 msgstr ""
 
-#: includes/paralog_log.php:380
+#: includes/paralog_log.php:361
+msgid "Date"
+msgstr ""
+
+#: includes/paralog_log.php:370
+msgid "Heure"
+msgstr ""
+
+#: includes/paralog_log.php:386
 msgid "Le nom du site est obligatoire"
 msgstr ""
 
-#: includes/paralog_log.php:389
+#: includes/paralog_log.php:392
 msgid "Le nom du pilote est obligatoire"
 msgstr ""
 
-#: includes/paralog_log.php:392
+#: includes/paralog_log.php:395
 msgid "Le poid total volant (PTV) est obligatoire"
 msgstr ""
 
-#: includes/paralog_log.php:426 includes/paralog_person.php:271
-#: includes/paralog_person.php:346 paralog.php:116 paralog.php:209
+#: includes/paralog_log.php:429 includes/paralog_person.php:245
+#: includes/paralog_person.php:320 paralog.php:112 paralog.php:209
 msgid "oui"
 msgstr ""
 
-#: includes/paralog_person.php:34
+#: includes/paralog_person.php:42
 msgid "Prénom + Nom"
 msgstr ""
 
-#: includes/paralog_person.php:37
+#: includes/paralog_person.php:43
 msgid "Statut pilote"
 msgstr ""
 
-#: includes/paralog_person.php:38 includes/paralog_person.php:302
+#: includes/paralog_person.php:44 includes/paralog_person.php:276
 msgid "Licence"
 msgstr ""
 
-#: includes/paralog_person.php:40
+#: includes/paralog_person.php:46
 msgid "Statut treuilleur"
 msgstr ""
 
-#: includes/paralog_person.php:194 includes/paralog_person.php:269
-#: paralog.php:113 paralog.php:206
+#: includes/paralog_person.php:168 includes/paralog_person.php:243
+#: paralog.php:109 paralog.php:206
 msgid "pilote"
 msgstr ""
 
-#: includes/paralog_person.php:196 includes/paralog_person.php:272
-#: paralog.php:117 paralog.php:210
+#: includes/paralog_person.php:170 includes/paralog_person.php:246
+#: paralog.php:113 paralog.php:210
 msgid "non"
 msgstr ""
 
-#: includes/paralog_person.php:213
+#: includes/paralog_person.php:187
 msgid "Personne enregistrée"
 msgstr ""
 
-#: includes/paralog_person.php:220
+#: includes/paralog_person.php:194
 msgid "Personne mise à jour"
 msgstr ""
 
-#: includes/paralog_person.php:243
+#: includes/paralog_person.php:217
 msgid "Fiche de personnel"
 msgstr ""
 
-#: includes/paralog_person.php:268 paralog.php:114 paralog.php:207
+#: includes/paralog_person.php:242 paralog.php:110 paralog.php:207
 msgid "treuilleur"
 msgstr ""
 
-#: includes/paralog_person.php:277
+#: includes/paralog_person.php:251
 msgid "Prénom"
 msgstr ""
 
-#: includes/paralog_person.php:280
+#: includes/paralog_person.php:254
 msgid "ex: Thierry"
 msgstr ""
 
-#: includes/paralog_person.php:288
+#: includes/paralog_person.php:262
 msgid "ex: Brouard"
 msgstr ""
 
-#: includes/paralog_person.php:293
+#: includes/paralog_person.php:267
 msgid "Type de pilote"
 msgstr ""
 
-#: includes/paralog_person.php:305
+#: includes/paralog_person.php:279
 msgid "ex: 0000000X"
 msgstr ""
 
-#: includes/paralog_person.php:319
+#: includes/paralog_person.php:293
 msgid "Type de treuilleur"
 msgstr ""
 
-#: includes/paralog_person.php:336
+#: includes/paralog_person.php:310
 msgid "Le prénom de la personne est obligatoire"
 msgstr ""
 
-#: includes/paralog_person.php:339
+#: includes/paralog_person.php:313
 msgid "Le nom de la personne est obligatoire"
 msgstr ""
 
-#: includes/paralog_person.php:342
+#: includes/paralog_person.php:316
 msgid "Le type de pilote est obligatoire"
 msgstr ""
 
-#: includes/paralog_person.php:345
+#: includes/paralog_person.php:319
 msgid "Le champ treuilleur est obligatoire"
 msgstr ""
 
-#: includes/paralog_person.php:348
+#: includes/paralog_person.php:322
 msgid "Le type de treuilleur est obligatoire"
 msgstr ""
 
-#: includes/paralog_site.php:16
+#: includes/paralog_site.php:22
 msgid "site"
 msgstr ""
 
-#: includes/paralog_site.php:17
+#: includes/paralog_site.php:23
 msgid "sites"
 msgstr ""
 
-#: includes/paralog_site.php:179
+#: includes/paralog_site.php:156
 msgid "Site enregistré"
 msgstr ""
 
-#: includes/paralog_site.php:186
+#: includes/paralog_site.php:163
 msgid "Site mis à jour"
 msgstr ""
 
-#: includes/paralog_site.php:209
+#: includes/paralog_site.php:186
 msgid "Fiche de site"
 msgstr ""
 
-#: includes/paralog_site.php:242
+#: includes/paralog_site.php:219
 msgid "ex: annecy"
 msgstr ""
 
-#: includes/paralog_site.php:255
+#: includes/paralog_site.php:232
 msgid "Le nom du site st obligatoire"
 msgstr ""
 
-#: paralog.php:439
+#: paralog.php:441
 msgid "Journaux de décollages / treuillés"
 msgstr ""
 
-#: paralog.php:439
+#: paralog.php:441
 msgid "Paralog"
 msgstr ""
 
-#: paralog.php:441
+#: paralog.php:443 paralog.php:727
 msgid "À propos de Paralog"
 msgstr ""
 
-#: paralog.php:441 paralog.php:707
+#: paralog.php:443
 msgid "À propos de"
 msgstr ""
 
-#: paralog.php:443
+#: paralog.php:445
 msgid "Décollages Paralog"
 msgstr ""
 
-#: paralog.php:443
+#: paralog.php:445
 msgid "Décollages"
 msgstr ""
 
-#: paralog.php:445 paralog.php:843
+#: paralog.php:447 paralog.php:864
 msgid "Ajouter un décollage / treuillé"
 msgstr ""
 
-#: paralog.php:447
+#: paralog.php:449
 msgid "Personnes Paralog"
 msgstr ""
 
-#: paralog.php:447
+#: paralog.php:449
 msgid "Personnes"
 msgstr ""
 
-#: paralog.php:449 paralog.php:948
+#: paralog.php:451 paralog.php:969
 msgid "Ajouter une personne"
 msgstr ""
 
-#: paralog.php:451
+#: paralog.php:453
 msgid "Lignes Paralog"
 msgstr ""
 
-#: paralog.php:453 paralog.php:913
+#: paralog.php:455 paralog.php:934
 msgid "Ajouter une ligne"
 msgstr ""
 
-#: paralog.php:455
+#: paralog.php:457
 msgid "Sites Paralog"
 msgstr ""
 
-#: paralog.php:455
+#: paralog.php:457
 msgid "Sites"
 msgstr ""
 
-#: paralog.php:457 paralog.php:878
+#: paralog.php:459 paralog.php:899
 msgid "Ajouter un site"
 msgstr ""
 
-#: paralog.php:507 paralog.php:542 paralog.php:579 paralog.php:614
-#: paralog.php:651 paralog.php:693
+#: paralog.php:512 paralog.php:550 paralog.php:590 paralog.php:628
+#: paralog.php:668 paralog.php:713
 msgid "aucune donnée"
 msgstr ""
 
-#: paralog.php:697
+#: paralog.php:717
 msgid "choisissez une année"
 msgstr ""
 
-#: paralog.php:698
+#: paralog.php:718
 msgid "toutes les années"
 msgstr ""
 
-#: paralog.php:708
+#: paralog.php:728
 msgid "Journaux des décollages / treuillés"
 msgstr ""
 
-#: paralog.php:710
+#: paralog.php:729
+msgid "Version"
+msgstr ""
+
+#: paralog.php:731
 msgid "Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief."
 msgstr ""
 
-#: paralog.php:711
+#: paralog.php:732
 msgid "Notions"
 msgstr ""
 
-#: paralog.php:713
+#: paralog.php:734
 msgid "Le site : correspond au lieu de manière générale <span class=\"PL_gris_clair\">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>"
 msgstr ""
 
-#: paralog.php:714
+#: paralog.php:735
 msgid "La ligne : représente la ligne du treuil <span class=\"PL_gris_clair\">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class=\"PL_gris_clair\">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class=\"PL_gris_clair\">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>"
 msgstr ""
 
-#: paralog.php:719
+#: paralog.php:740
 msgid "Statistiques"
 msgstr ""
 
-#: paralog.php:720
+#: paralog.php:741
 msgid "Année"
 msgstr ""
 
-#: paralog.php:729
+#: paralog.php:750
 msgid "aucune donnée à visualiser ?"
 msgstr ""
 
-#: paralog.php:729
+#: paralog.php:750
 msgid "ajouter de données de démonstration"
 msgstr ""
 
-#: paralog.php:732
+#: paralog.php:753
 msgid "exporter les données sélectionnées"
 msgstr ""
 
-#: paralog.php:732
+#: paralog.php:753
 msgid "exporter"
 msgstr ""
 
-#: paralog.php:734
+#: paralog.php:755
 msgid "Les sites"
 msgstr ""
 
-#: paralog.php:738 paralog.php:806
+#: paralog.php:759 paralog.php:827
 msgid "Nom des sites"
 msgstr ""
 
-#: paralog.php:739 paralog.php:756 paralog.php:773 paralog.php:790
-#: paralog.php:807
+#: paralog.php:760 paralog.php:777 paralog.php:794 paralog.php:811
+#: paralog.php:828
 msgid "Quantité"
 msgstr ""
 
-#: paralog.php:751
+#: paralog.php:772
 msgid "Les lignes"
 msgstr ""
 
-#: paralog.php:755
+#: paralog.php:776
 msgid "Nom des lignes"
 msgstr ""
 
-#: paralog.php:768
+#: paralog.php:789
 msgid "Les treuilleurs"
 msgstr ""
 
-#: paralog.php:772
+#: paralog.php:793
 msgid "Nom des treuilleurs"
 msgstr ""
 
-#: paralog.php:785
+#: paralog.php:806
 msgid "Les pilotes"
 msgstr ""
 
-#: paralog.php:789
+#: paralog.php:810
 msgid "Nom des pilotes"
 msgstr ""
 
-#: paralog.php:802
+#: paralog.php:823
 msgid "Les passagers"
 msgstr ""
 
-#: paralog.php:821
+#: paralog.php:842
 msgid "Nombre de décollages ou de treuillés"
 msgstr ""
 
-#: paralog.php:836 paralog.php:871 paralog.php:906 paralog.php:941
+#: paralog.php:857 paralog.php:892 paralog.php:927 paralog.php:962
 #, php-format
 msgid "Élément(s) supprimé(s): %d"
 msgstr ""
 
-#: paralog.php:843
+#: paralog.php:864
 msgid "Gestion des décollages / treuillés"
 msgstr ""
 
-#: paralog.php:878
+#: paralog.php:899
 msgid "Gestion des sites"
 msgstr ""
 
-#: paralog.php:913
+#: paralog.php:934
 msgid "Gestion des lignes"
 msgstr ""
 
-#: paralog.php:948
+#: paralog.php:969
 msgid "Gestion des personnes"
 msgstr ""
 
-#: paralog.php:971
+#: paralog.php:992
 msgid "nombre d'enregistrements"
 msgstr ""

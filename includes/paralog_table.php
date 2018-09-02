@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) {
-    die("No direct access allowed");
+    die('No direct access allowed');
 }
 
 if (!class_exists('WP_List_Table')) {

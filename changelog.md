@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.3.11] - 2018-09-02
+## Modification
+- Modification de la gestion des définitions de cookies
+
 ## [1.3.10] - 2018-08-25
 ## Ajout
 - Saisie de la date et de l'heure de décollage / treuillage désormais possible.
