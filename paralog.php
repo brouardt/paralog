@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.4.0
+ * Version:           1.4.1
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -16,8 +16,8 @@
  * Text Domain:       paralog
  * Domain Path:       /languages
  * Requires at least: 3.1.0
- * Stable tag:        4.9.8
- * Tested up to:      4.9.8
+ * Stable tag:        5.0.3
+ * Tested up to:      5.0.3
  * Requires PHP:      5.6
  * */
 if (!defined('ABSPATH')) {
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.0');
+    define('PL_VERSION', '1.4.1');
     define('PL_DB_VERSION', '2.0');
     define('PL_DOMAIN', 'paralog');
 
@@ -811,7 +811,8 @@ if (!class_exists('Paralog')) {
             $lines = $this->stats_lines($param_year);
             $winchmen = $this->stats_winchmen($param_year);
             $pilots = $this->stats_pilots($param_year);
-            $passengers = $this->stats_passengers($param_year);?>
+            $passengers = $this->stats_passengers($param_year);
+            ?>
             <div class="wrap">
                 <h1><?php _e("À propos de Paralog", PL_DOMAIN);?></h1>
                 <h2><?php _e("Journaux des décollages / treuillés", PL_DOMAIN);?></h2>
@@ -840,7 +841,8 @@ if (!class_exists('Paralog')) {
                     }
                     if (!empty($param_year)) {
                         echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-                    }?>
+                    }
+                    ?>
                     <h3><?php _e("Les sites", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
@@ -932,7 +934,7 @@ if (!class_exists('Paralog')) {
                 </p>
             </div>
             <?php
-}
+        }
 
         /**
          * @name list_logs
@@ -948,7 +950,8 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un décollage / treuillé", PL_DOMAIN);?></a>
                 <?=$message;?>
@@ -956,11 +959,12 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
                     //$class->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_log()
         {
@@ -983,7 +987,8 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?php _e("Gestion des sites", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un site", PL_DOMAIN);?></a>
                 <?=$message;?>
@@ -991,11 +996,12 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
                     //$site->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_site()
         {
@@ -1018,7 +1024,8 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?php _e("Gestion des lignes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une ligne", PL_DOMAIN);?></a>
                 <?=$message;?>
@@ -1026,11 +1033,12 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
                         //$site->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_line()
         {
@@ -1053,7 +1061,8 @@ if (!class_exists('Paralog')) {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?php _e("Gestion des personnes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une personne", PL_DOMAIN);?></a>
                 <?=$message;?>
@@ -1061,16 +1070,54 @@ if (!class_exists('Paralog')) {
                     <input type="hidden" name="page" value="<?=$page?>">
                     <?php
                     // $site->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_person()
         {
             require_once $this->plugin_dir . '/includes/paralog_person.php';
             $class = new Paralog_Person();
+            $class->form_edit();
+        }
+
+        /**
+         * @name list_activities
+         */
+        public function list_activities()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_activity.php';
+            $class = new Paralog_Activity();
+            $class->prepare_items();
+            if ('delete' === $class->current_action()) {
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+            } else {
+                $message = '';
+            }
+            $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
+            <div class="wrap">
+                <h1 class="wp-heading-inline"><?php _e("Gestion des activités", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une activité", PL_DOMAIN);?></a>
+                <?=$message;?>
+                <form method="post">
+                    <input type="hidden" name="page" value="<?=$page?>">
+                    <?php
+                    // $site->search_box('search', 'search_id');
+                    $class->display();
+                    ?>
+                </form>
+            </div>
+            <?php
+        }
+
+        public function form_activity()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_activity.php';
+            $class = new Paralog_Activity();
             $class->form_edit();
         }
 
