@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Paralog\n"
-"POT-Creation-Date: 2018-09-02 18:27+0200\n"
-"PO-Revision-Date: 2018-09-02 18:49+0200\n"
+"POT-Creation-Date: 2019-03-05 13:06+0100\n"
+"PO-Revision-Date: 2019-03-05 13:07+0100\n"
 "Last-Translator: Thierry Brouard <thierry@brouard.pro>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Ligne"
 msgstr "Line"
 
-#: includes/paralog_line.php:23 paralog.php:453
+#: includes/paralog_line.php:23 paralog.php:538
 msgid "Lignes"
 msgstr "Lines"
 
@@ -97,7 +97,7 @@ msgstr "person"
 msgid "personnes"
 msgstr "persons"
 
-#: includes/paralog_log.php:48 paralog.php:475
+#: includes/paralog_log.php:48 paralog.php:560
 msgid "Décollage"
 msgstr "Takeoff"
 
@@ -118,8 +118,8 @@ msgstr "Pilot"
 msgid "Passager"
 msgstr "Passenger"
 
-#: includes/paralog_log.php:141 includes/paralog_person.php:244 paralog.php:111
-#: paralog.php:208
+#: includes/paralog_log.php:141 includes/paralog_person.php:244 paralog.php:119
+#: paralog.php:293
 msgid "élève"
 msgstr "student"
 
@@ -192,7 +192,7 @@ msgid "Le poid total volant (PTV) est obligatoire"
 msgstr "The total flying weight (PTV) is mandatory"
 
 #: includes/paralog_log.php:429 includes/paralog_person.php:245
-#: includes/paralog_person.php:320 paralog.php:112 paralog.php:209
+#: includes/paralog_person.php:320 paralog.php:121 paralog.php:294
 msgid "oui"
 msgstr "yes"
 
@@ -213,12 +213,12 @@ msgid "Statut treuilleur"
 msgstr "Winchman status"
 
 #: includes/paralog_person.php:168 includes/paralog_person.php:243
-#: paralog.php:109 paralog.php:206
+#: paralog.php:115 paralog.php:291
 msgid "pilote"
 msgstr "pilot"
 
 #: includes/paralog_person.php:170 includes/paralog_person.php:246
-#: paralog.php:113 paralog.php:210
+#: paralog.php:122 paralog.php:295
 msgid "non"
 msgstr "no"
 
@@ -234,7 +234,7 @@ msgstr "Person updated"
 msgid "Fiche de personnel"
 msgstr "Person document"
 
-#: includes/paralog_person.php:242 paralog.php:110 paralog.php:207
+#: includes/paralog_person.php:242 paralog.php:116 paralog.php:292
 msgid "treuilleur"
 msgstr "winchman"
 
@@ -310,88 +310,132 @@ msgstr "ex: annecy"
 msgid "Le nom du site st obligatoire"
 msgstr "The site name is required"
 
-#: paralog.php:441
+#: paralog.php:117
+msgid "moniteur"
+msgstr "instructor"
+
+#: paralog.php:118
+msgid "plateforme"
+msgstr "plateform"
+
+#: paralog.php:120
+msgid "confirmé"
+msgstr "confirmed"
+
+#: paralog.php:124
+msgid "nord"
+msgstr "north"
+
+#: paralog.php:125
+msgid "nord-est"
+msgstr "north-east"
+
+#: paralog.php:126
+msgid "est"
+msgstr "east"
+
+#: paralog.php:127
+msgid "sud-est"
+msgstr "south-east"
+
+#: paralog.php:128
+msgid "sud"
+msgstr "south"
+
+#: paralog.php:129
+msgid "sud-ouest"
+msgstr "south-west"
+
+#: paralog.php:130
+msgid "ouest"
+msgstr "west"
+
+#: paralog.php:131
+msgid "nord-ouest"
+msgstr "north-west"
+
+#: paralog.php:526
 msgid "Journaux de décollages / treuillés"
 msgstr "Logs of Takeoff / Winches"
 
-#: paralog.php:441 paralog.php:727
+#: paralog.php:526
 msgid "Paralog"
 msgstr "Paralog"
 
-#: paralog.php:443
+#: paralog.php:528 paralog.php:812
 msgid "À propos de Paralog"
 msgstr "About Paralog"
 
-#: paralog.php:443 paralog.php:727
+#: paralog.php:528
 msgid "À propos de"
 msgstr "About"
 
-#: paralog.php:445
+#: paralog.php:530
 msgid "Décollages Paralog"
 msgstr "Paralog Takeoffs"
 
-#: paralog.php:445
+#: paralog.php:530
 msgid "Décollages"
 msgstr "Takeoffs"
 
-#: paralog.php:447 paralog.php:864
+#: paralog.php:532 paralog.php:949
 msgid "Ajouter un décollage / treuillé"
 msgstr "Add a Take off / Winch"
 
-#: paralog.php:449
+#: paralog.php:534
 msgid "Personnes Paralog"
 msgstr "Paralog Persons"
 
-#: paralog.php:449
+#: paralog.php:534
 msgid "Personnes"
 msgstr "Persons"
 
-#: paralog.php:451 paralog.php:969
+#: paralog.php:536 paralog.php:1054
 msgid "Ajouter une personne"
 msgstr "Add a person"
 
-#: paralog.php:453
+#: paralog.php:538
 msgid "Lignes Paralog"
 msgstr "Paralog Lines"
 
-#: paralog.php:455 paralog.php:934
+#: paralog.php:540 paralog.php:1019
 msgid "Ajouter une ligne"
 msgstr "Add a line"
 
-#: paralog.php:457
+#: paralog.php:542
 msgid "Sites Paralog"
 msgstr "Paralog Sites"
 
-#: paralog.php:457
+#: paralog.php:542
 msgid "Sites"
 msgstr "Sites"
 
-#: paralog.php:459 paralog.php:899
+#: paralog.php:544 paralog.php:984
 msgid "Ajouter un site"
 msgstr "Add a site"
 
-#: paralog.php:512 paralog.php:550 paralog.php:590 paralog.php:628
-#: paralog.php:668 paralog.php:713
+#: paralog.php:597 paralog.php:635 paralog.php:675 paralog.php:713
+#: paralog.php:753 paralog.php:798
 msgid "aucune donnée"
 msgstr "no data"
 
-#: paralog.php:717
+#: paralog.php:802
 msgid "choisissez une année"
 msgstr "choose an year"
 
-#: paralog.php:718
+#: paralog.php:803
 msgid "toutes les années"
 msgstr "every years"
 
-#: paralog.php:728
+#: paralog.php:813
 msgid "Journaux des décollages / treuillés"
 msgstr "Logs of Takeoffs / Winches"
 
-#: paralog.php:729
+#: paralog.php:814
 msgid "Version"
 msgstr "Version"
 
-#: paralog.php:731
+#: paralog.php:816
 msgid ""
 "Cette extension permet à toutes les personnes autorisées, de gérer les "
 "journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce "
@@ -402,11 +446,11 @@ msgstr ""
 "one or more flight sites. This program was initially thought for the "
 "winnowing in plain. However, it can very well be used on mountains sites."
 
-#: paralog.php:732
+#: paralog.php:817
 msgid "Notions"
 msgstr "Notions"
 
-#: paralog.php:734
+#: paralog.php:819
 msgid ""
 "Le site : correspond au lieu de manière générale <span class=\"PL_gris_clair"
 "\">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>"
@@ -414,7 +458,7 @@ msgstr ""
 "The site: corresponds to the place generally <span class = \"wl_gris_clair"
 "\"> (ex: Aslonnes, Mont Bouquet, Annecy, Samoens, etc.) </ span>"
 
-#: paralog.php:735
+#: paralog.php:820
 msgid ""
 "La ligne : représente la ligne du treuil <span class=\"PL_gris_clair\">(ex: "
 "Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="
@@ -429,97 +473,97 @@ msgstr ""
 "several takeoff spaces <span class = \"wl_gris_clair\"> (eg: Déco Est, Déco "
 "Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</ span>"
 
-#: paralog.php:740
+#: paralog.php:825
 msgid "Statistiques"
 msgstr "Statistics"
 
-#: paralog.php:741
+#: paralog.php:826
 msgid "Année"
 msgstr "Year"
 
-#: paralog.php:750
+#: paralog.php:835
 msgid "aucune donnée à visualiser ?"
 msgstr "no data to visualise ?"
 
-#: paralog.php:750
+#: paralog.php:835
 msgid "ajouter de données de démonstration"
 msgstr "add demonstration datas"
 
-#: paralog.php:753
+#: paralog.php:838
 msgid "exporter les données sélectionnées"
 msgstr "export selected datas"
 
-#: paralog.php:753
+#: paralog.php:838
 msgid "exporter"
 msgstr "to export"
 
-#: paralog.php:755
+#: paralog.php:840
 msgid "Les sites"
 msgstr "The sites"
 
-#: paralog.php:759 paralog.php:827
+#: paralog.php:844 paralog.php:912
 msgid "Nom des sites"
 msgstr "Sites name"
 
-#: paralog.php:760 paralog.php:777 paralog.php:794 paralog.php:811
-#: paralog.php:828
+#: paralog.php:845 paralog.php:862 paralog.php:879 paralog.php:896
+#: paralog.php:913
 msgid "Quantité"
 msgstr "Quantity"
 
-#: paralog.php:772
+#: paralog.php:857
 msgid "Les lignes"
 msgstr "The lines"
 
-#: paralog.php:776
+#: paralog.php:861
 msgid "Nom des lignes"
 msgstr "Name of lines"
 
-#: paralog.php:789
+#: paralog.php:874
 msgid "Les treuilleurs"
 msgstr "The winchmen"
 
-#: paralog.php:793
+#: paralog.php:878
 msgid "Nom des treuilleurs"
 msgstr "Name of the winchman"
 
-#: paralog.php:806
+#: paralog.php:891
 msgid "Les pilotes"
 msgstr "The pilots"
 
-#: paralog.php:810
+#: paralog.php:895
 msgid "Nom des pilotes"
 msgstr "Name of the pilot"
 
-#: paralog.php:823
+#: paralog.php:908
 msgid "Les passagers"
 msgstr "The passengers"
 
-#: paralog.php:842
+#: paralog.php:927
 msgid "Nombre de décollages ou de treuillés"
 msgstr "Number of take off / winches"
 
-#: paralog.php:857 paralog.php:892 paralog.php:927 paralog.php:962
+#: paralog.php:942 paralog.php:977 paralog.php:1012 paralog.php:1047
 #, php-format
 msgid "Élément(s) supprimé(s): %d"
 msgstr "Item (s) removed: %d"
 
-#: paralog.php:864
+#: paralog.php:949
 msgid "Gestion des décollages / treuillés"
 msgstr "Takeoff / Winches management"
 
-#: paralog.php:899
+#: paralog.php:984
 msgid "Gestion des sites"
 msgstr "Sites management"
 
-#: paralog.php:934
+#: paralog.php:1019
 msgid "Gestion des lignes"
 msgstr "Lines management"
 
-#: paralog.php:969
+#: paralog.php:1054
 msgid "Gestion des personnes"
 msgstr "Persons magagement"
 
-#: paralog.php:992
+#: paralog.php:1077
 msgid "nombre d'enregistrements"
 msgstr "items by page"
 

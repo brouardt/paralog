@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.3.11
+ * Version:           1.4.0
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -25,8 +25,8 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.3.11');
-    define('PL_DB_VERSION', '1.9');
+    define('PL_VERSION', '1.4.0');
+    define('PL_DB_VERSION', '2.0');
     define('PL_DOMAIN', 'paralog');
 
     /**
@@ -39,7 +39,13 @@ if (!class_exists('Paralog')) {
         public $plugin_dir;
         public $plugin_url;
         public $plugin_name;
-        private static $tables = array('sites', 'lines', 'persons', 'logs');
+        private static $tables = array(
+            'activities', 'activities_persons', 'activities_materials',
+            'sites', 
+            'lines', 
+            'persons', 
+            'logs'
+        );
 
         /**
          * @name __construct
@@ -106,11 +112,90 @@ if (!class_exists('Paralog')) {
             if ($options['db_version'] != PL_DB_VERSION) {
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-                $p = __('pilote', PL_DOMAIN);
-                $t = __('treuilleur', PL_DOMAIN);
-                $e = __('élève', PL_DOMAIN);
-                $o = __('oui', PL_DOMAIN);
-                $n = __('non', PL_DOMAIN);
+                $pi = __('pilote', PL_DOMAIN);
+                $tr = __('treuilleur', PL_DOMAIN);
+                $mo = __('moniteur', PL_DOMAIN);
+                $pl = __('plateforme', PL_DOMAIN);
+                $el = __('élève', PL_DOMAIN);
+                $co = __('confirmé', PL_DOMAIN);
+                $ou = __('oui', PL_DOMAIN);
+                $no = __('non', PL_DOMAIN);
+
+                $nd = __('nord', PL_DOMAIN);
+                $nt = __('nord-est', PL_DOMAIN);
+                $et = __('est', PL_DOMAIN);
+                $st = __('sud-est', PL_DOMAIN);
+                $sd = __('sud', PL_DOMAIN);
+                $st = __('sud-ouest', PL_DOMAIN);
+                $ot = __('ouest', PL_DOMAIN);
+                $nt = __('nord-ouest', PL_DOMAIN);
+
+                /*
+                 * activity
+                 */
+                $table = self::table_name('activities');
+                $query = "CREATE TABLE IF NOT EXISTS $table ( "
+                    . "`activity_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "`date` date NOT NULL DEFAULT '0000-00-00', "
+                    . "`site_name` varchar(64) NULL DEFAULT NULL, "
+                    . "`comment` mediumtext NULL DEFAULT NULL, "
+                    . "`winch_incident` mediumtext NULL DEFAULT NULL, "
+                    . "`fly_incident` mediumtext NULL DEFAULT NULL, "
+                    . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
+                    . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
+                    . "PRIMARY KEY (`activity_id`) "
+                    . ") $charset_collate";
+                dbDelta($query);
+
+                /*
+                 * activities persons
+                 */
+                $table = self::table_name('activities_persons');
+                $query = $wpdb->prepare(
+                      "CREATE TABLE IF NOT EXISTS $table ( "
+                    . "`activity_person_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "`activity_id` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`type` enum(%s,%s,%s) NOT NULL DEFAULT %s, "
+                    . "`person_name` varchar(129) NULL DEFAULT NULL, "
+                    . "`person_type` enum(%s,%s) NOT NULL DEFAULT %s, "
+                    . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
+                    . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
+                    . "PRIMARY KEY (`activity_person_id`) "
+                    . ") $charset_collate",
+                    array(
+                        $mo, $pl, $tr, $mo,
+                        $co, $el, $co
+                    )
+                );
+                dbDelta($query);
+
+                /*
+                 * activities materials
+                 */
+                $table = self::table_name('activities_materials');
+                $query = $wpdb->prepare(
+                      "CREATE TABLE IF NOT EXISTS $table ( "
+                    . "`activity_material_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
+                    . "`activity_id` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`line_name` varchar(64) NULL DEFAULT NULL, "
+                    . "`start_wind_orientation` enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
+                    . "`end_wind_orientation`  enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
+                    . "`start_counter` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`end_counter` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`start_time` time NOT NULL DEFAULT '00:00:00', "
+                    . "`end_time` time NOT NULL DEFAULT '00:00:00', "
+                    . "`start_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
+                    . "`end_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
+                    . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
+                    . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
+                    . "PRIMARY KEY (`activity_material_id`) "
+                    . ") $charset_collate",
+                    array(
+                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt,
+                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt
+                    )
+                );
+                dbDelta($query);
 
                 /*
                  * area
@@ -154,9 +239,9 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (person_id) "
                     . ") $charset_collate",
                     array(
-                        $p, $e, $p,
-                        $o, $n, $n,
-                        $t, $e,
+                        $pi, $el, $pi,
+                        $ou, $no, $no,
+                        $tr, $el,
                     )
                 );
                 dbDelta($query);
@@ -181,8 +266,8 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (log_id) "
                     . ") $charset_collate",
                     array(
-                        $t, $e,
-                        $p, $e, $p,
+                        $tr, $el,
+                        $pi, $el, $pi,
                     )
                 );
                 dbDelta($query);
@@ -203,11 +288,11 @@ if (!class_exists('Paralog')) {
 
             $user_id = get_current_user_id();
 
-            $p = __('pilote', PL_DOMAIN);
-            $t = __('treuilleur', PL_DOMAIN);
-            $e = __('élève', PL_DOMAIN);
-            $o = __('oui', PL_DOMAIN);
-            $n = __('non', PL_DOMAIN);
+            $pi = __('pilote', PL_DOMAIN);
+            $tr = __('treuilleur', PL_DOMAIN);
+            $el = __('élève', PL_DOMAIN);
+            $ou = __('oui', PL_DOMAIN);
+            $no = __('non', PL_DOMAIN);
 
             $table = self::table_name('sites');
             $query = $wpdb->prepare(
@@ -260,11 +345,11 @@ if (!class_exists('Paralog')) {
                 . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d, 0), "
                 . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d, 0);",
                 array(
-                    $p, $o, $e, $user_id,
-                    $p, $o, $t, $user_id,
-                    $p, $n, $user_id,
-                    $p, $o, $t, $user_id,
-                    $p, $n, $user_id,
+                    $pi, $ou, $el, $user_id,
+                    $pi, $ou, $tr, $user_id,
+                    $pi, $no, $user_id,
+                    $pi, $ou, $tr, $user_id,
+                    $pi, $no, $user_id,
                 )
             );
             $wpdb->query($query);
@@ -280,13 +365,13 @@ if (!class_exists('Paralog')) {
                 . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d, 0), "
                 . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d, 0);",
                 array(
-                    $p, $user_id,
-                    $p, $user_id,
-                    $p, $user_id,
-                    $p, $user_id,
-                    $e, $p, $user_id,
-                    $t, $e, $user_id,
-                    $t, $p, $user_id,
+                    $pi, $user_id,
+                    $pi, $user_id,
+                    $pi, $user_id,
+                    $pi, $user_id,
+                    $el, $pi, $user_id,
+                    $tr, $el, $user_id,
+                    $tr, $pi, $user_id,
                 )
             );
             $wpdb->query($query);
@@ -380,7 +465,7 @@ if (!class_exists('Paralog')) {
                 ini_set('zlib.output_compression', 'Off');
             }
             if (ob_get_contents()) { # Make sure no junk is included in the file
-            ob_end_clean();
+                ob_end_clean();
             }
             header('Pragma: public');
             header('Expires: 0');
@@ -457,6 +542,10 @@ if (!class_exists('Paralog')) {
                     $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog", PL_DOMAIN), __("Sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
                     add_action("load-$sites_hook", array($this, 'add_options'));
                     add_submenu_page('paralog-sites', __("Ajouter un site", PL_DOMAIN), __("Ajouter un site", PL_DOMAIN), $allowed_group, 'paralog-sites-form', array($this, 'form_site'));
+                    
+                    $activities_hook = add_submenu_page(self::admin_slug, __("Activités Paralog", PL_DOMAIN), __("Activités", PL_DOMAIN), $allowed_group, 'paralog-activities', array($this, 'list_activities'));
+                    add_action("load-$activities_hook", array($this, 'add_options'));
+                    add_submenu_page('paralog-activities', __("Ajouter une activité", PL_DOMAIN), __("Ajouter une activité", PL_DOMAIN), $allowed_group, 'paralog-activities-form', array($this, 'form_activity'));                    
                 }
             }
         }

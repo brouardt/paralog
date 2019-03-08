@@ -136,11 +136,6 @@ class Paralog_Log extends Paralog_Table
         }
     }
 
-    private function color_person($item)
-    {
-        return ($item == __('élève', PL_DOMAIN)) ? 'orange' : 'green';
-    }
-
     protected function get_sortable_columns()
     {
         $sortable_columns = array(
@@ -278,14 +273,15 @@ class Paralog_Log extends Paralog_Table
             </form>
         </div>
         <?php
-}
+    }
 
     public function log_form_meta_box_handler($item)
     {
         $sites = $this->site_name_items();
         $lines = $this->line_name_items();
         $pilots = $this->pilot_name_items();
-        $winchmen = $this->winchman_name_items();?>
+        $winchmen = $this->winchman_name_items();
+        ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
                 <tr class="form-field">
@@ -400,74 +396,6 @@ class Paralog_Log extends Paralog_Table
         }
 
         return implode('<br />', $messages);
-    }
-
-    /**
-     * @name pilot_name_items
-     * @return array
-     */
-    private function pilot_name_items()
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('persons');
-        $query = "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table ORDER BY lastname ASC, firstname ASC;";
-
-        return $wpdb->get_results($query, ARRAY_A);
-    }
-    /**
-     * @name winchman_name_items
-     * @return array
-     */
-    private function winchman_name_items()
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('persons');
-        $query = $wpdb->prepare(
-            "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table WHERE deleted = 0 AND winchman LIKE %s ORDER BY lastname ASC, firstname ASC;",
-            __('oui', PL_DOMAIN)
-        );
-
-        return $wpdb->get_results($query, ARRAY_A);
-    }
-
-    /**
-     * @name line_name_items
-     * @return array
-     */
-    private function line_name_items()
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('lines');
-        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name;";
-
-        return $wpdb->get_results($query, ARRAY_A);
-    }
-
-    /**
-     * @name site_name_items
-     * @return array
-     */
-    private function site_name_items()
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('sites');
-        $query = "SELECT name FROM $table ORDER BY name;";
-
-        return $wpdb->get_results($query, ARRAY_A);
-    }
-
-    private function person_name_type($id, $type)
-    {
-        global $wpdb;
-
-        $table = Paralog::table_name('persons');
-        $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE deleted = 0 AND person_id = %d;", $id);
-
-        return $wpdb->get_row($query, OBJECT);
     }
 
     /**

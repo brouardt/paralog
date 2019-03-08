@@ -8,7 +8,7 @@ if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 /**
- * Classe de table commune à Paralog_(site,line,person,log)
+ * Classe de table commune à Paralog_(activity,site,line,person,log)
  *
  * @author Thierry Brouard <thierry@brouard.pro>
  */
@@ -18,8 +18,8 @@ class Paralog_Table extends WP_List_Table
     protected $primary_key;
 
     /**
-     * @param string $table
-     * @return $this
+     * @param String $table
+     * @return Object $this
      */
     protected function setTable($table)
     {
@@ -29,15 +29,15 @@ class Paralog_Table extends WP_List_Table
     }
 
     /**
-     * @return string
+     * @return String
      */
     protected function getTable() {
         return Paralog::table_name($this->table);
     }
 
     /**
-     * @param string $primary_key
-     * @return $this
+     * @param String $primary_key
+     * @return Object $this
      */
     protected function setPrimary($primary_key)
     {
@@ -47,7 +47,7 @@ class Paralog_Table extends WP_List_Table
     }
 
     /**
-     * @return string
+     * @return String
      */
     protected function getPrimary() 
     {
@@ -55,7 +55,7 @@ class Paralog_Table extends WP_List_Table
     }
 
     /**
-     * @return string
+     * @return String
      */
     protected function column_cb($item)
     {
@@ -105,8 +105,8 @@ class Paralog_Table extends WP_List_Table
     }
 
     /**
-     * @param integer $id
-     * @return boolean
+     * @param Integer $id
+     * @return Boolean
      */
     protected function is_id_belong_to_user($id) 
     {
@@ -123,5 +123,84 @@ class Paralog_Table extends WP_List_Table
         $result = $wpdb->get_var($query);
 
         return $result ? true : false;
+    }
+
+    /**
+     * @name person_name_type
+     * @param Integer id
+     * @param String type
+     * @return Object
+     */
+    protected function person_name_type($id, $type)
+    {
+        global $wpdb;
+
+        $table = Paralog::table_name('persons');
+        $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE deleted = 0 AND person_id = %d;", $id);
+
+        return $wpdb->get_row($query, OBJECT);
+    }
+
+    /**
+     * @name pilot_name_items
+     * @return Array
+     */
+    protected function pilot_name_items()
+    {
+        global $wpdb;
+
+        $table = Paralog::table_name('persons');
+        $query = "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table ORDER BY lastname ASC, firstname ASC;";
+
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+    /**
+     * @name winchman_name_items
+     * @return Array
+     */
+    protected function winchman_name_items()
+    {
+        global $wpdb;
+
+        $table = Paralog::table_name('persons');
+        $query = $wpdb->prepare(
+            "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table WHERE deleted = 0 AND winchman LIKE %s ORDER BY lastname ASC, firstname ASC;",
+            __('oui', PL_DOMAIN)
+        );
+
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+
+    /**
+     * @name line_name_items
+     * @return Array
+     */
+    protected function line_name_items()
+    {
+        global $wpdb;
+
+        $table = Paralog::table_name('lines');
+        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name;";
+
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+
+    /**
+     * @name site_name_items
+     * @return Array
+     */
+    protected function site_name_items()
+    {
+        global $wpdb;
+
+        $table = Paralog::table_name('sites');
+        $query = "SELECT name FROM $table ORDER BY name;";
+
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+    
+    protected function color_person($item)
+    {
+        return ($item == __('élève', PL_DOMAIN)) ? 'orange' : 'green';
     }
 }
