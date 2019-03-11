@@ -180,7 +180,8 @@ class Paralog_Site extends Paralog_Table
                 }
             }
         }
-        add_meta_box('site_form_meta_box', 'Donnée', array($this, 'site_form_meta_box_handler'), 'site', 'normal', 'default'); ?>
+        add_meta_box('site_form_meta_box', 'Donnée', array($this, 'site_form_meta_box_handler'), 'site', 'normal', 'default'); 
+        ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e('Fiche de site', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>

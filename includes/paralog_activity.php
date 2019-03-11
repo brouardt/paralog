@@ -39,7 +39,8 @@ class Paralog_Activity extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'name' => __("Nom", PL_DOMAIN),
+            'date' => __('Date', PL_DOMAIN),
+            'site_name' => __('Nom', PL_DOMAIN)
         ));
 
         return $columns;
@@ -111,9 +112,10 @@ class Paralog_Activity extends Paralog_Table
     {
         switch ($column_name) {
             case 'date':
+            case 'site_name':
                 return $item[$column_name];
             default:
-                return print_r($item, true); //Show the whole array for troubleshooting purposes
+                return print_r($item, true); // Show the whole array for troubleshooting purposes
         }
     }
 
@@ -121,6 +123,7 @@ class Paralog_Activity extends Paralog_Table
     {
         $sortable_columns = array(
             'date' => array('date', false),
+            'site_name' => array('site_name', false)
         );
 
         return $sortable_columns;
@@ -185,10 +188,11 @@ class Paralog_Activity extends Paralog_Table
                 }
             }
         }
-        add_meta_box('site_form_meta_box', 'Donnée', array($this, 'site_form_meta_box_handler'), 'site', 'normal', 'default'); ?>
+        add_meta_box('activity_form_meta_box', 'Donnée', array($this, 'activity_form_meta_box_handler'), 'activity', 'normal', 'default'); 
+        ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de site', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e("Fiche d'activité", PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -198,10 +202,10 @@ class Paralog_Activity extends Paralog_Table
             <form id="form" method="post">
                 <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
                 <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
-                <div class="metabox-holder" id="postsite">
+                <div class="metabox-holder" id="postactivity">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('site', 'normal', $item) ?>
+                            <?php do_meta_boxes('activity', 'normal', $item) ?>
                             <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
@@ -211,7 +215,7 @@ class Paralog_Activity extends Paralog_Table
         <?php
     }
 
-    public function site_form_meta_box_handler($item)
+    public function activity_form_meta_box_handler($item) 
     {
         $sites = $this->site_name_items();
         $lines = $this->line_name_items();
@@ -221,9 +225,18 @@ class Paralog_Activity extends Paralog_Table
         $instructor_list = $this->instructor_list($item['activity_id']);
         $plateform_list = $this->plateform_list($item['activity_id']);
         $winchman_list = $this->winchman_list($item['activity_id']);
+
         ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="date"><?php _e('Date', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input id="date" name="date" type="date" value="<?=esc_attr($item['date'])?>" class="code" /> 
+                    </td>
+                </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
                         <label for="site_name"><?php _e('Nom du site', PL_DOMAIN)?></label>
@@ -235,14 +248,6 @@ class Paralog_Activity extends Paralog_Table
                             <option value="<?=esc_attr($site['name'])?>"<?=($site['name'] == $item['site_name'] ? ' selected' : '')?>><?=esc_html($site['name'])?></option>
                             <?php endforeach;?>
                         </select>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="date"><?php _e('Date', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <input id="date" name="date" type="date" value="<?=esc_attr($item['date'])?>" class="code" /> 
                     </td>
                 </tr>
                 <tr class="form-field">
@@ -328,7 +333,7 @@ class Paralog_Activity extends Paralog_Table
                         <label for="winch_incident"><?php _e('Incident de treuil', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <textarea name="winch_incident" value="<?=esc_attr($item['winch_incident'])?>" class="code" />
+                        <textarea name="winch_incident" class="code"><?=esc_html($item['winch_incident'])?></textarea>
                     </td>
                 </tr>
                 <tr class="form-field">
@@ -336,7 +341,7 @@ class Paralog_Activity extends Paralog_Table
                         <label for="fly_incident"><?php _e('Incident de vol', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <textarea name="fly_incident" value="<?=esc_attr($item['fly_incident'])?>" class="code" />
+                        <textarea name="fly_incident" class="code"><?=esc_html($item['fly_incident'])?></textarea>
                     </td>
                 </tr>
                 <tr class="form-field">
@@ -344,7 +349,7 @@ class Paralog_Activity extends Paralog_Table
                         <label for="comment"><?php _e('Commentaire', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <textarea name="comment" value="<?=esc_attr($item['comment'])?>" class="code" />
+                        <textarea name="comment" class="code"><?=esc_html($item['comment'])?></textarea>
                     </td>
                 </tr>
             </tbody>
@@ -388,9 +393,7 @@ class Paralog_Activity extends Paralog_Table
             $type
         );
 
-        $wpdb->get_result($query, ARRAY_A);
-
-        return $query;
+        return $wpdb->get_results($query, ARRAY_A);
     }
 
     /**

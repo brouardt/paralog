@@ -211,7 +211,8 @@ class Paralog_Person extends Paralog_Table
                 }
             }
         }
-        add_meta_box('person_form_meta_box', 'Donnée', array($this, 'person_form_meta_box_handler'), 'person', 'normal', 'default');?>
+        add_meta_box('person_form_meta_box', 'Donnée', array($this, 'person_form_meta_box_handler'), 'person', 'normal', 'default');
+        ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e('Fiche de personnel', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
@@ -235,7 +236,7 @@ class Paralog_Person extends Paralog_Table
             </form>
         </div>
         <?php
-}
+    }
 
     public function person_form_meta_box_handler($item)
     {
@@ -243,7 +244,8 @@ class Paralog_Person extends Paralog_Table
         $pilote = __('pilote', PL_DOMAIN);
         $eleve = __('élève', PL_DOMAIN);
         $oui = __('oui', PL_DOMAIN);
-        $non = __('non', PL_DOMAIN);?>
+        $non = __('non', PL_DOMAIN);
+        ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
                 <tr class="form-field">
@@ -300,7 +302,7 @@ class Paralog_Person extends Paralog_Table
             </tbody>
         </table>
         <?php
-}
+    }
 
     private function form_validate($item)
     {

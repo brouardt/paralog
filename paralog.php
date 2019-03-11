@@ -25,8 +25,8 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.1');
-    define('PL_DB_VERSION', '2.0');
+    define('PL_VERSION', '1.4.2');
+    define('PL_DB_VERSION', '2.1');
     define('PL_DOMAIN', 'paralog');
 
     /**
@@ -40,7 +40,7 @@ if (!class_exists('Paralog')) {
         public $plugin_url;
         public $plugin_name;
         private static $tables = array(
-            'activities', 'activities_persons', 'activities_materials',
+            'activities', 'activities_persons',
             'sites', 
             'lines', 
             'persons', 
@@ -134,17 +134,32 @@ if (!class_exists('Paralog')) {
                  * activity
                  */
                 $table = self::table_name('activities');
-                $query = "CREATE TABLE IF NOT EXISTS $table ( "
+                $query = $wpdb->prepare(
+                      "CREATE TABLE IF NOT EXISTS $table ( "
                     . "`activity_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "`date` date NOT NULL DEFAULT '0000-00-00', "
                     . "`site_name` varchar(64) NULL DEFAULT NULL, "
+                    . "`line_name` varchar(64) NULL DEFAULT NULL, "
+                    . "`start_wind_orientation` enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
+                    . "`end_wind_orientation`  enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
+                    . "`start_counter` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`end_counter` mediumint(8) UNSIGNED NOT NULL, "
+                    . "`start_time` time NOT NULL DEFAULT '00:00:00', "
+                    . "`end_time` time NOT NULL DEFAULT '00:00:00', "
+                    . "`start_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
+                    . "`end_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
                     . "`comment` mediumtext NULL DEFAULT NULL, "
                     . "`winch_incident` mediumtext NULL DEFAULT NULL, "
                     . "`fly_incident` mediumtext NULL DEFAULT NULL, "
                     . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
                     . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (`activity_id`) "
-                    . ") $charset_collate";
+                    . ") $charset_collate",
+                    array(
+                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt,
+                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt
+                    )
+                );
                 dbDelta($query);
 
                 /*
@@ -165,34 +180,6 @@ if (!class_exists('Paralog')) {
                     array(
                         $mo, $pl, $tr, $mo,
                         $co, $el, $co
-                    )
-                );
-                dbDelta($query);
-
-                /*
-                 * activities materials
-                 */
-                $table = self::table_name('activities_materials');
-                $query = $wpdb->prepare(
-                      "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "`activity_material_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "`activity_id` mediumint(8) UNSIGNED NOT NULL, "
-                    . "`line_name` varchar(64) NULL DEFAULT NULL, "
-                    . "`start_wind_orientation` enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
-                    . "`end_wind_orientation`  enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
-                    . "`start_counter` mediumint(8) UNSIGNED NOT NULL, "
-                    . "`end_counter` mediumint(8) UNSIGNED NOT NULL, "
-                    . "`start_time` time NOT NULL DEFAULT '00:00:00', "
-                    . "`end_time` time NOT NULL DEFAULT '00:00:00', "
-                    . "`start_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
-                    . "`end_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
-                    . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
-                    . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
-                    . "PRIMARY KEY (`activity_material_id`) "
-                    . ") $charset_collate",
-                    array(
-                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt,
-                        $nd, $nt, $et, $st, $sd, $st, $ot, $nt
                     )
                 );
                 dbDelta($query);
@@ -372,6 +359,24 @@ if (!class_exists('Paralog')) {
                     $el, $pi, $user_id,
                     $tr, $el, $user_id,
                     $tr, $pi, $user_id,
+                )
+            );
+            $wpdb->query($query);
+
+            $table = self::table_name('activities');
+            $query = $wpdb->prepare(
+                "",
+                array(
+
+                )
+            );
+            $wpdb->query($query);
+
+            $table = self::table_name('activities_persons');
+            $query = $wpdb->prepare(
+                "",
+                array(
+                    
                 )
             );
             $wpdb->query($query);

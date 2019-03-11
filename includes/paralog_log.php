@@ -246,7 +246,8 @@ class Paralog_Log extends Paralog_Table
                 $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.", PL_DOMAIN);
             }
         }
-        add_meta_box('log_form_meta_box', 'Journal', array($this, 'log_form_meta_box_handler'), 'log', 'normal', 'default');?>
+        add_meta_box('log_form_meta_box', 'Journal', array($this, 'log_form_meta_box_handler'), 'log', 'normal', 'default');
+        ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
@@ -372,7 +373,7 @@ class Paralog_Log extends Paralog_Table
             </tbody>
         </table>
         <?php
-}
+    }
 
     private function form_validate($item)
     {

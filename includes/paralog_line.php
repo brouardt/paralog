@@ -180,7 +180,8 @@ class Paralog_Line extends Paralog_Table
                 }
             }
         }
-        add_meta_box('line_form_meta_box', 'Donnée', array($this, 'line_form_meta_box_handler'), 'line', 'normal', 'default'); ?>
+        add_meta_box('line_form_meta_box', 'Donnée', array($this, 'line_form_meta_box_handler'), 'line', 'normal', 'default'); 
+        ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e('Fiche de ligne', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-lines&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
