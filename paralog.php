@@ -19,7 +19,7 @@
  * Stable tag:        5.0.3
  * Tested up to:      5.0.3
  * Requires PHP:      5.6
- * */
+ */
 if (!defined('ABSPATH')) {
     die('No direct access allowed');
 }
@@ -339,7 +339,7 @@ if (!class_exists('Paralog')) {
             $table = self::table_name('activities');
             $query = $wpdb->prepare(
                 "INSERT INTO $table (activity_id, date, site_name, line_name, start_wind_orientation, end_wind_orientation, start_counter, end_counter, start_time, end_time, start_fuel, end_fuel, comment, winch_incident, fly_incident, user_id, deleted) VALUES "
-                . "(1, '2018-04-24', 'Aslonnes \"Le Fort\"', 'Treuil 1B', %s, %s, 64120, 64522, '13:25:00', '18:16:00', 45, 33, 'RAZ', '', '', %d, 0);",
+                . "(1, '2018-04-24', 'Aslonnes \"Le Fort\"', 'Treuil 1B', %s, %s, 64120, 64278, '13:25:00', '18:16:00', 45, 33, 'RAZ', '', '', %d, 0);",
                 array(
                     __('nord-ouest'), __('nord-est'), $user_id
                 )
@@ -351,10 +351,12 @@ if (!class_exists('Paralog')) {
                 "INSERT INTO $table (activity_id, type, person_name, person_type, user_id, deleted) VALUES"
                 . "(1, %s, 'Thierry PROUST', %s, %d, 0),"
                 . "(1, %s, 'Joël GASCHET', %s, %d, 0),"
-                . "(1, %s, 'Thierry PROUST', %s, %d, 0),"
+                . "(1, %s, 'Thierry BROUARD', %s, %d, 0),"
                 . "(1, %s, '', %s, %d, 0);",
                 array(
-                    
+                    __('moniteur'), __('confirmé'), $user_id,
+                    __('plateforme'), __('élève'), $user_id,
+                    __('treuilleur'), __('élève'), $user_id,
                 )
             );
             $wpdb->query($query);

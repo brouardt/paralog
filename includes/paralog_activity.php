@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('ABSPATH')) {
     die('No direct access allowed');
 }
@@ -9,7 +8,7 @@ if (!class_exists('Paralog_Table')) {
 }
 
 /**
- * Description of paralog_site
+ * @package Paralog_Activity
  *
  * @author Thierry Brouard <thierry@brouard.pro>
  */

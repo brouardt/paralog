@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('ABSPATH')) {
     die('No direct access allowed');
 }
@@ -9,7 +8,7 @@ if (!class_exists('WP_List_Table')) {
 }
 /**
  * Classe de table commune à Paralog_(activity,site,line,person,log)
- *
+ * 
  * @author Thierry Brouard <thierry@brouard.pro>
  */
 class Paralog_Table extends WP_List_Table
