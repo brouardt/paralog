@@ -19,8 +19,8 @@ class Paralog_Activity extends Paralog_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => __('activité', PL_DOMAIN), //singular name of the listed records
-            'plural' => __('activités', PL_DOMAIN), //plural name of the listed records
+            'singular' => __('activité'), //singular name of the listed records
+            'plural' => __('activités'), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
 
@@ -39,8 +39,8 @@ class Paralog_Activity extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'date' => __('Date', PL_DOMAIN),
-            'site_name' => __('Nom', PL_DOMAIN)
+            'date' => __('Date'),
+            'site_name' => __('Nom')
         ));
 
         return $columns;
@@ -54,12 +54,12 @@ class Paralog_Activity extends Paralog_Table
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier', PL_DOMAIN)),
+                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier')),
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN)),
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer')),
             ));
         }
 
@@ -161,16 +161,16 @@ class Paralog_Activity extends Paralog_Table
                     $result = $wpdb->insert($table, $item);
                     $item[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Activité enregistrée", PL_DOMAIN);
+                        $message = __("Activité enregistrée");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la sauvegarde");
                     }
                 } else {
                     $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
                     if ($result !== false) {
-                        $message = __("Activité mise à jour", PL_DOMAIN);
+                        $message = __("Activité mise à jour");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la mise à jour");
                     }
                 }
             } else {
@@ -181,10 +181,16 @@ class Paralog_Activity extends Paralog_Table
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
+                $item = $wpdb->get_row(
+                    $wpdb->prepare(
+                        "SELECT * FROM $table WHERE $primary = %d", 
+                        $_REQUEST['id']
+                    ), 
+                    ARRAY_A
+                );
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Donnée introuvable', PL_DOMAIN);
+                    $notice = __('Donnée introuvable');
                 }
             }
         }
@@ -192,7 +198,7 @@ class Paralog_Activity extends Paralog_Table
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e("Fiche d'activité", PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e("Fiche d'activité"); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste') ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -206,7 +212,7 @@ class Paralog_Activity extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('activity', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver'); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -231,7 +237,7 @@ class Paralog_Activity extends Paralog_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="date"><?php _e('Date', PL_DOMAIN)?></label>
+                        <label for="date"><?php _e('Date')?></label>
                     </th>
                     <td>
                         <input id="date" name="date" type="date" value="<?=esc_attr($item['date'])?>" class="code" /> 
@@ -239,7 +245,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="site_name"><?php _e('Nom du site', PL_DOMAIN)?></label>
+                        <label for="site_name"><?php _e('Nom du site')?></label>
                     </th>
                     <td>
                         <select id="site_name" name="site_name">
@@ -252,7 +258,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="instructor"><?php _e('Moniteur', PL_DOMAIN)?></label>
+                        <label for="instructor"><?php _e('Moniteur')?></label>
                     </th>
                     <td>
                         <select id="instructor" name="instructor">
@@ -269,8 +275,8 @@ class Paralog_Activity extends Paralog_Table
                     <td>
                     <?php foreach ($instructor_list as $instructor): ?>
                         <span><?=esc_html($instructor['person_name'])?></span>
-                        <?php if( $instructor['person_type'] == __('élève', PL_DOMAIN) ):?>
-                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
+                        <?php if( $instructor['person_type'] == __('élève') ):?>
+                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève')?></span>)
                         <?php endif;?>
                         <br />
                     <?php endforeach;?>
@@ -278,7 +284,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="plateform"><?php _e('Plateforme', PL_DOMAIN)?></label>
+                        <label for="plateform"><?php _e('Plateforme')?></label>
                     </th>
                     <td>
                         <select id="plateform" name="plateform">
@@ -295,8 +301,8 @@ class Paralog_Activity extends Paralog_Table
                     <td>
                     <?php foreach($plateform_list as $plateform): ?>
                         <span><?=esc_html($plateform['person_name'])?></span>
-                        <?php if( $plateform['person_type'] == __('élève', PL_DOMAIN) ): ?>
-                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
+                        <?php if( $plateform['person_type'] == __('élève') ): ?>
+                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève')?></span>)
                         <?php endif;?>
                         <br />
                     <?php endforeach; ?>
@@ -304,7 +310,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN)?></label>
+                        <label for="winchman"><?php _e('Treuilleur')?></label>
                     </th>
                     <td>
                         <select id="winchman" name="winchman">
@@ -321,8 +327,8 @@ class Paralog_Activity extends Paralog_Table
                     <td>
                         <?php foreach($winchman_list as $winchman): ?>
                             <span><?=esc_html($winchman['person_name'])?></span>
-                            <?php if( $winchman['person_type'] == __('élève', PL_DOMAIN) ): ?>
-                                (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
+                            <?php if( $winchman['person_type'] == __('élève') ): ?>
+                                (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève')?></span>)
                             <?php endif;?>
                             <br />
                         <?php endforeach; ?>
@@ -330,7 +336,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winch_incident"><?php _e('Incident de treuil', PL_DOMAIN)?></label>
+                        <label for="winch_incident"><?php _e('Incident de treuil')?></label>
                     </th>
                     <td>
                         <textarea name="winch_incident" class="code"><?=esc_html($item['winch_incident'])?></textarea>
@@ -338,7 +344,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="fly_incident"><?php _e('Incident de vol', PL_DOMAIN)?></label>
+                        <label for="fly_incident"><?php _e('Incident de vol')?></label>
                     </th>
                     <td>
                         <textarea name="fly_incident" class="code"><?=esc_html($item['fly_incident'])?></textarea>
@@ -346,7 +352,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="comment"><?php _e('Commentaire', PL_DOMAIN)?></label>
+                        <label for="comment"><?php _e('Commentaire')?></label>
                     </th>
                     <td>
                         <textarea name="comment" class="code"><?=esc_html($item['comment'])?></textarea>
@@ -362,7 +368,7 @@ class Paralog_Activity extends Paralog_Table
         $messages = array();
 
         if (empty($item['name'])) {
-            $messages[] = __('Le nom du site est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom du site est obligatoire');
         }
 
         if (empty($messages)) {
@@ -403,7 +409,7 @@ class Paralog_Activity extends Paralog_Table
      */
     private function instructor_list($id) 
     {
-        return $this->person_list_by_activity_and_type($id, __('moniteur', PL_DOMAIN));
+        return $this->person_list_by_activity_and_type($id, __('moniteur'));
     }
 
     /**
@@ -413,7 +419,7 @@ class Paralog_Activity extends Paralog_Table
      */
     private function plateform_list($id)
     {
-        return $this->person_list_by_activity_and_type($id, __('plateforme', PL_DOMAIN));
+        return $this->person_list_by_activity_and_type($id, __('plateforme'));
     }
 
     /**
@@ -423,6 +429,6 @@ class Paralog_Activity extends Paralog_Table
      */
     private function winchman_list($id)
     {
-        return $this->person_list_by_activity_and_type($id, __('treuilleur', PL_DOMAIN));
+        return $this->person_list_by_activity_and_type($id, __('treuilleur'));
     }
 }

@@ -66,7 +66,7 @@ class Paralog_Table extends WP_List_Table
     {
         if (current_user_can('delete_others_posts')) {
             $bulk_actions = array(
-                'delete' => __('Supprimer', PL_DOMAIN),
+                'delete' => __('Supprimer'),
             );
         } else {
             $bulk_actions = array();
@@ -136,7 +136,15 @@ class Paralog_Table extends WP_List_Table
         global $wpdb;
 
         $table = Paralog::table_name('persons');
-        $query = $wpdb->prepare("SELECT CONCAT_WS(' ', firstname, lastname) AS name, $type AS type FROM $table WHERE deleted = 0 AND person_id = %d;", $id);
+        $query = $wpdb->prepare(
+            "SELECT "
+            . "CONCAT_WS(' ', firstname, lastname) AS name, "
+            . "$type AS type "
+            . "FROM $table "
+            . "WHERE deleted = 0 "
+            . "AND person_id = %d;", 
+            $id
+        );
 
         return $wpdb->get_row($query, OBJECT);
     }
@@ -164,8 +172,13 @@ class Paralog_Table extends WP_List_Table
 
         $table = Paralog::table_name('persons');
         $query = $wpdb->prepare(
-            "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table WHERE deleted = 0 AND winchman LIKE %s ORDER BY lastname ASC, firstname ASC;",
-            __('oui', PL_DOMAIN)
+            "SELECT "
+            . "person_id, CONCAT_WS(' ', firstname, lastname) AS name "
+            . "FROM $table "
+            . "WHERE deleted = 0 "
+            . "AND winchman LIKE %s "
+            . "ORDER BY lastname ASC, firstname ASC;",
+            __('oui')
         );
 
         return $wpdb->get_results($query, ARRAY_A);
@@ -201,6 +214,6 @@ class Paralog_Table extends WP_List_Table
     
     protected function color_person($item)
     {
-        return ($item == __('élève', PL_DOMAIN)) ? 'orange' : 'green';
+        return ($item == __('élève')) ? 'orange' : 'green';
     }
 }

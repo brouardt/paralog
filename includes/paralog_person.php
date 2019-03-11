@@ -19,8 +19,8 @@ class Paralog_Person extends Paralog_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => __('personne', PL_DOMAIN), //singular name of the listed records
-            'plural' => __('personnes', PL_DOMAIN), //plural name of the listed records
+            'singular' => __('personne'), //singular name of the listed records
+            'plural' => __('personnes'), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
 
@@ -39,11 +39,11 @@ class Paralog_Person extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'name' => __("Prénom + Nom", PL_DOMAIN),
-            'pilot_type' => __("Statut pilote", PL_DOMAIN),
-            'licence' => __("Licence", PL_DOMAIN),
-            'winchman' => __("Treuilleur", PL_DOMAIN),
-            'winchman_type' => __("Statut treuilleur", PL_DOMAIN),
+            'name' => __("Prénom + Nom"),
+            'pilot_type' => __("Statut pilote"),
+            'licence' => __("Licence"),
+            'winchman' => __("Treuilleur"),
+            'winchman_type' => __("Statut treuilleur"),
         ));
 
         return $columns;
@@ -57,12 +57,12 @@ class Paralog_Person extends Paralog_Table
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">%s</a>', $_REQUEST['page'], $item[$primary], $this->get_pagenum(), __('Modifier', PL_DOMAIN)),
+                'edit' => sprintf('<a href="?page=%s-form&id=%d&paged=%d">%s</a>', $_REQUEST['page'], $item[$primary], $this->get_pagenum(), __('Modifier')),
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN)),
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer')),
             ));
         }
 
@@ -165,9 +165,9 @@ class Paralog_Person extends Paralog_Table
             'person_id' => 0,
             'firstname' => '',
             'lastname' => '',
-            'pilot_type' => __('pilote', PL_DOMAIN),
+            'pilot_type' => __('pilote'),
             'licence' => '',
-            'winchman' => __('non', PL_DOMAIN),
+            'winchman' => __('non'),
             'winchman_type' => null,
             'user_id' => get_current_user_id(),
         );
@@ -184,16 +184,16 @@ class Paralog_Person extends Paralog_Table
                     $result = $wpdb->insert($table, $item);
                     $item[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Personne enregistrée", PL_DOMAIN);
+                        $message = __("Personne enregistrée");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la sauvegarde");
                     }
                 } else {
                     $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
                     if ($result !== false) {
-                        $message = __("Personne mise à jour", PL_DOMAIN);
+                        $message = __("Personne mise à jour");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la mise à jour");
                     }
                 }
             } else {
@@ -207,7 +207,7 @@ class Paralog_Person extends Paralog_Table
                 $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Donnée introuvable', PL_DOMAIN);
+                    $notice = __('Donnée introuvable');
                 }
             }
         }
@@ -215,7 +215,7 @@ class Paralog_Person extends Paralog_Table
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de personnel', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
+            <h1><?php _e('Fiche de personnel');?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste')?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?=$notice?></p></div>
             <?php endif;?>
@@ -229,7 +229,7 @@ class Paralog_Person extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('person', 'normal', $item)?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN);?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver');?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -240,33 +240,33 @@ class Paralog_Person extends Paralog_Table
 
     public function person_form_meta_box_handler($item)
     {
-        $treuilleur = __('treuilleur', PL_DOMAIN);
-        $pilote = __('pilote', PL_DOMAIN);
-        $eleve = __('élève', PL_DOMAIN);
-        $oui = __('oui', PL_DOMAIN);
-        $non = __('non', PL_DOMAIN);
+        $treuilleur = __('treuilleur');
+        $pilote = __('pilote');
+        $eleve = __('élève');
+        $oui = __('oui');
+        $non = __('non');
         ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="firstname"><?php _e('Prénom', PL_DOMAIN)?></label>
+                        <label for="firstname"><?php _e('Prénom')?></label>
                     </th>
                     <td>
-                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?=esc_attr($item['firstname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Thierry', PL_DOMAIN)?>" required>
+                        <input id="firstname" name="firstname" type="text" style="width: 95%" value="<?=esc_attr($item['firstname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Thierry')?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="lastname"><?php _e('Nom', PL_DOMAIN)?></label>
+                        <label for="lastname"><?php _e('Nom')?></label>
                     </th>
                     <td>
-                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?=esc_attr($item['lastname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Brouard', PL_DOMAIN)?>" required>
+                        <input id="lastname" name="lastname" type="text" style="width: 95%" value="<?=esc_attr($item['lastname'])?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Brouard')?>" required>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label><?php _e('Type de pilote', PL_DOMAIN)?></label>
+                        <label><?php _e('Type de pilote')?></label>
                     </th>
                     <td>
                         <label><input name="pilot_type" type="radio" value="<?=$pilote?>"<?=($item['pilot_type'] == $pilote ? ' checked' : '')?>/> <?=$pilote?></label>
@@ -275,15 +275,15 @@ class Paralog_Person extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="licence"><?php _e('Licence', PL_DOMAIN)?></label>
+                        <label for="licence"><?php _e('Licence')?></label>
                     </th>
                     <td>
-                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?=esc_attr($item['licence'])?>" size="50" maxlength="10" class="code" placeholder="<?php _e('ex: 0000000X', PL_DOMAIN)?>">
+                        <input id="licence" name="licence" type="text" style="width: 95%" value="<?=esc_attr($item['licence'])?>" size="50" maxlength="10" class="code" placeholder="<?php _e('ex: 0000000X')?>">
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN)?></label>
+                        <label for="winchman"><?php _e('Treuilleur')?></label>
                     </th>
                     <td>
                         <label><input name="winchman" type="radio" value="<?=$oui?>"<?=($item['winchman'] == $oui ? ' checked' : '')?>/> <?=$oui?></label>
@@ -292,7 +292,7 @@ class Paralog_Person extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN)?></label>
+                        <label for="winchman_type"><?php _e('Type de treuilleur')?></label>
                     </th>
                     <td>
                         <label><input name="winchman_type" type="radio" value="<?=$treuilleur?>"<?=($item['winchman_type'] == $treuilleur ? ' checked' : '')?>/> <?=$treuilleur?></label>
@@ -309,19 +309,19 @@ class Paralog_Person extends Paralog_Table
         $messages = array();
 
         if (empty($item['firstname'])) {
-            $messages[] = __('Le prénom de la personne est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le prénom de la personne est obligatoire');
         }
         if (empty($item['lastname'])) {
-            $messages[] = __('Le nom de la personne est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom de la personne est obligatoire');
         }
         if (empty($item['pilot_type'])) {
-            $messages[] = __('Le type de pilote est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le type de pilote est obligatoire');
         }
         if (empty($item['winchman'])) {
-            $messages[] = __('Le champ treuilleur est obligatoire', PL_DOMAIN);
-        } elseif ($item['winchman'] == __('oui', PL_DOMAIN)) {
+            $messages[] = __('Le champ treuilleur est obligatoire');
+        } elseif ($item['winchman'] == __('oui')) {
             if (empty($item['winchman_type'])) {
-                $messages[] = __('Le type de treuilleur est obligatoire', PL_DOMAIN);
+                $messages[] = __('Le type de treuilleur est obligatoire');
             }
         }
 

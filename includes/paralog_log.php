@@ -21,8 +21,8 @@ class Paralog_Log extends Paralog_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => __('personne', PL_DOMAIN), //singular name of the listed records
-            'plural' => __('personnes', PL_DOMAIN), //plural name of the listed records
+            'singular' => __('personne'), //singular name of the listed records
+            'plural' => __('personnes'), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
         
@@ -45,12 +45,12 @@ class Paralog_Log extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'takeoff' => __("Décollage", PL_DOMAIN),
-            'site_name' => __("Site", PL_DOMAIN),
-            'line_name' => __("Ligne", PL_DOMAIN),
-            'winchman_name' => __("Treuilleur", PL_DOMAIN),
-            'pilot_name' => __("Pilote", PL_DOMAIN),
-            'passenger_name' => __("Passager", PL_DOMAIN),
+            'takeoff' => __("Décollage"),
+            'site_name' => __("Site"),
+            'line_name' => __("Ligne"),
+            'winchman_name' => __("Treuilleur"),
+            'pilot_name' => __("Pilote"),
+            'passenger_name' => __("Passager"),
         ));
 
         return $columns;
@@ -64,12 +64,12 @@ class Paralog_Log extends Paralog_Table
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier', PL_DOMAIN)),
+                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier')),
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN)),
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer')),
             ));
         }
 
@@ -209,16 +209,16 @@ class Paralog_Log extends Paralog_Table
                     $result = $wpdb->insert($table, $row);
                     $row[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Décollage enregistré", PL_DOMAIN);
+                        $message = __("Décollage enregistré");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la sauvegarde");
                     }
                 } else {
                     $result = $wpdb->update($table, $row, array($primary => $row[$primary]));
                     if ($result !== false) {
-                        $message = __("Décollage mis à jour", PL_DOMAIN);
+                        $message = __("Décollage mis à jour");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la mise à jour");
                     }
                 }
             } else {
@@ -236,21 +236,21 @@ class Paralog_Log extends Paralog_Table
                 $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Donnée introuvable', PL_DOMAIN);
+                    $notice = __('Donnée introuvable');
                 } else {
                     $datetime = new DateTime($item['takeoff']);
                     $item['takeoff_date'] = $datetime->format('Y-m-d');
                     $item['takeoff_time'] = $datetime->format('H:i:s');
                 }
             } else {
-                $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.", PL_DOMAIN);
+                $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.");
             }
         }
         add_meta_box('log_form_meta_box', 'Journal', array($this, 'log_form_meta_box_handler'), 'log', 'normal', 'default');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN);?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
+            <h1><?php _e('Fiche de décollage / treuillé');?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste')?></a></h1>
             <?php if(!empty($information)):  ?>
                 <div id="information" class="notice notice-info is-dismissible"><p><?=$information?></div>
             <?php endif; ?>
@@ -267,7 +267,7 @@ class Paralog_Log extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('log', 'normal', $item)?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN);?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver');?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -287,7 +287,7 @@ class Paralog_Log extends Paralog_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="site_name"><?php _e('Nom du site', PL_DOMAIN)?></label>
+                        <label for="site_name"><?php _e('Nom du site')?></label>
                     </th>
                     <td>
                         <select id="site_name" name="site_name">
@@ -300,7 +300,7 @@ class Paralog_Log extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN)?></label>
+                        <label for="line_name"><?php _e('Nom de la ligne')?></label>
                     </th>
                     <td>
                         <select id="line_name" name="line_name">
@@ -313,7 +313,7 @@ class Paralog_Log extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="winchman_id"><?php _e('Nom du treuilleur', PL_DOMAIN)?></label>
+                        <label for="winchman_id"><?php _e('Nom du treuilleur')?></label>
                     </th>
                     <td>
                         <select id="winchman_id" name="winchman_id">
@@ -326,7 +326,7 @@ class Paralog_Log extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="pilot_id"><?php _e('Nom du pilote', PL_DOMAIN)?></label>
+                        <label for="pilot_id"><?php _e('Nom du pilote')?></label>
                     </th>
                     <td>
                         <select id="pilot_id" name="pilot_id">
@@ -339,23 +339,23 @@ class Paralog_Log extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="passenger_name"><?php _e('Nom du passager', PL_DOMAIN)?></label>
+                        <label for="passenger_name"><?php _e('Nom du passager')?></label>
                     </th>
                     <td>
-                        <input id="passenger_name" name="passenger_name" type="text" style="width: 95%" value="<?=esc_attr($item['passenger_name'])?>" size="50" maxlength="129" class="code" placeholder="<?php _e('ex: Joe-Henri BLACK', PL_DOMAIN)?>"/>
+                        <input id="passenger_name" name="passenger_name" type="text" style="width: 95%" value="<?=esc_attr($item['passenger_name'])?>" size="50" maxlength="129" class="code" placeholder="<?php _e('ex: Joe-Henri BLACK')?>"/>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="total_flying_weight"><?php _e('Poid total volant (PTV)', PL_DOMAIN)?></label>
+                        <label for="total_flying_weight"><?php _e('Poid total volant (PTV)')?></label>
                     </th>
                     <td>
-                        <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em" value="<?=esc_attr($item['total_flying_weight'])?>" size="5" maxlength="4" class="code" placeholder="<?php _e('ex: 123', PL_DOMAIN)?>"/>
+                        <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em" value="<?=esc_attr($item['total_flying_weight'])?>" size="5" maxlength="4" class="code" placeholder="<?php _e('ex: 123')?>"/>
                     </td>
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="takeoff_date"><?php _e('Date', PL_DOMAIN)?></label>
+                        <label for="takeoff_date"><?php _e('Date')?></label>
                     </th>
                     <td>
                         <input id="takeoff_date" name="takeoff_date" type="date" value="<?=esc_attr($item['takeoff_date'])?>" class="code" /> 
@@ -364,7 +364,7 @@ class Paralog_Log extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN)?></label>
+                        <label for="takeoff_time"><?php _e('Heure')?></label>
                     </th>
                     <td>
                         <input id="takeoff_time" name="takeoff_time" type="time" step="1" min="00:00:00" max="23:59:59" value="<?=esc_attr($item['takeoff_time'])?>" class="code" />
@@ -380,16 +380,16 @@ class Paralog_Log extends Paralog_Table
         $messages = array();
 
         if (empty($item['site_name'])) {
-            $messages[] = __('Le nom du site est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom du site est obligatoire');
         }
         if (empty($item['line_name'])) {
-            $messages[] = __('Le nom de la ligne est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom de la ligne est obligatoire');
         }
         if (empty($item['pilot_id'])) {
-            $messages[] = __('Le nom du pilote est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom du pilote est obligatoire');
         }
         if (is_int($item['total_flying_weight'])) {
-            $messages[] = __('Le poid total volant (PTV) est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le poid total volant (PTV) est obligatoire');
         }
 
         if (empty($messages)) {

@@ -19,8 +19,8 @@ class Paralog_Line extends Paralog_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => __('Ligne', PL_DOMAIN), //singular name of the listed records
-            'plural' => __('Lignes', PL_DOMAIN), //plural name of the listed records
+            'singular' => __('Ligne'), //singular name of the listed records
+            'plural' => __('Lignes'), //plural name of the listed records
             'ajax' => false                    //does this table support ajax?
         ));
 
@@ -39,7 +39,7 @@ class Paralog_Line extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'name' => __("Nom", PL_DOMAIN)
+            'name' => __("Nom")
         ));
 
         return $columns;
@@ -53,12 +53,12 @@ class Paralog_Line extends Paralog_Table
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier', PL_DOMAIN))
+                'edit' => sprintf('<a href="?page=%s-form&&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier'))
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN))
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer'))
             ));
         }
 
@@ -153,16 +153,16 @@ class Paralog_Line extends Paralog_Table
                     $result = $wpdb->insert($table, $item);
                     $item[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Ligne enregistrée", PL_DOMAIN);
+                        $message = __("Ligne enregistrée");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la sauvegarde");
                     }
                 } else {
                     $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
                     if ($result !== false) {
-                        $message = __("Ligne mise à jour", PL_DOMAIN);
+                        $message = __("Ligne mise à jour");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la mise à jour");
                     }
                 }
             } else {
@@ -176,7 +176,7 @@ class Paralog_Line extends Paralog_Table
                 $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Donnée introuvable', PL_DOMAIN);
+                    $notice = __('Donnée introuvable');
                 }
             }
         }
@@ -184,7 +184,7 @@ class Paralog_Line extends Paralog_Table
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de ligne', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-lines&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e('Fiche de ligne'); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-lines&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste') ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -198,7 +198,7 @@ class Paralog_Line extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('line', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver'); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -214,10 +214,10 @@ class Paralog_Line extends Paralog_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="name"><?php _e('Nom de la ligne', PL_DOMAIN) ?></label>
+                        <label for="name"><?php _e('Nom de la ligne') ?></label>
                     </th>
                     <td>
-                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Treuil 1B - ligne A', PL_DOMAIN) ?>" required>
+                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: Treuil 1B - ligne A') ?>" required>
                     </td>
                 </tr>
             </tbody>
@@ -230,7 +230,7 @@ class Paralog_Line extends Paralog_Table
         $messages = array();
 
         if (empty($item['name'])) {
-            $messages[] = __('Le nom de la ligne est obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom de la ligne est obligatoire');
         }
 
         if (empty($messages)) {

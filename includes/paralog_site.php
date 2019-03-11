@@ -19,8 +19,8 @@ class Paralog_Site extends Paralog_Table
     public function __construct()
     {
         parent::__construct(array(
-            'singular' => __('site', PL_DOMAIN), //singular name of the listed records
-            'plural' => __('sites', PL_DOMAIN), //plural name of the listed records
+            'singular' => __('site'), //singular name of the listed records
+            'plural' => __('sites'), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
 
@@ -39,7 +39,7 @@ class Paralog_Site extends Paralog_Table
         }
 
         $columns = array_merge($columns, array(
-            'name' => __("Nom", PL_DOMAIN),
+            'name' => __("Nom"),
         ));
 
         return $columns;
@@ -53,12 +53,12 @@ class Paralog_Site extends Paralog_Table
 
         if (current_user_can('edit_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier', PL_DOMAIN)),
+                'edit' => sprintf('<a href="?page=%s-form&id=%d">%s</a>', $_REQUEST['page'], $item[$primary], __('Modifier')),
             ));
         }
         if (current_user_can('delete_others_posts') || ($item['user_id'] == $user_id)) {
             $actions = array_merge($actions, array(
-                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer', PL_DOMAIN)),
+                'delete' => sprintf('<a href="?page=%s&action=%s&id=%d">%s</a>', $_REQUEST['page'], 'delete', $item[$primary], __('Supprimer')),
             ));
         }
 
@@ -153,16 +153,16 @@ class Paralog_Site extends Paralog_Table
                     $result = $wpdb->insert($table, $item);
                     $item[$primary] = $wpdb->insert_id;
                     if ($result !== false) {
-                        $message = __("Site enregistré", PL_DOMAIN);
+                        $message = __("Site enregistré");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la sauvegarde", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la sauvegarde");
                     }
                 } else {
                     $result = $wpdb->update($table, $item, array($primary => $item[$primary]));
                     if ($result !== false) {
-                        $message = __("Site mis à jour", PL_DOMAIN);
+                        $message = __("Site mis à jour");
                     } else {
-                        $notice = __("Un erreur est apparue lors de la mise à jour", PL_DOMAIN);
+                        $notice = __("Un erreur est apparue lors de la mise à jour");
                     }
                 }
             } else {
@@ -176,7 +176,7 @@ class Paralog_Site extends Paralog_Table
                 $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
                 if (!$item) {
                     $item = $default;
-                    $notice = __('Donnée introuvable', PL_DOMAIN);
+                    $notice = __('Donnée introuvable');
                 }
             }
         }
@@ -184,7 +184,7 @@ class Paralog_Site extends Paralog_Table
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de site', PL_DOMAIN); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a></h1>
+            <h1><?php _e('Fiche de site'); ?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste') ?></a></h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -198,7 +198,7 @@ class Paralog_Site extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('site', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver'); ?>" id="submit" class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
@@ -214,10 +214,10 @@ class Paralog_Site extends Paralog_Table
             <tbody>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                        <label for="name"><?php _e('Nom du site') ?></label>
                     </th>
                     <td>
-                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN) ?>" required>
+                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy') ?>" required>
                     </td>
                 </tr>
             </tbody>
@@ -230,7 +230,7 @@ class Paralog_Site extends Paralog_Table
         $messages = array();
 
         if (empty($item['name'])) {
-            $messages[] = __('Le nom du site st obligatoire', PL_DOMAIN);
+            $messages[] = __('Le nom du site st obligatoire');
         }
 
         if (empty($messages)) {
