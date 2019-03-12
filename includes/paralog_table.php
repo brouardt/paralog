@@ -66,7 +66,7 @@ class Paralog_Table extends WP_List_Table
     {
         if (current_user_can('delete_others_posts')) {
             $bulk_actions = array(
-                'delete' => __('Supprimer'),
+                'delete' => __('Supprimer', PL_DOMAIN),
             );
         } else {
             $bulk_actions = array();
@@ -178,7 +178,7 @@ class Paralog_Table extends WP_List_Table
             . "WHERE deleted = 0 "
             . "AND winchman LIKE %s "
             . "ORDER BY lastname ASC, firstname ASC;",
-            __('oui')
+            __('oui', PL_DOMAIN)
         );
 
         return $wpdb->get_results($query, ARRAY_A);
@@ -214,6 +214,6 @@ class Paralog_Table extends WP_List_Table
     
     protected function color_person($item)
     {
-        return ($item == __('élève')) ? 'orange' : 'green';
+        return ($item == __('élève', PL_DOMAIN)) ? 'orange' : 'green';
     }
 }
