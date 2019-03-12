@@ -513,7 +513,7 @@ class Paralog_Statistic
                 </ul>
             </div>
             <form name="statistiques" method="get" action="">
-                <input type="hidden" name="page" value="<?=self::admin_slug;?>" />
+                <input type="hidden" name="page" value="<?php echo PL_ADMIN_SLUG;?>" />
                 <h2><?php _e("Statistiques", PL_DOMAIN);?></h2>
                 <label><?php _e("Année", PL_DOMAIN);?> :
                     <select name="annee" onchange="submit();">
