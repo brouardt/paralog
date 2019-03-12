@@ -7,7 +7,7 @@ if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 /**
- * Classe de table commune à Paralog_(activity,site,line,person,log)
+ * Table commune à Paralog_(activity,site,line,person,log)
  * 
  * @author Thierry Brouard <thierry@brouard.pro>
  */
@@ -20,7 +20,7 @@ class Paralog_Table extends WP_List_Table
      * @param String $table
      * @return Object $this
      */
-    protected function setTable($table)
+    protected function setTable($table) 
     {
         $this->table = $table;
 
@@ -30,7 +30,8 @@ class Paralog_Table extends WP_List_Table
     /**
      * @return String
      */
-    protected function getTable() {
+    protected function getTable() 
+    {
         return Paralog::table_name($this->table);
     }
 
