@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.2');
+    define('PL_VERSION', '1.4.4');
     define('PL_DB_VERSION', '2.1');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
