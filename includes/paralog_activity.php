@@ -90,6 +90,7 @@ class Paralog_Activity extends Paralog_Table
             . "activity_id, "
             . "date, "
             . "site_name, "
+            . "line_name, "
             . "user_id "
             . "FROM $table "
             . "WHERE deleted = 0 "
@@ -114,6 +115,7 @@ class Paralog_Activity extends Paralog_Table
         switch ($column_name) {
             case 'date':
             case 'site_name':
+            case 'line_name':
                 return $item[$column_name];
             default:
                 return print_r($item, true); // Show the whole array for troubleshooting purposes
@@ -124,7 +126,8 @@ class Paralog_Activity extends Paralog_Table
     {
         $sortable_columns = array(
             'date' => array('date', false),
-            'site_name' => array('site_name', false)
+            'site_name' => array('site_name', false),
+            'line_name' => array('line_name', false)
         );
 
         return $sortable_columns;
@@ -143,7 +146,16 @@ class Paralog_Activity extends Paralog_Table
         $default = array(
             'activity_id' => 0,
             'date' => null,
-            'site_name' => '',
+            'site_name' => null,
+            'line_name' => null,
+            'start_wind_orientation' => null,
+            'end_wind_orientation' => null,
+            'start_counter' => '',
+            'end_counter' => '',
+            'start_time' => '',
+            'end_time' => '',
+            'start_gazoline' => '',
+            'end_gazoline' => '',
             'comment' => '',
             'winch_incident' => '',
             'fly_incident' => '',
@@ -253,6 +265,20 @@ class Paralog_Activity extends Paralog_Table
                             <option value=""></option>
                             <?php foreach ($sites as $site): ?>
                             <option value="<?=esc_attr($site['name'])?>"<?=($site['name'] == $item['site_name'] ? ' selected' : '')?>><?=esc_html($site['name'])?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <select id="line_name" name="line_name">
+                            <option value=""></option>
+                            <?php foreach ($lines as $line): ?>
+                            <option value="<?=esc_attr($line['name'])?>"<?=($line['name'] == $item['line_name'] ? ' selected' : '')?>><?=esc_html($line['name'])?></option>
                             <?php endforeach;?>
                         </select>
                     </td>

@@ -120,15 +120,15 @@ if (!class_exists('Paralog')) {
                     . "`activity_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "`date` date NOT NULL DEFAULT '0000-00-00', "
                     . "`site_name` varchar(64) NULL DEFAULT NULL, "
-                    . "`line_name` varchar(64) NULL DEFAULT NULL, "
+                    . "`line_name` varchar(32) NULL DEFAULT NULL, "
                     . "`start_wind_orientation` enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
                     . "`end_wind_orientation`  enum(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, "
                     . "`start_counter` mediumint(8) UNSIGNED NOT NULL, "
                     . "`end_counter` mediumint(8) UNSIGNED NOT NULL, "
                     . "`start_time` time NOT NULL DEFAULT '00:00:00', "
                     . "`end_time` time NOT NULL DEFAULT '00:00:00', "
-                    . "`start_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
-                    . "`end_fuel` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
+                    . "`start_gazoline` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
+                    . "`end_gazoline` tinyint(3) UNSIGNED NOT NULL DEFAULT 100, "
                     . "`comment` mediumtext NULL DEFAULT NULL, "
                     . "`winch_incident` mediumtext NULL DEFAULT NULL, "
                     . "`fly_incident` mediumtext NULL DEFAULT NULL, "
@@ -338,7 +338,7 @@ if (!class_exists('Paralog')) {
 
             $table = self::table_name('activities');
             $query = $wpdb->prepare(
-                "INSERT INTO $table (activity_id, date, site_name, line_name, start_wind_orientation, end_wind_orientation, start_counter, end_counter, start_time, end_time, start_fuel, end_fuel, comment, winch_incident, fly_incident, user_id, deleted) VALUES "
+                "INSERT INTO $table (activity_id, date, site_name, line_name, start_wind_orientation, end_wind_orientation, start_counter, end_counter, start_time, end_time, start_gazoline, end_gazoline, comment, winch_incident, fly_incident, user_id, deleted) VALUES "
                 . "(1, '2018-04-24', 'Aslonnes \"Le Fort\"', 'Treuil 1B', %s, %s, 64120, 64278, '13:25:00', '18:16:00', 45, 33, 'RAZ', '', '', %d, 0);",
                 array(
                     __('nord-ouest', PL_DOMAIN), __('nord-est', PL_DOMAIN), $user_id
