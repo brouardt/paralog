@@ -137,8 +137,8 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (`activity_id`) "
                     . ") $charset_collate",
                     array(
-                        __('nord'), __('nord-est'), __('est'), __('sud-est'), __('sud'), __('sud-ouest'), __('ouest'), __('nord-ouest'),
-                        __('nord'), __('nord-est'), __('est'), __('sud-est'), __('sud'), __('sud-ouest'), __('ouest'), __('nord-ouest')
+                        __('nord', PL_DOMAIN), __('nord-est', PL_DOMAIN), __('est', PL_DOMAIN), __('sud-est', PL_DOMAIN), __('sud', PL_DOMAIN), __('sud-ouest', PL_DOMAIN), __('ouest', PL_DOMAIN), __('nord-ouest', PL_DOMAIN),
+                        __('nord', PL_DOMAIN), __('nord-est', PL_DOMAIN), __('est', PL_DOMAIN), __('sud-est', PL_DOMAIN), __('sud', PL_DOMAIN), __('sud-ouest', PL_DOMAIN), __('ouest', PL_DOMAIN), __('nord-ouest', PL_DOMAIN)
                     )
                 );
                 dbDelta($query);
@@ -158,8 +158,8 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (`activity_person_id`) "
                     . ") $charset_collate",
                     array(
-                        __('moniteur'), __('pilote'), __('treuilleur'), __('moniteur'),
-                        __('confirmé'), __('élève'), __('confirmé')
+                        __('moniteur', PL_DOMAIN), __('pilote', PL_DOMAIN), __('treuilleur', PL_DOMAIN), __('moniteur', PL_DOMAIN),
+                        __('confirmé', PL_DOMAIN), __('élève', PL_DOMAIN), __('confirmé', PL_DOMAIN)
                     )
                 );
                 dbDelta($query);
@@ -205,9 +205,9 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (person_id) "
                     . ") $charset_collate",
                     array(
-                        __('pilote'), __('élève'), __('pilote'),
-                        __('oui'), __('non'), __('non'),
-                        __('treuilleur'), __('élève'),
+                        __('pilote', PL_DOMAIN), __('élève', PL_DOMAIN), __('pilote', PL_DOMAIN),
+                        __('oui', PL_DOMAIN), __('non', PL_DOMAIN), __('non', PL_DOMAIN),
+                        __('treuilleur', PL_DOMAIN), __('élève', PL_DOMAIN),
                     )
                 );
                 dbDelta($query);
@@ -232,8 +232,8 @@ if (!class_exists('Paralog')) {
                     . "PRIMARY KEY (log_id) "
                     . ") $charset_collate",
                     array(
-                        __('treuilleur'), __('élève'),
-                        __('pilote'), __('élève'), __('pilote'),
+                        __('treuilleur', PL_DOMAIN), __('élève', PL_DOMAIN),
+                        __('pilote', PL_DOMAIN), __('élève', PL_DOMAIN), __('pilote', PL_DOMAIN),
                     )
                 );
                 dbDelta($query);
@@ -305,11 +305,11 @@ if (!class_exists('Paralog')) {
                 . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d, 0), "
                 . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d, 0);",
                 array(
-                    __('pilote'), __('oui'), __('élève'), $user_id,
-                    __('pilote'), __('oui'), __('treuilleur'), $user_id,
-                    __('pilote'), __('non'), $user_id,
-                    __('pilote'), __('oui'), __('treuilleur'), $user_id,
-                    __('pilote'), __('non'), $user_id,
+                    __('pilote', PL_DOMAIN), __('oui', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), __('oui', PL_DOMAIN), __('treuilleur', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), __('non', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), __('oui', PL_DOMAIN), __('treuilleur', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), __('non', PL_DOMAIN), $user_id,
                 )
             );
             $wpdb->query($query);
@@ -325,13 +325,13 @@ if (!class_exists('Paralog')) {
                 . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d, 0), "
                 . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d, 0);",
                 array(
-                    __('pilote'), $user_id,
-                    __('pilote'), $user_id,
-                    __('pilote'), $user_id,
-                    __('pilote'), $user_id,
-                    __('élève'), __('pilote'), $user_id,
-                    __('treuilleur'), __('élève'), $user_id,
-                    __('treuilleur'), __('pilote'), $user_id,
+                    __('pilote', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), $user_id,
+                    __('pilote', PL_DOMAIN), $user_id,
+                    __('élève', PL_DOMAIN), __('pilote', PL_DOMAIN), $user_id,
+                    __('treuilleur', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
+                    __('treuilleur', PL_DOMAIN), __('pilote', PL_DOMAIN), $user_id,
                 )
             );
             $wpdb->query($query);
@@ -341,7 +341,7 @@ if (!class_exists('Paralog')) {
                 "INSERT INTO $table (activity_id, date, site_name, line_name, start_wind_orientation, end_wind_orientation, start_counter, end_counter, start_time, end_time, start_fuel, end_fuel, comment, winch_incident, fly_incident, user_id, deleted) VALUES "
                 . "(1, '2018-04-24', 'Aslonnes \"Le Fort\"', 'Treuil 1B', %s, %s, 64120, 64278, '13:25:00', '18:16:00', 45, 33, 'RAZ', '', '', %d, 0);",
                 array(
-                    __('nord-ouest'), __('nord-est'), $user_id
+                    __('nord-ouest', PL_DOMAIN), __('nord-est', PL_DOMAIN), $user_id
                 )
             );
             $wpdb->query($query);
@@ -354,9 +354,9 @@ if (!class_exists('Paralog')) {
                 . "(1, %s, 'Thierry BROUARD', %s, %d, 0),"
                 . "(1, %s, '', %s, %d, 0);",
                 array(
-                    __('moniteur'), __('confirmé'), $user_id,
-                    __('plateforme'), __('élève'), $user_id,
-                    __('treuilleur'), __('élève'), $user_id,
+                    __('moniteur', PL_DOMAIN), __('confirmé', PL_DOMAIN), $user_id,
+                    __('plateforme', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
+                    __('treuilleur', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
                 )
             );
             $wpdb->query($query);
@@ -471,7 +471,7 @@ if (!class_exists('Paralog')) {
 
             fwrite($out, $bom, strlen($bom));
             
-            $table = Paralog::table_name('logs');
+            $table = self::table_name('logs');
 
             $query = "SHOW COLUMNS FROM $table WHERE Field NOT IN ('log_id','user_id','deleted');";
             $columns = $wpdb->get_results($query, ARRAY_A);
@@ -508,29 +508,29 @@ if (!class_exists('Paralog')) {
             $allowed_group = 'edit_posts'; // 'manage_options'
 
             if (function_exists('add_menu_page')) {
-                add_menu_page(__("Journaux de décollages / treuillés"), __("Paralog"), $allowed_group, self::admin_slug, array($this, 'about'), 'dashicons-media-spreadsheet');
+                add_menu_page(__("Journaux de décollages / treuillés", PL_DOMAIN), __("Paralog", PL_DOMAIN), $allowed_group, self::admin_slug, array($this, 'about'), 'dashicons-media-spreadsheet');
                 if (function_exists('add_submenu_page')) {
-                    add_submenu_page(self::admin_slug, __("À propos de Paralog"), __("À propos de"), $allowed_group, self::admin_slug, array($this, 'about'));
+                    add_submenu_page(self::admin_slug, __("À propos de Paralog", PL_DOMAIN), __("À propos de", PL_DOMAIN), $allowed_group, self::admin_slug, array($this, 'about'));
 
-                    $logs_hook = add_submenu_page(self::admin_slug, __("Décollages Paralog"), __("Décollages"), $allowed_group, 'paralog-logs', array($this, 'list_logs'));
+                    $logs_hook = add_submenu_page(self::admin_slug, __("Décollages Paralog", PL_DOMAIN), __("Décollages", PL_DOMAIN), $allowed_group, 'paralog-logs', array($this, 'list_logs'));
                     add_action("load-$logs_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-logs', __("Ajouter un décollage / treuillé"), __("Ajouter un décollage / treuillé"), $allowed_group, 'paralog-logs-form', array($this, 'form_log'));
+                    add_submenu_page('paralog-logs', __("Ajouter un décollage / treuillé", PL_DOMAIN), __("Ajouter un décollage / treuillé", PL_DOMAIN), $allowed_group, 'paralog-logs-form', array($this, 'form_log'));
 
-                    $persons_hook = add_submenu_page(self::admin_slug, __("Personnes Paralog"), __("Personnes"), $allowed_group, 'paralog-persons', array($this, 'list_persons'));
+                    $persons_hook = add_submenu_page(self::admin_slug, __("Personnes Paralog", PL_DOMAIN), __("Personnes", PL_DOMAIN), $allowed_group, 'paralog-persons', array($this, 'list_persons'));
                     add_action("load-$persons_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-persons', __("Ajouter une personne"), __("Ajouter une personne"), $allowed_group, 'paralog-persons-form', array($this, 'form_person'));
+                    add_submenu_page('paralog-persons', __("Ajouter une personne", PL_DOMAIN), __("Ajouter une personne", PL_DOMAIN), $allowed_group, 'paralog-persons-form', array($this, 'form_person'));
 
-                    $lines_hook = add_submenu_page(self::admin_slug, __("Lignes Paralog"), __("Lignes"), $allowed_group, 'paralog-lines', array($this, 'list_lines'));
+                    $lines_hook = add_submenu_page(self::admin_slug, __("Lignes Paralog", PL_DOMAIN), __("Lignes", PL_DOMAIN), $allowed_group, 'paralog-lines', array($this, 'list_lines'));
                     add_action("load-$lines_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-lines', __("Ajouter une ligne"), __("Ajouter une ligne"), $allowed_group, 'paralog-lines-form', array($this, 'form_line'));
+                    add_submenu_page('paralog-lines', __("Ajouter une ligne", PL_DOMAIN), __("Ajouter une ligne", PL_DOMAIN), $allowed_group, 'paralog-lines-form', array($this, 'form_line'));
 
-                    $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog"), __("Sites"), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
+                    $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog", PL_DOMAIN), __("Sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
                     add_action("load-$sites_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-sites', __("Ajouter un site"), __("Ajouter un site"), $allowed_group, 'paralog-sites-form', array($this, 'form_site'));
+                    add_submenu_page('paralog-sites', __("Ajouter un site", PL_DOMAIN), __("Ajouter un site", PL_DOMAIN), $allowed_group, 'paralog-sites-form', array($this, 'form_site'));
                     
-                    $activities_hook = add_submenu_page(self::admin_slug, __("Activités Paralog"), __("Activités"), $allowed_group, 'paralog-activities', array($this, 'list_activities'));
+                    $activities_hook = add_submenu_page(self::admin_slug, __("Activités Paralog", PL_DOMAIN), __("Activités", PL_DOMAIN), $allowed_group, 'paralog-activities', array($this, 'list_activities'));
                     add_action("load-$activities_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-activities', __("Ajouter une activité"), __("Ajouter une activité"), $allowed_group, 'paralog-activities-form', array($this, 'form_activity'));                    
+                    add_submenu_page('paralog-activities', __("Ajouter une activité", PL_DOMAIN), __("Ajouter une activité", PL_DOMAIN), $allowed_group, 'paralog-activities-form', array($this, 'form_activity'));                    
                 }
             }
         }
@@ -546,7 +546,7 @@ if (!class_exists('Paralog')) {
             $wp_admin_bar->add_menu(array(
                 'parent' => 'new-content',
                 'id' => 'paralog-admin-bar',
-                'title' => __('Décollage'),
+                'title' => __('Décollage', PL_DOMAIN),
                 'href' => admin_url('admin.php?page=paralog-logs-form'),
             ));
         }
@@ -562,7 +562,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $sites = '';
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -583,7 +583,12 @@ if (!class_exists('Paralog')) {
                 $sites = $wpdb->get_results($query, ARRAY_A);
             }
             if (empty($sites)) {
-                $sites = array(array('site_name' => __('aucune donnée'), 'site_count' => '-'));
+                $sites = array(
+                    array(
+                        'site_name' => __('aucune donnée', PL_DOMAIN), 
+                        'site_count' => '-'
+                    )
+                );
             }
 
             return $sites;
@@ -600,7 +605,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $lines = '';
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -621,7 +626,12 @@ if (!class_exists('Paralog')) {
                 $lines = $wpdb->get_results($query, ARRAY_A);
             }
             if (empty($lines)) {
-                $lines = array(array('line_name' => __('aucune donnée'), 'line_count' => '-'));
+                $lines = array(
+                    array(
+                        'line_name' => __('aucune donnée', PL_DOMAIN), 
+                        'line_count' => '-'
+                    )
+                );
             }
 
             return $lines;
@@ -638,7 +648,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $winchmen = '';
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -661,7 +671,12 @@ if (!class_exists('Paralog')) {
                 $winchmen = $wpdb->get_results($query, ARRAY_A);
             }
             if (empty($winchmen)) {
-                $winchmen = array(array('winchman_name' => __('aucune donnée'), 'winchman_count' => '-'));
+                $winchmen = array(
+                    array(
+                        'winchman_name' => __('aucune donnée', PL_DOMAIN), 
+                        'winchman_count' => '-'
+                    )
+                );
             }
 
             return $winchmen;
@@ -678,7 +693,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $pilots = '';
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -699,7 +714,12 @@ if (!class_exists('Paralog')) {
                 $pilots = $wpdb->get_results($query, ARRAY_A);
             }
             if (empty($pilots)) {
-                $pilots = array(array('pilot_name' => __('aucune donnée'), 'pilot_count' => '-'));
+                $pilots = array(
+                    array(
+                        'pilot_name' => __('aucune donnée', PL_DOMAIN), 
+                        'pilot_count' => '-'
+                    )
+                );
             }
 
             return $pilots;
@@ -716,7 +736,7 @@ if (!class_exists('Paralog')) {
             global $wpdb;
 
             $passengers = '';
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             if (!empty($year)) {
                 if (is_numeric($year)) {
@@ -739,7 +759,12 @@ if (!class_exists('Paralog')) {
                 $passengers = $wpdb->get_results($query, ARRAY_A);
             }
             if (empty($passengers)) {
-                $passengers = array(array('site_name' => __('aucune donnée'), 'passenger_count' => '-'));
+                $passengers = array(
+                    array(
+                        'site_name' => __('aucune donnée', PL_DOMAIN), 
+                        'passenger_count' => '-'
+                    )
+                );
             }
 
             return $passengers;
@@ -754,7 +779,7 @@ if (!class_exists('Paralog')) {
         {
             global $wpdb;
             
-            $table = $this->table_name('logs');
+            $table = self::table_name('logs');
 
             $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
                     . "FROM $table "
@@ -775,22 +800,30 @@ if (!class_exists('Paralog')) {
             $export = isset($_GET['export']) ? $_GET['export'] : '0';
 
             if ($demo_datas == '1') {
-                Paralog::insert_demo_datas();
+                self::insert_demo_datas();
             }
             if ($export == '1') {
-                Paralog::export_csv($param_year);
+                self::export_csv($param_year);
             }
 
             $years_list = $this->years_takeoff();
             if (empty($years_list)) {
                 $demo_datas = '1';
-                $years = array(array('valeur' => '', 'libelle' => __('aucune donnée')));
+                $years = array(
+                    array(
+                        'valeur' => '', 
+                        'libelle' => __('aucune donnée', PL_DOMAIN)
+                    )
+                );
             } else {
                 $demo_datas = '0';
-                $years = array_merge(array(
-                    array('valeur' => '', 'libelle' => __('choisissez une année')),
-                    array('valeur' => '*', 'libelle' => __('toutes les années')),
-                ), $years_list);
+                $years = array_merge(
+                    array(
+                        array('valeur' => '', 'libelle' => __('choisissez une année', PL_DOMAIN)),
+                        array('valeur' => '*', 'libelle' => __('toutes les années', PL_DOMAIN)),
+                    ), 
+                    $years_list
+                );
             }
             $sites = $this->stats_sites($param_year);
             $lines = $this->stats_lines($param_year);
@@ -799,21 +832,21 @@ if (!class_exists('Paralog')) {
             $passengers = $this->stats_passengers($param_year);
             ?>
             <div class="wrap">
-                <h1><?php _e("À propos de Paralog");?></h1>
-                <h2><?php _e("Journaux des décollages / treuillés");?></h2>
-                <h3><?php _e("Version");?> [<?php echo PL_VERSION;?>]</h3>
+                <h1><?php _e("À propos de Paralog", PL_DOMAIN);?></h1>
+                <h2><?php _e("Journaux des décollages / treuillés", PL_DOMAIN);?></h2>
+                <h3><?php _e("Version", PL_DOMAIN);?> [<?php echo PL_VERSION;?>]</h3>
                 <div class="notice inline notice-info">
-                    <p><?php _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.");?></p>
-                    <?php _e("Notions");?>
+                    <p><?php _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN);?></p>
+                    <?php _e("Notions", PL_DOMAIN);?>
                     <ul class="ul-square">
-                        <li><?php _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>');?>.</li>
-                        <li><?php _e('La ligne : représente la ligne du treuil <span class="PL_gris_clair">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="PL_gris_clair">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class="PL_gris_clair">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>');?></li>
+                        <li><?php _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>', PL_DOMAIN);?>.</li>
+                        <li><?php _e('La ligne : représente la ligne du treuil <span class="PL_gris_clair">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="PL_gris_clair">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class="PL_gris_clair">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>', PL_DOMAIN);?></li>
                     </ul>
                 </div>
                 <form name="statistiques" method="get" action="">
                     <input type="hidden" name="page" value="<?=self::admin_slug;?>" />
-                    <h2><?php _e("Statistiques");?></h2>
-                    <label><?php _e("Année");?> :
+                    <h2><?php _e("Statistiques", PL_DOMAIN);?></h2>
+                    <label><?php _e("Année", PL_DOMAIN);?> :
                         <select name="annee" onchange="submit();">
                             <?php foreach ($years as $year): ?>
                                 <option value="<?=$year['valeur'];?>"<?=($param_year == $year['valeur'] ? 'selected' : '')?>><?=$year['libelle'];?></option>
@@ -822,18 +855,18 @@ if (!class_exists('Paralog')) {
                     </label>
                     <?php
                     if ($demo_datas == '1') {
-                        echo '<p>' . __('aucune donnée à visualiser ?') . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration') . '</button></p>';
+                        echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
                     }
                     if (!empty($param_year)) {
-                        echo '<p>' . __('exporter les données sélectionnées') . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter') . '</button></p>';
+                        echo '<p>' . __('exporter les données sélectionnées') . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
                     }
                     ?>
-                    <h3><?php _e("Les sites");?></h3>
+                    <h3><?php _e("Les sites", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?php _e("Nom des sites");?></th>
-                                <th><?php _e("Quantité");?><sup>*</sup></th>
+                                <th><?php _e("Nom des sites", PL_DOMAIN);?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -845,12 +878,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach;?>
                         </tbody>
                     </table>
-                    <h3><?php _e("Les lignes");?></h3>
+                    <h3><?php _e("Les lignes", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?php _e("Nom des lignes");?></th>
-                                <th><?php _e("Quantité");?><sup>*</sup></th>
+                                <th><?php _e("Nom des lignes", PL_DOMAIN);?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -862,12 +895,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach;?>
                         </tbody>
                     </table>
-                    <h3><?php _e("Les treuilleurs");?></h3>
+                    <h3><?php _e("Les treuilleurs", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?php _e("Nom des treuilleurs");?></th>
-                                <th><?php _e("Quantité");?><sup>*</sup></th>
+                                <th><?php _e("Nom des treuilleurs", PL_DOMAIN);?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -879,12 +912,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach;?>
                         </tbody>
                     </table>
-                    <h3><?php _e("Les pilotes");?></h3>
+                    <h3><?php _e("Les pilotes", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?php _e("Nom des pilotes");?></th>
-                                <th><?php _e("Quantité");?><sup>*</sup></th>
+                                <th><?php _e("Nom des pilotes", PL_DOMAIN);?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -896,12 +929,12 @@ if (!class_exists('Paralog')) {
                             <?php endforeach;?>
                         </tbody>
                     </table>
-                    <h3><?php _e("Les passagers");?></h3>
+                    <h3><?php _e("Les passagers", PL_DOMAIN);?></h3>
                     <table class="table widefat fixed striped">
                         <thead>
                             <tr>
-                                <th><?php _e("Nom des sites");?></th>
-                                <th><?php _e("Quantité");?><sup>*</sup></th>
+                                <th><?php _e("Nom des sites", PL_DOMAIN);?></th>
+                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -915,7 +948,7 @@ if (!class_exists('Paralog')) {
                     </table>
                 </form>
                 <p>*
-                    <?php _e('Nombre de décollages ou de treuillés');?>
+                    <?php _e("Nombre de décollages ou de treuillés", PL_DOMAIN);?>
                 </p>
             </div>
             <?php
@@ -930,7 +963,7 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Log();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d'), count($_REQUEST['id'])) . '</p></div>';
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -938,7 +971,7 @@ if (!class_exists('Paralog')) {
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un décollage / treuillé");?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un décollage / treuillé", PL_DOMAIN);?></a>
                 <?=$message;?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
@@ -967,7 +1000,7 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Site();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d'), count($_REQUEST['id'])) . '</p></div>';
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -975,7 +1008,7 @@ if (!class_exists('Paralog')) {
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des sites");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un site");?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des sites", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un site", PL_DOMAIN);?></a>
                 <?=$message;?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
@@ -1004,7 +1037,7 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Line();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d'), count($_REQUEST['id'])) . '</p></div>';
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -1012,7 +1045,7 @@ if (!class_exists('Paralog')) {
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des lignes");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une ligne");?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des lignes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une ligne", PL_DOMAIN);?></a>
                 <?=$message;?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
@@ -1041,7 +1074,7 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Person();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d'), count($_REQUEST['id'])) . '</p></div>';
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -1049,7 +1082,7 @@ if (!class_exists('Paralog')) {
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des personnes");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une personne");?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des personnes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une personne", PL_DOMAIN);?></a>
                 <?=$message;?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
@@ -1078,7 +1111,7 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Activity();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d'), count($_REQUEST['id'])) . '</p></div>';
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -1086,7 +1119,7 @@ if (!class_exists('Paralog')) {
             $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des activités");?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une activité");?></a>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des activités", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une activité", PL_DOMAIN);?></a>
                 <?=$message;?>
                 <form method="post">
                     <input type="hidden" name="page" value="<?=$page?>">
@@ -1110,7 +1143,7 @@ if (!class_exists('Paralog')) {
         {
             $option = 'per_page';
             $args = array(
-                'label' => __("nombre d'enregistrements"),
+                'label' => __("nombre d'enregistrements", PL_DOMAIN),
                 'default' => 15,
                 'option' => "items_$option",
             );
