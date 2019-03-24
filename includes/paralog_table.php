@@ -158,7 +158,11 @@ class Paralog_Table extends WP_List_Table
         global $wpdb;
 
         $table = Paralog::table_name('persons');
-        $query = "SELECT person_id, CONCAT_WS(' ', firstname, lastname) AS name FROM $table ORDER BY lastname ASC, firstname ASC;";
+        $query = "SELECT "
+                . "person_id, "
+                . "CONCAT_WS(' ', firstname, lastname) AS name "
+                . "FROM $table "
+                . "ORDER BY lastname ASC, firstname ASC;";
 
         return $wpdb->get_results($query, ARRAY_A);
     }

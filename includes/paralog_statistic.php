@@ -110,16 +110,16 @@ class Paralog_Statistic
 
         $table = Paralog::table_name('activities_persons');
         $query = $wpdb->prepare(
-            "INSERT INTO $table (activity_id, type, person_name, person_type, user_id, deleted) VALUES"
-            . "(1, %s, 'Thierry PROUST', %s, %d, 0),"
-            . "(1, %s, 'Joël GASCHET', %s, %d, 0),"
-            . "(1, %s, 'Thierry BROUARD', %s, %d, 0),"
+            "INSERT INTO $table (activity_id, person_type, person_name, user_id, deleted) VALUES"
+            . "(1, %s, 'Thierry PROUST', %d, 0),"
+            . "(1, %s, 'Joël GASCHET', %d, 0),"
+            . "(1, %s, 'Thierry BROUARD', %d, 0),"
             . "(1, %s, 'Jean-Yves COLLIN', %s, %d, 0);",
             array(
-                __('moniteur', PL_DOMAIN), __('confirmé', PL_DOMAIN), $user_id,
-                __('plateforme', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
-                __('treuilleur', PL_DOMAIN), __('élève', PL_DOMAIN), $user_id,
-                __('treuilleur', PL_DOMAIN), __('confirmé', PL_DOMAIN), $user_id,
+                __('moniteur', PL_DOMAIN), $user_id,
+                __('plateforme', PL_DOMAIN), $user_id,
+                __('treuilleur', PL_DOMAIN), $user_id,
+                __('treuilleur', PL_DOMAIN), $user_id,
             )
         );
         $wpdb->query($query);

@@ -14,7 +14,8 @@ if (!class_exists('Paralog_Table')) {
  */
 class Paralog_Activity extends Paralog_Table
 {
-
+    private $date_format = null;
+    
     public function __construct()
     {
         // (_[_en]\(['"][\w\s\d]+['"])(\))
@@ -23,6 +24,8 @@ class Paralog_Activity extends Paralog_Table
             'plural' => __('activités', PL_DOMAIN), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
+
+        $this->date_format = get_option('date_format');
 
         $this->setTable('activities');
         $this->setPrimary('activity_id');
@@ -47,7 +50,7 @@ class Paralog_Activity extends Paralog_Table
         return $columns;
     }
 
-    public function column_name($item)
+    public function column_site_name($item)
     {
         $actions = array();
         $user_id = get_current_user_id();
@@ -64,7 +67,7 @@ class Paralog_Activity extends Paralog_Table
             ));
         }
 
-        return sprintf('%1$s %2$s', $item['name'], $this->row_actions($actions));
+        return sprintf('%1$s %2$s', $item['site_name'], $this->row_actions($actions));
     }
 
     public function prepare_items()
@@ -80,8 +83,8 @@ class Paralog_Activity extends Paralog_Table
 
         $per_page = $this->get_items_per_page('items_per_page', 5);
         $paged = isset($_REQUEST['paged']) ? ($per_page * max(0, intval($_REQUEST['paged']) - 1)) : 0;
-        $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'name';
-        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'asc';
+        $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'date';
+        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
 
         $table = $this->getTable();
         
@@ -114,6 +117,7 @@ class Paralog_Activity extends Paralog_Table
     {
         switch ($column_name) {
             case 'date':
+                return mysql2date($this->date_format, $item[$column_name]);
             case 'site_name':
             case 'line_name':
                 return $item[$column_name];
@@ -138,6 +142,7 @@ class Paralog_Activity extends Paralog_Table
         global $wpdb;
 
         $table = $this->getTable();
+        $table_ap = Paralog::table_name('activities_persons');
         $primary = $this->getPrimary();
 
         $message = '';
@@ -205,6 +210,47 @@ class Paralog_Activity extends Paralog_Table
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
                 }
+            }
+        }
+        // sauvegarde activities_persons
+        if( isset($_REQUEST['instructor_action'])) {
+            $action_key = explode(':', $_REQUEST['instructor_action']);
+            if($action_key[0] === 'add') {
+                $item_person = $this->person_activity(
+                    $item[$primary], 
+                    $_REQUEST['instructor'], 
+                    __('moniteur', PL_DOMAIN), 
+                    'pilot_type'
+                );
+                $wpdb->insert($table_ap, $item_person);
+            } else {
+                $wpdb->delete($table_ap, array('activity_person_id' =>  $action_key[1]));
+            }
+        } elseif( isset($_REQUEST['plateform_action'])) {
+            $action_key = explode(':', $_REQUEST['plateform_action']);
+            if($action_key[0] === 'add') {
+                $item_person = $this->person_activity(
+                    $item[$primary], 
+                    $_REQUEST['plateform'], 
+                    __('plateforme', PL_DOMAIN), 
+                    'pilot_type'
+                );
+                $wpdb->insert($table_ap, $item_person);
+            } else {
+                $wpdb->delete($table_ap, array('activity_person_id' =>  $action_key[1]));
+            }
+        } elseif( isset($_REQUEST['winchman_action'])){
+            $action_key = explode(':', $_REQUEST['winchman_action']);
+            if($action_key[0] === 'add') {
+                $item_person = $this->person_activity(
+                    $item[$primary], 
+                    $_REQUEST['winchman'], 
+                    __('treuilleur', PL_DOMAIN), 
+                    'winchman_type'
+                );
+                $wpdb->insert($table_ap, $item_person);
+            } else {
+                $wpdb->delete($table_ap, array('activity_person_id' =>  $action_key[1]));
             }
         }
         add_meta_box('activity_form_meta_box', 'Donnée', array($this, 'activity_form_meta_box_handler'), 'activity', 'normal', 'default'); 
@@ -291,21 +337,25 @@ class Paralog_Activity extends Paralog_Table
                         <select id="instructor" name="instructor">
                             <option value=""></option>
                             <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?=esc_attr($pilot['name'])?>"><?=esc_html($pilot['name'])?></option>
+                            <option value="<?=$pilot['person_id']?>"><?=esc_html($pilot['name'])?></option>
                             <?php endforeach;?>
                         </select>
+                        <button type="submit" name="instructor_action" value="add:0" class="button button-primary">
+                            <span class="fa fa-plus"></span>
+                        </button>
                     </td>
                 </tr>
                 <!-- instructors -->
                 <tr>
-                    <th>&nbsp;</tr>
+                    <th>&nbsp;</th>
                     <td>
                     <?php foreach ($instructor_list as $instructor): ?>
-                        <span><?=esc_html($instructor['person_name'])?></span>
-                        <?php if( $instructor['person_type'] == __('élève', PL_DOMAIN) ):?>
-                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
-                        <?php endif;?>
-                        <br />
+                        <div>
+                            <button type="submit" name="instructor_action" value="remove:<?= $instructor['activity_person_id'] ?>" class="button">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                            <span><?=esc_html($instructor['person_name'])?></span>
+                        </div>
                     <?php endforeach;?>
                     </td>
                 </tr>
@@ -317,21 +367,25 @@ class Paralog_Activity extends Paralog_Table
                         <select id="plateform" name="plateform">
                             <option value=""></option>
                             <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?=esc_attr($pilot['name'])?>"><?=esc_html($pilot['name'])?></option>
+                            <option value="<?=$pilot['person_id']?>"><?=esc_html($pilot['name'])?></option>
                             <?php endforeach;?>
                         </select>
+                        <button type="submit" name="plateform_action" value="add:0" class="button button-primary">
+                            <span class="fa fa-plus"></span>
+                        </button>
                     </td>
                 </tr>
                 <!-- plateform manager -->
                 <tr>
-                    <th>&nbsp;</tr>
+                    <th>&nbsp;</th>
                     <td>
                     <?php foreach($plateform_list as $plateform): ?>
-                        <span><?=esc_html($plateform['person_name'])?></span>
-                        <?php if( $plateform['person_type'] == __('élève', PL_DOMAIN) ): ?>
-                            (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
-                        <?php endif;?>
-                        <br />
+                        <div>
+                            <button type="submit" name="plateform_action" value="remove:<?= $plateform['activity_person_id'] ?>" class="button">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                            <span><?=esc_html($plateform['person_name'])?></span>
+                        </div>
                     <?php endforeach; ?>
                     </td>
                 </tr>
@@ -343,21 +397,25 @@ class Paralog_Activity extends Paralog_Table
                         <select id="winchman" name="winchman">
                             <option value=""></option>
                             <?php foreach ($winchmen as $winchman): ?>
-                            <option value="<?=esc_attr($winchman['name'])?>"><?=esc_html($winchman['name'])?></option>
+                            <option value="<?=$winchman['person_id']?>"><?=esc_html($winchman['name'])?></option>
                             <?php endforeach;?>
                         </select>
+                        <button type="submit" name="winchman_action" value="add:0" class="button button-primary">
+                            <span class="fa fa-plus"></span>
+                        </button>
                     </td>
                 </tr>
                 <!-- winchmen -->
                 <tr>
-                    <th>&nbsp;</tr>
+                    <th>&nbsp;</th>
                     <td>
                         <?php foreach($winchman_list as $winchman): ?>
-                            <span><?=esc_html($winchman['person_name'])?></span>
-                            <?php if( $winchman['person_type'] == __('élève', PL_DOMAIN) ): ?>
-                                (<span style="color:<?php $this->color_person($item['person_type'])?>"><?php _e('élève', PL_DOMAIN)?></span>)
-                            <?php endif;?>
-                            <br />
+                            <div>
+                                <button type="submit" name="winchman_action" value="remove:<?= $winchman['activity_person_id'] ?>" class="button">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                                <span><?=esc_html($winchman['person_name'])?></span>
+                            </div>
                         <?php endforeach; ?>
                     </td>
                 </tr>
@@ -394,8 +452,12 @@ class Paralog_Activity extends Paralog_Table
     {
         $messages = array();
 
-        if (empty($item['name'])) {
+        if (empty($item['site_name'])) {
             $messages[] = __('Le nom du site est obligatoire', PL_DOMAIN);
+        }
+
+        if (empty($item['line_name'])) {
+            $messages[] = __('Le nom de la ligne est obligatoire', PL_DOMAIN);
         }
 
         if (empty($messages)) {
@@ -417,10 +479,10 @@ class Paralog_Activity extends Paralog_Table
         $table = Paralog::table_name('activities_persons');
 
         $query = $wpdb->prepare(
-              "SELECT activity_person_id, person_name, person_type "
+              "SELECT activity_person_id, person_name "
             . "FROM $table "
             . "WHERE activity_id = %d "
-            . "AND type = %s "
+            . "AND person_type = %s "
             . "AND deleted = 0",
             $id, 
             $type
@@ -457,5 +519,30 @@ class Paralog_Activity extends Paralog_Table
     private function winchman_list($id)
     {
         return $this->person_list_by_activity_and_type($id, __('treuilleur', PL_DOMAIN));
+    }
+
+    /**
+     * @name person_activity
+     * @param Integer id_activity
+     * @param Integer id_person
+     * @param String type
+     * @param String name_type
+     * @return Array
+     */
+    private function person_activity($id_activity, $id_person, $type, $name_type)
+    {
+        $default = array(
+            'activity_id' => $id_activity,
+            'person_type' => $type,
+            'person_name' => null,
+            'user_id' => get_current_user_id(),
+            'deleted' => 0
+        );
+
+        $pilot = $this->person_name_type($id_person, $name_type);
+        
+        $data['person_name'] = $pilot->name;
+
+        return shortcode_atts($default, $data);
     }
 }

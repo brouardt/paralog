@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.4.4
+ * Version:           1.4.5
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.4');
+    define('PL_VERSION', '1.4.5');
     define('PL_DB_VERSION', '2.1');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
@@ -39,7 +39,8 @@ if (!class_exists('Paralog')) {
         public $plugin_url;
         public $plugin_name;
         private static $tables = array(
-            'activities', 'activities_persons',
+            'activities', 
+            'activities_persons',
             'sites', 
             'lines', 
             'persons', 
@@ -149,16 +150,14 @@ if (!class_exists('Paralog')) {
                       "CREATE TABLE IF NOT EXISTS $table ( "
                     . "`activity_person_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "`activity_id` mediumint(8) UNSIGNED NOT NULL, "
-                    . "`type` enum(%s,%s,%s) NOT NULL DEFAULT %s, "
+                    . "`person_type` enum(%s,%s,%s) NULL DEFAULT NULL, "
                     . "`person_name` varchar(129) NULL DEFAULT NULL, "
-                    . "`person_type` enum(%s,%s) NOT NULL DEFAULT %s, "
                     . "`user_id` bigint(20) NOT NULL DEFAULT 0, "
                     . "`deleted` tinyint(1) NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (`activity_person_id`) "
                     . ") $charset_collate",
                     array(
-                        __('moniteur', PL_DOMAIN), __('pilote', PL_DOMAIN), __('treuilleur', PL_DOMAIN), __('moniteur', PL_DOMAIN),
-                        __('confirmé', PL_DOMAIN), __('élève', PL_DOMAIN), __('confirmé', PL_DOMAIN)
+                        __('moniteur', PL_DOMAIN), __('treuilleur', PL_DOMAIN), __('plateforme', PL_DOMAIN)
                     )
                 );
                 dbDelta($query);
