@@ -113,7 +113,7 @@ class Paralog_Table extends WP_List_Table
         global $wpdb;
         
         $query = sprintf(
-            'SELECT TRUE FROM %s WHERE user_id = %d AND %s = %d', 
+            "SELECT TRUE FROM %s WHERE user_id = %d AND %s = %d", 
             $this->getTable(), 
             get_current_user_id(), 
             $this->getPrimary(), 
@@ -142,7 +142,7 @@ class Paralog_Table extends WP_List_Table
             . "$type AS type "
             . "FROM $table "
             . "WHERE deleted = 0 "
-            . "AND person_id = %d;", 
+            . "AND person_id = %d", 
             $id
         );
 
@@ -162,7 +162,8 @@ class Paralog_Table extends WP_List_Table
                 . "person_id, "
                 . "CONCAT_WS(' ', firstname, lastname) AS name "
                 . "FROM $table "
-                . "ORDER BY lastname ASC, firstname ASC;";
+                . "WHERE deleted = 0 "
+                . "ORDER BY lastname ASC, firstname ASC";
 
         return $wpdb->get_results($query, ARRAY_A);
     }
@@ -181,7 +182,7 @@ class Paralog_Table extends WP_List_Table
             . "FROM $table "
             . "WHERE deleted = 0 "
             . "AND winchman LIKE %s "
-            . "ORDER BY lastname ASC, firstname ASC;",
+            . "ORDER BY lastname ASC, firstname ASC",
             __('oui', PL_DOMAIN)
         );
 
@@ -197,7 +198,7 @@ class Paralog_Table extends WP_List_Table
         global $wpdb;
 
         $table = Paralog::table_name('lines');
-        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name;";
+        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name";
 
         return $wpdb->get_results($query, ARRAY_A);
     }
@@ -211,7 +212,7 @@ class Paralog_Table extends WP_List_Table
         global $wpdb;
 
         $table = Paralog::table_name('sites');
-        $query = "SELECT name FROM $table ORDER BY name;";
+        $query = "SELECT name FROM $table WHERE deleted = 0 ORDER BY name";
 
         return $wpdb->get_results($query, ARRAY_A);
     }
