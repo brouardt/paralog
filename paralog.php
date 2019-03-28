@@ -26,7 +26,7 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('Paralog')) {
     define('PL_VERSION', '1.4.6');
-    define('PL_DB_VERSION', '2.2');
+    define('PL_DB_VERSION', '2.3');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
 
@@ -168,6 +168,7 @@ if (!class_exists('Paralog')) {
                 $query = "CREATE TABLE IF NOT EXISTS $table ( "
                     . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(64) DEFAULT NULL, "
+                    . "message text NULL DEFAULT NULL "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (site_id) "

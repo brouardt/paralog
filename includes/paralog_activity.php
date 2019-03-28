@@ -143,6 +143,7 @@ class Paralog_Activity extends Paralog_Table
 
         $table = $this->getTable();
         $table_ap = Paralog::table_name('activities_persons');
+        $table_si = PAralog::table_name('sites');
         $primary = $this->getPrimary();
 
         $message = '';
@@ -209,6 +210,14 @@ class Paralog_Activity extends Paralog_Table
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
+                } else {
+                    $information = $wpdb->get_row(
+                        $wpdb->prepare(
+                            "SELECT message FROM $table_si WHERE name = %s AND deleted = 0",
+                            $item['site_name']
+                        ), 
+                        ARRAY_A
+                    )['message'];
                 }
             }
         }
@@ -258,6 +267,9 @@ class Paralog_Activity extends Paralog_Table
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
             <h1><?php _e("Fiche d'activité", PL_DOMAIN)?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
+            <?php if(!empty($information)): ?>
+                <div id="information" class="notice notice-info is-dismissible"><p><?= esc_html($information) ?></div>
+            <?php endif; ?>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
