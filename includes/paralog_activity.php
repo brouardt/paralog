@@ -364,7 +364,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="start_wind_orientation"><?php _e('Orientation du vent en début de scéance', PL_DOMAIN)?></label>
+                        <label for="start_wind_orientation"><?php _e('Orientation du vent en début de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <select id="start_wind_orientation" name="start_wind_orientation">
@@ -377,7 +377,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="start_counter"><?php _e('Compteur en debut de scéance', PL_DOMAIN)?></label>
+                        <label for="start_counter"><?php _e('Compteur en debut de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <input type="number" name="start_counter" value="<?= $item['start_counter']?>" />
@@ -385,7 +385,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>                
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="start_gazoline"><?php _e('Niveau de carburant en debut de scéance', PL_DOMAIN)?></label>
+                        <label for="start_gazoline"><?php _e('Niveau de carburant en debut de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <select id="start_gazoline" name="start_gazoline">
@@ -398,7 +398,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="start_time"><?php _e('Heure du début de scéance', PL_DOMAIN)?></label>
+                        <label for="start_time"><?php _e('Heure du début de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <input type="time" name="start_time" step="60" min="00:00" max="23:59" value="<?= $item['start_time']?>" />
@@ -406,7 +406,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="end_wind_orientation"><?php _e('Orientation du vent en fin de scéance', PL_DOMAIN)?></label>
+                        <label for="end_wind_orientation"><?php _e('Orientation du vent en fin de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <select id="end_wind_orientation" name="end_wind_orientation">
@@ -419,7 +419,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="end_counter"><?php _e('Compteur en fin de scéance', PL_DOMAIN)?></label>
+                        <label for="end_counter"><?php _e('Compteur en fin de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <input type="number" name="end_counter" value="<?= $item['end_counter']?>" />
@@ -427,7 +427,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="end_gazoline"><?php _e('Niveau de carburant en fin de scéance', PL_DOMAIN)?></label>
+                        <label for="end_gazoline"><?php _e('Niveau de carburant en fin de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <select id="end_gazoline" name="end_gazoline">
@@ -440,7 +440,7 @@ class Paralog_Activity extends Paralog_Table
                 </tr>
                 <tr class="form-field">
                     <th valign="top" scope="row">
-                        <label for="end_time"><?php _e('Heure de fin de scéance', PL_DOMAIN)?></label>
+                        <label for="end_time"><?php _e('Heure de fin de séance', PL_DOMAIN)?></label>
                     </th>
                     <td>
                         <input type="time" name="end_time" step="60" min="00:00" max="23:59" value="<?= $item['end_time']?>" />
