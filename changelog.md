@@ -2,6 +2,11 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.4.9] - 2019-03-28
+## Ajout
+- Création de la gestion des activités
+- Nouvelle structure de base de données
+
 ## [1.3.11] - 2018-09-02
 ## Modification
 - Modification de la gestion des définitions de cookies
