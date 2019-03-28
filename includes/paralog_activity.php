@@ -176,6 +176,13 @@ class Paralog_Activity extends Paralog_Table
             $item_valid = $this->form_validate($item);
 
             if ($item_valid === true) {
+                $datetime = new DateTime(current_time('mysql'));
+                if( empty($item['date'])) {
+                    $item['date'] = $datetime->format('Y-m-d');
+                }
+                if( empty($item['start_time'])) {
+                    $item['start_time'] = $datetime->format('H:i');
+                }
                 if ($item[$primary] == 0) {
                     $result = $wpdb->insert($table, $item);
                     $item[$primary] = $wpdb->insert_id;
@@ -394,7 +401,7 @@ class Paralog_Activity extends Paralog_Table
                         <label for="start_time"><?php _e('Heure du début de scéance', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <input type="time" name="start_time" value="<?= $item['start_time']?>" />
+                        <input type="time" name="start_time" step="60" min="00:00" max="23:59" value="<?= $item['start_time']?>" />
                     </td>
                 </tr>
                 <tr class="form-field">
@@ -436,7 +443,7 @@ class Paralog_Activity extends Paralog_Table
                         <label for="end_time"><?php _e('Heure de fin de scéance', PL_DOMAIN)?></label>
                     </th>
                     <td>
-                        <input type="time" name="end_time" value="<?= $item['end_time']?>" />
+                        <input type="time" name="end_time" step="60" min="00:00" max="23:59" value="<?= $item['end_time']?>" />
                     </td>
                 </tr>
                 <tr class="form-field">
