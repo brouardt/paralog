@@ -210,16 +210,17 @@ class Paralog_Activity extends Paralog_Table
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
-                } else {
-                    $information = $wpdb->get_row(
-                        $wpdb->prepare(
-                            "SELECT message FROM $table_si WHERE name = %s AND deleted = 0",
-                            $item['site_name']
-                        ), 
-                        ARRAY_A
-                    )['message'];
                 }
             }
+        }
+        // message d'information du site
+        if( isset($item[$primary]) && isset($item['site_name'])) {
+            $information = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT message FROM $table_si WHERE name = %s AND deleted = 0",
+                    $item['site_name']
+                )
+            );
         }
         // sauvegarde activities_persons
         if( isset($_REQUEST['instructor_action'])) {
