@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.4.6
+ * Version:           1.4.7
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.6');
+    define('PL_VERSION', '1.4.7');
     define('PL_DB_VERSION', '2.3');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
@@ -358,7 +358,8 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Log();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -395,7 +396,8 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Site();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -432,7 +434,8 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Line();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -469,7 +472,8 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Person();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
@@ -506,7 +510,8 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Activity();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
