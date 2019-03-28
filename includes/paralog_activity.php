@@ -290,6 +290,19 @@ class Paralog_Activity extends Paralog_Table
         $instructor_list = $this->instructor_list($item['activity_id']);
         $plateform_list = $this->plateform_list($item['activity_id']);
         $winchman_list = $this->winchman_list($item['activity_id']);
+        
+        $orientations = array(
+            __('nord', PL_DOMAIN),
+            __('nord-est', PL_DOMAIN),
+            __('est', PL_DOMAIN),
+            __('sud-est', PL_DOMAIN),
+            __('sud', PL_DOMAIN),
+            __('sud-ouest', PL_DOMAIN),
+            __('ouest', PL_DOMAIN),
+            __('nord-ouest', PL_DOMAIN)
+        );
+
+        $levels = array( 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 );
 
         ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
@@ -327,6 +340,90 @@ class Paralog_Activity extends Paralog_Table
                             <option value="<?=esc_attr($line['name'])?>"<?=($line['name'] == $item['line_name'] ? ' selected' : '')?>><?=esc_html($line['name'])?></option>
                             <?php endforeach;?>
                         </select>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="start_wind_orientation"><?php _e('Orientation du vent en début de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <select id="start_wind_orientation" name="start_wind_orientation">
+                            <option value=""></option>
+                            <?php foreach ($orientations as $orientation): ?>
+                            <option value="<?=esc_attr($orientation)?>"<?=($orientation == $item['start_wind_orientation'] ? ' selected' : '')?>><?=esc_html($orientation)?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="start_counter"><?php _e('Compteur en debut de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input type="number" name="start_counter" value="<?= $item['start_counter']?>" />
+                    </td>
+                </tr>                
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="start_gazoline"><?php _e('Niveau de carburant en debut de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <select id="start_gazoline" name="start_gazoline">
+                            <option value=""></option>
+                            <?php foreach ($levels as $level): ?>
+                            <option value="<?=esc_attr($level)?>"<?=($level == $item['start_gazoline'] ? ' selected' : '')?>><?=esc_html($level)?>%</option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="start_time"><?php _e('Heure du début de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input type="time" name="start_time" value="<?= $item['start_time']?>" />
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="end_wind_orientation"><?php _e('Orientation du vent en fin de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <select id="end_wind_orientation" name="end_wind_orientation">
+                            <option value=""></option>
+                            <?php foreach ($orientations as $orientation): ?>
+                            <option value="<?=esc_attr($orientation)?>"<?=($orientation == $item['end_wind_orientation'] ? ' selected' : '')?>><?=esc_html($orientation)?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="end_counter"><?php _e('Compteur en fin de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input type="number" name="end_counter" value="<?= $item['end_counter']?>" />
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="end_gazoline"><?php _e('Niveau de carburant en fin de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <select id="end_gazoline" name="end_gazoline">
+                            <option value=""></option>
+                            <?php foreach ($levels as $level): ?>
+                            <option value="<?=esc_attr($level)?>"<?=($level == $item['end_gazoline'] ? ' selected' : '')?>><?=esc_html($level)?>%</option>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="end_time"><?php _e('Heure de fin de scéance', PL_DOMAIN)?></label>
+                    </th>
+                    <td>
+                        <input type="time" name="end_time" value="<?= $item['end_time']?>" />
                     </td>
                 </tr>
                 <tr class="form-field">

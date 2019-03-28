@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.4.5
+ * Version:           1.4.6
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -16,8 +16,8 @@
  * Text Domain:       paralog
  * Domain Path:       /languages
  * Requires at least: 3.1.0
- * Stable tag:        5.0.3
- * Tested up to:      5.0.3
+ * Stable tag:        5.1.1
+ * Tested up to:      5.1.1
  * Requires PHP:      5.6
  */
 if (!defined('ABSPATH')) {
@@ -25,8 +25,8 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.4.5');
-    define('PL_DB_VERSION', '2.1');
+    define('PL_VERSION', '1.4.6');
+    define('PL_DB_VERSION', '2.2');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
 
