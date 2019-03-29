@@ -168,7 +168,7 @@ if (!class_exists('Paralog')) {
                 $query = "CREATE TABLE IF NOT EXISTS $table ( "
                     . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
                     . "name varchar(64) DEFAULT NULL, "
-                    . "message text NULL DEFAULT NULL "
+                    . "message text NULL DEFAULT NULL, "
                     . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
                     . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
                     . "PRIMARY KEY (site_id) "
