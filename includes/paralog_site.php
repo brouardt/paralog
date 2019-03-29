@@ -137,6 +137,7 @@ class Paralog_Site extends Paralog_Table
         $default = array(
             'site_id' => 0,
             'name' => '',
+            'message' => null,
             'user_id' => get_current_user_id()
         );
 
@@ -217,6 +218,14 @@ class Paralog_Site extends Paralog_Table
                     </th>
                     <td>
                         <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN) ?>" required>
+                    </td>
+                </tr>
+                <tr class="form-field">
+                    <th valign="top" scope="row">
+                        <label for="message"><?php _e('Message du site', PL_DOMAIN) ?></label>
+                    </th>
+                    <td>
+                        <textarea name="message" class="code" placeholder="<?php _e('Prevenir le propriétaire', PL_DOMAIN)?>"><?=esc_html($item['message'])?></textarea>
                     </td>
                 </tr>
             </tbody>
