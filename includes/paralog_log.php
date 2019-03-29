@@ -156,6 +156,7 @@ class Paralog_Log extends Paralog_Table
         $table = $this->getTable();
         $primary = $this->getPrimary();
 
+        $information = '';
         $message = '';
         $notice = '';
 
