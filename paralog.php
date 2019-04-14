@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.3.10
+ * Version:           1.5.1
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -16,30 +16,37 @@
  * Text Domain:       paralog
  * Domain Path:       /languages
  * Requires at least: 3.1.0
- * Stable tag:        4.9.8
- * Tested up to:      4.9.8
+ * Stable tag:        5.1.1
+ * Tested up to:      5.1.1
  * Requires PHP:      5.6
- * */
+ */
 if (!defined('ABSPATH')) {
-    die("No direct access allowed");
+    die('No direct access allowed');
 }
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.3.10');
-    define('PL_DB_VERSION', '1.9');
+    define('PL_VERSION', '1.5.1');
+    define('PL_DB_VERSION', '2.4');
     define('PL_DOMAIN', 'paralog');
+    define('PL_ADMIN_SLUG', 'paralog-admin');
 
     /**
      * @name Paralog
      */
     class Paralog
     {
-        const admin_slug = 'paralog-admin';
-
         public $plugin_dir;
         public $plugin_url;
         public $plugin_name;
-        private static $tables = array('sites', 'lines', 'persons', 'logs');
+        private static $tables = array(
+            'activities',
+            'activities_persons',
+            'sites',
+            'lines',
+            'persons',
+            'logs',
+            'attendances'
+        );
 
         /**
          * @name __construct
@@ -81,9 +88,10 @@ if (!class_exists('Paralog')) {
 
         /**
          *
-         * @global object $wpdb
          * @param string $name
+         *
          * @return string
+         * @global object $wpdb
          */
         public static function table_name($name)
         {
@@ -105,58 +113,123 @@ if (!class_exists('Paralog')) {
 
             if ($options['db_version'] != PL_DB_VERSION) {
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-                $p = __('pilote', PL_DOMAIN);
-                $t = __('treuilleur', PL_DOMAIN);
-                $e = __('élève', PL_DOMAIN);
-                $o = __('oui', PL_DOMAIN);
-                $n = __('non', PL_DOMAIN);
-
+                /*
+                 * activity
+                 */
+                $table = self::table_name('activities');
+                $query = $wpdb->prepare(
+                    "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`activity_id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`date` DATE NOT NULL DEFAULT '0000-00-00', " .
+                    "`site_name` VARCHAR(64) NULL DEFAULT NULL, " .
+                    "`line_name` VARCHAR(32) NULL DEFAULT NULL, " .
+                    "`start_wind_orientation` ENUM(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, " .
+                    "`end_wind_orientation`  ENUM(%s,%s,%s,%s,%s,%s,%s,%s) NULL DEFAULT NULL, " .
+                    "`start_counter` MEDIUMINT(8) UNSIGNED NOT NULL, " .
+                    "`end_counter` MEDIUMINT(8) UNSIGNED NOT NULL, " .
+                    "`start_time` TIME NOT NULL DEFAULT '00:00:00', " .
+                    "`end_time` TIME NOT NULL DEFAULT '00:00:00', " .
+                    "`start_gazoline` TINYINT(3) UNSIGNED NOT NULL DEFAULT 100, " .
+                    "`end_gazoline` TINYINT(3) UNSIGNED NOT NULL DEFAULT 100, " .
+                    "`comment` MEDIUMTEXT NULL DEFAULT NULL, " .
+                    "`winch_incident` MEDIUMTEXT NULL DEFAULT NULL, " .
+                    "`fly_incident` MEDIUMTEXT NULL DEFAULT NULL, " .
+                    "`user_id` BIGINT(20) NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`activity_id`) " .
+                    ") $charset_collate",
+                    array(
+                        __('nord', PL_DOMAIN),
+                        __('nord-est', PL_DOMAIN),
+                        __('est', PL_DOMAIN),
+                        __('sud-est', PL_DOMAIN),
+                        __('sud', PL_DOMAIN),
+                        __('sud-ouest', PL_DOMAIN),
+                        __('ouest', PL_DOMAIN),
+                        __('nord-ouest', PL_DOMAIN),
+                        __('nord', PL_DOMAIN),
+                        __('nord-est', PL_DOMAIN),
+                        __('est', PL_DOMAIN),
+                        __('sud-est', PL_DOMAIN),
+                        __('sud', PL_DOMAIN),
+                        __('sud-ouest', PL_DOMAIN),
+                        __('ouest', PL_DOMAIN),
+                        __('nord-ouest', PL_DOMAIN)
+                    )
+                );
+                dbDelta($query);
+                /*
+                 * activities persons
+                 */
+                $table = self::table_name('activities_persons');
+                $query = $wpdb->prepare(
+                    "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`activity_person_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`activity_id` MEDIUMINT(8) UNSIGNED NOT NULL, " .
+                    "`person_type` ENUM(%s,%s,%s) NULL DEFAULT NULL, " .
+                    "`person_name` VARCHAR(129) NULL DEFAULT NULL, " .
+                    "`user_id` BIGINT(20) NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`activity_person_id`) " .
+                    ") $charset_collate",
+                    array(
+                        __('moniteur', PL_DOMAIN),
+                        __('treuilleur', PL_DOMAIN),
+                        __('plateforme', PL_DOMAIN)
+                    )
+                );
+                dbDelta($query);
                 /*
                  * area
                  */
                 $table = self::table_name('sites');
-                $query = "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "site_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "name varchar(64) DEFAULT NULL, "
-                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "PRIMARY KEY (site_id) "
-                    . ") $charset_collate";
+                $query = "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`site_id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`name` VARCHAR(64) DEFAULT NULL, " .
+                    "`message` TEXT NULL DEFAULT NULL, " .
+                    "`user_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`site_id`) " .
+                    ") $charset_collate";
                 dbDelta($query);
                 /*
                  * line equipment
                  */
                 $table = self::table_name('lines');
-                $query = "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "line_id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "name varchar(32) DEFAULT NULL, "
-                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "PRIMARY KEY (line_id) "
-                    . ") $charset_collate";
+                $query = "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`line_id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`name` VARCHAR(32) DEFAULT NULL, " .
+                    "`user_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`line_id`) " .
+                    ") $charset_collate";
                 dbDelta($query);
                 /*
                  * pilot, student and winchman
                  */
                 $table = self::table_name('persons');
                 $query = $wpdb->prepare(
-                    "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "person_id smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "firstname varchar(64) DEFAULT NULL, "
-                    . "lastname varchar(64) DEFAULT NULL, "
-                    . "pilot_type enum(%s,%s) NOT NULL DEFAULT %s, "
-                    . "licence varchar(10) DEFAULT NULL, "
-                    . "winchman enum(%s,%s) NOT NULL DEFAULT %s, "
-                    . "winchman_type enum(%s,%s) DEFAULT NULL, "
-                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "PRIMARY KEY (person_id) "
-                    . ") $charset_collate",
+                    "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`person_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`firstname` VARCHAR(64) DEFAULT NULL, " .
+                    "`lastname` VARCHAR(64) DEFAULT NULL, " .
+                    "`pilot_type` ENUM(%s,%s) NOT NULL DEFAULT %s, " .
+                    "`licence` VARCHAR(10) DEFAULT NULL, " .
+                    "`winchman` ENUM(%s,%s) NOT NULL DEFAULT %s, " .
+                    "`winchman_type` ENUM(%s,%s) DEFAULT NULL, " .
+                    "`user_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`person_id`) " .
+                    ") $charset_collate",
                     array(
-                        $p, $e, $p,
-                        $o, $n, $n,
-                        $t, $e,
+                        __('pilote', PL_DOMAIN),
+                        __('élève', PL_DOMAIN),
+                        __('pilote', PL_DOMAIN),
+                        __('oui', PL_DOMAIN),
+                        __('non', PL_DOMAIN),
+                        __('non', PL_DOMAIN),
+                        __('treuilleur', PL_DOMAIN),
+                        __('élève', PL_DOMAIN),
                     )
                 );
                 dbDelta($query);
@@ -165,26 +238,46 @@ if (!class_exists('Paralog')) {
                  */
                 $table = self::table_name('logs');
                 $query = $wpdb->prepare(
-                    "CREATE TABLE IF NOT EXISTS $table ( "
-                    . "log_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT, "
-                    . "site_name varchar(64) DEFAULT NULL, "
-                    . "line_name varchar(32) DEFAULT NULL, "
-                    . "winchman_name varchar(129) DEFAULT NULL, "
-                    . "winchman_type enum(%s,%s) DEFAULT NULL, "
-                    . "pilot_name varchar(129) DEFAULT NULL, "
-                    . "pilot_type enum(%s,%s) NOT NULL DEFAULT %s, "
-                    . "passenger_name varchar(129) DEFAULT NULL, "
-                    . "total_flying_weight smallint(5) UNSIGNED DEFAULT NULL, "
-                    . "takeoff datetime NOT NULL DEFAULT '0000-00-00 00:00:00', "
-                    . "user_id bigint(20) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "deleted tinyint(1) UNSIGNED NOT NULL DEFAULT 0, "
-                    . "PRIMARY KEY (log_id) "
-                    . ") $charset_collate",
+                    "CREATE TABLE IF NOT EXISTS `$table` ( " .
+                    "`log_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`site_name` VARCHAR(64) DEFAULT NULL, " .
+                    "`line_name` VARCHAR(32) DEFAULT NULL, " .
+                    "`winchman_name` VARCHAR(129) DEFAULT NULL, " .
+                    "`winchman_type` ENUM(%s,%s) DEFAULT NULL, " .
+                    "`pilot_name` VARCHAR(129) DEFAULT NULL, " .
+                    "`pilot_type` ENUM(%s,%s) NOT NULL DEFAULT %s, " .
+                    "`passenger_name` VARCHAR(129) DEFAULT NULL, " .
+                    "`total_flying_weight` SMALLINT(5) UNSIGNED DEFAULT NULL, " .
+                    "`takeoff` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', " .
+                    "`user_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "`deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, " .
+                    "PRIMARY KEY (`log_id`) " .
+                    ") $charset_collate",
                     array(
-                        $t, $e,
-                        $p, $e, $p,
+                        __('treuilleur', PL_DOMAIN),
+                        __('élève', PL_DOMAIN),
+                        __('pilote', PL_DOMAIN),
+                        __('élève', PL_DOMAIN),
+                        __('pilote', PL_DOMAIN),
                     )
                 );
+                dbDelta($query);
+
+                /*
+                 * whowhen
+                 */
+                $table = self::table_name('attendances');
+                $query = $wpdb->prepare("CREATE TABLE IF NOT EXISTS `$table` (" .
+                    "`date` DATE NOT NULL, " .
+                    "`person_id` SMALLINT(5) UNSIGNED NOT NULL, " .
+                    "`attendance` ENUM(%s,%s,%s) NOT NULL DEFAULT %s, " .
+                    "UNIQUE KEY `udp` (`date`,`person_id`) " .
+                    ") $charset_collate",
+                        __('oui', PL_DOMAIN),
+                        __('non', PL_DOMAIN),
+                        __('peut-être', PL_DOMAIN),
+                        __('oui', PL_DOMAIN)
+                    );
                 dbDelta($query);
 
                 // options
@@ -195,103 +288,6 @@ if (!class_exists('Paralog')) {
                 );
                 update_option(PL_DOMAIN, $options, 'no');
             }
-        }
-
-        public static function insert_demo_datas()
-        {
-            global $wpdb;
-
-            $user_id = get_current_user_id();
-
-            $p = __('pilote', PL_DOMAIN);
-            $t = __('treuilleur', PL_DOMAIN);
-            $e = __('élève', PL_DOMAIN);
-            $o = __('oui', PL_DOMAIN);
-            $n = __('non', PL_DOMAIN);
-
-            $table = self::table_name('sites');
-            $query = $wpdb->prepare(
-                "INSERT INTO $table (name, user_id, deleted) VALUES "
-                . "('Mont Bouquet', %d, 0), "
-                . "('Aslonnes \"Le Fort\"', %d, 0), "
-                . "('Annecy', %d, 0), "
-                . "('Massognes / Jarzay', %d, 0);",
-                array(
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                )
-            );
-            $wpdb->query($query);
-
-            $table = self::table_name('lines');
-            $query = $wpdb->prepare(
-                "INSERT INTO $table (name, user_id, deleted) VALUES "
-                . "('Déco EST', %d, 0), "
-                . "('Déco SUD', %d, 0), "
-                . "('Planfait', %d, 0), "
-                . "('Montmin', %d, 0), "
-                . "('Coche Cabane', %d, 0), "
-                . "('Treuil 1B', %d, 0), "
-                . "('Treuil 2B - ligne rouge', %d, 0), "
-                . "('Treuil 2B - ligne verte', %d, 0), "
-                . "('Dévidoir', %d, 0);",
-                array(
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                    $user_id,
-                )
-            );
-            $wpdb->query($query);
-
-            $table = self::table_name('persons');
-            $query = $wpdb->prepare(
-                "INSERT INTO $table (firstname, lastname, pilot_type, licence, winchman, winchman_type, user_id, deleted) VALUES "
-                . "('Thierry', 'BROUARD', %s, '1309710X', %s, %s, %d, 0), "
-                . "('Jean-Yves', 'COLLIN', %s, '0700484V', %s, %s, %d, 0), "
-                . "('Quentin', 'COURTOIS', %s, '1604781B', %s, NULL, %d, 0), "
-                . "('Bernard', 'MAUDET', %s, '0062282X', %s, %s, %d, 0), "
-                . "('Carlos', 'MESQUITA', %s, '1302566G', %s, NULL, %d, 0);",
-                array(
-                    $p, $o, $e, $user_id,
-                    $p, $o, $t, $user_id,
-                    $p, $n, $user_id,
-                    $p, $o, $t, $user_id,
-                    $p, $n, $user_id,
-                )
-            );
-            $wpdb->query($query);
-
-            $table = self::table_name('logs');
-            $query = $wpdb->prepare(
-                "INSERT INTO $table (site_name, line_name, winchman_name, winchman_type, pilot_name, pilot_type, passenger_name, total_flying_weight, takeoff, user_id, deleted) VALUES "
-                . "('Annecy', 'Planfait', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:06:07', %d, 0), "
-                . "('Annecy', 'Montmin', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2017-10-10 15:14:45', %d, 0), "
-                . "('Mont Bouquet', 'Déco SUD', NULL, NULL, 'Thierry BROUARD', %s, NULL, 95, '2018-01-10 15:50:21', %d, 0), "
-                . "('Mont Bouquet', 'Déco EST', NULL, NULL, 'Bernard MAUDET', %s, NULL, 90, '2017-10-10 15:18:47', %d, 0), "
-                . "('Massognes / Jarzay', 'Dévidoir 3B', 'Thierry BROUARD', %s, 'Quentin COURTOIS', %s, NULL, 105, '2018-01-10 15:36:55', %d, 0), "
-                . "('Aslonnes \"Le Fort\"', 'Treuil 1B', 'Jean-Yves COLLIN', %s, 'Carlos MESQUITA', %s, NULL, 90, '2018-01-10 15:38:48', %d, 0), "
-                . "('Aslonnes \"Le Fort\"', 'Treuil 2B - ligne rouge', 'Bernard MAUDET', %s, 'Thierry BROUARD', %s, NULL, 93, '2018-01-10 15:39:23', %d, 0);",
-                array(
-                    $p, $user_id,
-                    $p, $user_id,
-                    $p, $user_id,
-                    $p, $user_id,
-                    $e, $p, $user_id,
-                    $t, $e, $user_id,
-                    $t, $p, $user_id,
-                )
-            );
-            $wpdb->query($query);
-
-            return true;
         }
 
         /**
@@ -317,117 +313,10 @@ if (!class_exists('Paralog')) {
 
             foreach (self::$tables as $table) {
                 $name = self::table_name($table);
-                $wpdb->query("DROP TABLE IF EXISTS $name;");
+                $wpdb->query("DROP TABLE IF EXISTS `$name`");
             }
 
             delete_option(PL_DOMAIN);
-        }
-        /**
-         * @name my_query
-         * @global object $wpdb
-         * @param string $query
-         */
-        private function my_query($query)
-        {
-            global $wpdb;
-
-            if (!empty($wpdb->dbh)) {
-                if ($wpdb->use_mysqli) {
-                    $wpdb->result = mysqli_query($wpdb->dbh, $query);
-                } else {
-                    $wpdb->result = mysql_query($query, $wpdb->dbh);
-                }
-            }
-        }
-
-        /**
-         * @name my_fetchrow
-         * @global object $wpdb
-         * @return array
-         */
-        private function my_fetchrow()
-        {
-            global $wpdb;
-
-            $row = null;
-
-            if ($wpdb->result) {
-                if ($wpdb->use_mysqli) {
-                    $row = mysqli_fetch_assoc($wpdb->result);
-                } else {
-                    $row = mysql_fetch_assoc($wpdb->result);
-                }
-            }
-
-            return ($row) ? $row : false;
-        }
-
-        /**
-         * @name export_csv
-         * @global $wpdb
-         * @param integer $year
-         */
-        public function export_csv($year)
-        {
-            global $wpdb;
-
-            if (headers_sent()) {
-                die('Headers already sent');
-            }
-
-            // Required for some browsers
-            if (ini_get('zlib.output_compression')) {
-                ini_set('zlib.output_compression', 'Off');
-            }
-            if (ob_get_contents()) { # Make sure no junk is included in the file
-            ob_end_clean();
-            }
-            header('Pragma: public');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Cache-Control: public', false);
-            header('Content-Description: File Transfer');
-            header('Content-Type: text/csv; charset=utf-8');
-            header('Content-Disposition: attachment; filename=data.csv');
-            if (ob_get_contents()) { // Make __absolutely__ :) sure no junk is included in the file
-                ob_end_flush();
-                flush();
-            }
-            $out = fopen('php://output', 'w');
-            $bom = chr(0xEF) . chr(0xBB) . chr(0xBF); // utf8-bom
-            $separateur = ";";
-            $delimiteur = '"';
-            $echappement = "\\";
-
-            fwrite($out, $bom, strlen($bom));
-            
-            $table = Paralog::table_name('logs');
-
-            $query = "SHOW COLUMNS FROM $table WHERE Field NOT IN ('log_id','user_id','deleted');";
-            $columns = $wpdb->get_results($query, ARRAY_A);
-            $head = array_column($columns, 'Field');
-
-            fputcsv($out, $head, $separateur, $delimiteur, $echappement);
-
-            $sql = "SELECT " . implode(",", $head) . " FROM $table WHERE deleted = 0 ";
-
-            if (is_numeric($year)) {
-                $sql .= "AND YEAR(takeoff) = %d ";
-                $query = $wpdb->prepare($sql, $year);
-            } else {
-                $query = $sql;
-            }
-            $query .= "ORDER BY takeoff DESC;";
-
-            $this->my_query($query);
-
-            while (($enregistrement = $this->my_fetchrow()) !== false) {
-                fputcsv($out, $enregistrement, $separateur, $delimiteur, $echappement);
-            }
-
-            $wpdb->flush();
-            fclose($out);
-            exit;
         }
 
         /**
@@ -438,25 +327,75 @@ if (!class_exists('Paralog')) {
             $allowed_group = 'edit_posts'; // 'manage_options'
 
             if (function_exists('add_menu_page')) {
-                add_menu_page(__("Journaux de décollages / treuillés", PL_DOMAIN), __("Paralog", PL_DOMAIN), $allowed_group, self::admin_slug, array($this, 'about'), 'dashicons-media-spreadsheet');
+                add_menu_page(__("Journaux de décollages / treuillés", PL_DOMAIN), __("Paralog", PL_DOMAIN), $allowed_group, PL_ADMIN_SLUG, array(
+                    $this,
+                    'about'
+                ), 'dashicons-media-spreadsheet');
                 if (function_exists('add_submenu_page')) {
-                    add_submenu_page(self::admin_slug, __("À propos de Paralog", PL_DOMAIN), __("À propos de", PL_DOMAIN), $allowed_group, self::admin_slug, array($this, 'about'));
+                    add_submenu_page(PL_ADMIN_SLUG, __("À propos de Paralog", PL_DOMAIN), __("À propos de", PL_DOMAIN), $allowed_group, PL_ADMIN_SLUG, array(
+                        $this,
+                        'about'
+                    ));
 
-                    $logs_hook = add_submenu_page(self::admin_slug, __("Décollages Paralog", PL_DOMAIN), __("Décollages", PL_DOMAIN), $allowed_group, 'paralog-logs', array($this, 'list_logs'));
+                    $logs_hook = add_submenu_page(PL_ADMIN_SLUG, __("Décollages Paralog", PL_DOMAIN), __("Décollages", PL_DOMAIN), $allowed_group, 'paralog-logs', array(
+                        $this,
+                        'list_logs'
+                    ));
                     add_action("load-$logs_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-logs', __("Ajouter un décollage / treuillé", PL_DOMAIN), __("Ajouter un décollage / treuillé", PL_DOMAIN), $allowed_group, 'paralog-logs-form', array($this, 'form_log'));
+                    add_submenu_page('paralog-logs', __("Ajouter un décollage / treuillé", PL_DOMAIN), __("Ajouter un décollage / treuillé", PL_DOMAIN), $allowed_group, 'paralog-logs-form', array(
+                        $this,
+                        'form_log'
+                    ));
 
-                    $persons_hook = add_submenu_page(self::admin_slug, __("Personnes Paralog", PL_DOMAIN), __("Personnes", PL_DOMAIN), $allowed_group, 'paralog-persons', array($this, 'list_persons'));
+                    $persons_hook = add_submenu_page(PL_ADMIN_SLUG, __("Personnes Paralog", PL_DOMAIN), __("Personnes", PL_DOMAIN), $allowed_group, 'paralog-persons', array(
+                        $this,
+                        'list_persons'
+                    ));
                     add_action("load-$persons_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-persons', __("Ajouter une personne", PL_DOMAIN), __("Ajouter une personne", PL_DOMAIN), $allowed_group, 'paralog-persons-form', array($this, 'form_person'));
+                    add_submenu_page('paralog-persons', __("Ajouter une personne", PL_DOMAIN), __("Ajouter une personne", PL_DOMAIN), $allowed_group, 'paralog-persons-form', array(
+                        $this,
+                        'form_person'
+                    ));
 
-                    $lines_hook = add_submenu_page(self::admin_slug, __("Lignes Paralog", PL_DOMAIN), __("Lignes", PL_DOMAIN), $allowed_group, 'paralog-lines', array($this, 'list_lines'));
+                    $lines_hook = add_submenu_page(PL_ADMIN_SLUG, __("Lignes Paralog", PL_DOMAIN), __("Lignes", PL_DOMAIN), $allowed_group, 'paralog-lines', array(
+                        $this,
+                        'list_lines'
+                    ));
                     add_action("load-$lines_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-lines', __("Ajouter une ligne", PL_DOMAIN), __("Ajouter une ligne", PL_DOMAIN), $allowed_group, 'paralog-lines-form', array($this, 'form_line'));
+                    add_submenu_page('paralog-lines', __("Ajouter une ligne", PL_DOMAIN), __("Ajouter une ligne", PL_DOMAIN), $allowed_group, 'paralog-lines-form', array(
+                        $this,
+                        'form_line'
+                    ));
 
-                    $sites_hook = add_submenu_page(self::admin_slug, __("Sites Paralog", PL_DOMAIN), __("Sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array($this, 'list_sites'));
+                    $sites_hook = add_submenu_page(PL_ADMIN_SLUG, __("Sites Paralog", PL_DOMAIN), __("Sites", PL_DOMAIN), $allowed_group, 'paralog-sites', array(
+                        $this,
+                        'list_sites'
+                    ));
                     add_action("load-$sites_hook", array($this, 'add_options'));
-                    add_submenu_page('paralog-sites', __("Ajouter un site", PL_DOMAIN), __("Ajouter un site", PL_DOMAIN), $allowed_group, 'paralog-sites-form', array($this, 'form_site'));
+                    add_submenu_page('paralog-sites', __("Ajouter un site", PL_DOMAIN), __("Ajouter un site", PL_DOMAIN), $allowed_group, 'paralog-sites-form', array(
+                        $this,
+                        'form_site'
+                    ));
+
+                    $activities_hook = add_submenu_page(PL_ADMIN_SLUG, __("Activités Paralog", PL_DOMAIN), __("Activités", PL_DOMAIN), $allowed_group, 'paralog-activities', array(
+                        $this,
+                        'list_activities'
+                    ));
+                    add_action("load-$activities_hook", array($this, 'add_options'));
+                    add_submenu_page('paralog-activities', __("Ajouter une activité", PL_DOMAIN), __("Ajouter une activité", PL_DOMAIN), $allowed_group, 'paralog-activities-form', array(
+                        $this,
+                        'form_activity'
+                    ));
+
+                    $attendance_hook = add_submenu_page(PL_ADMIN_SLUG, __("Présence Paralog", PL_DOMAIN), __("Présences", PL_DOMAIN), $allowed_group, 'paralog-attendances', array(
+                        $this,
+                        'list_attendances'
+                    ));
+                    add_action("load-$attendance_hook", array($this, 'add_options'));
+                    add_submenu_page('paralog-attendance', __("Ajouter une présence", PL_DOMAIN), __("Ajouter une présence", PL_DOMAIN), $allowed_group, 'paralog-attendances-form', array(
+                        $this,
+                        'form_attendance'
+                    ));
                 }
             }
         }
@@ -478,371 +417,26 @@ if (!class_exists('Paralog')) {
         }
 
         /**
-         * @name stats_sites
-         * @global object $wpdb
-         * @param integer $year
-         * @return array
-         */
-        private function stats_sites($year)
-        {
-            global $wpdb;
-
-            $sites = '';
-            $table = $this->table_name('logs');
-
-            if (!empty($year)) {
-                if (is_numeric($year)) {
-                    $query = $wpdb->prepare(
-                        "SELECT site_name, COUNT(*) AS site_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND YEAR(takeoff) = %d "
-                        . "GROUP BY site_name;",
-                        $year
-                    );
-                } else {
-                    $query = "SELECT site_name, COUNT(*) AS site_count "
-                            . "FROM $table "
-                            . "WHERE deleted = 0 "
-                            . "GROUP BY site_name;";
-                }
-                $sites = $wpdb->get_results($query, ARRAY_A);
-            }
-            if (empty($sites)) {
-                $sites = array(array('site_name' => __('aucune donnée'), 'site_count' => '-'));
-            }
-
-            return $sites;
-        }
-
-        /**
-         * @name stats_lines
-         * @global object $wpdb
-         * @param integer $year
-         * @return array
-         */
-        private function stats_lines($year)
-        {
-            global $wpdb;
-
-            $lines = '';
-            $table = $this->table_name('logs');
-
-            if (!empty($year)) {
-                if (is_numeric($year)) {
-                    $query = $wpdb->prepare(
-                        "SELECT line_name, COUNT(*) AS line_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND YEAR(takeoff) = %d "
-                        . "GROUP BY line_name;",
-                        $year
-                    );
-                } else {
-                    $query = "SELECT line_name, COUNT(*) AS line_count "
-                            . "FROM $table "
-                            . "WHERE deleted = 0 "
-                            . "GROUP BY line_name;";
-                }
-                $lines = $wpdb->get_results($query, ARRAY_A);
-            }
-            if (empty($lines)) {
-                $lines = array(array('line_name' => __('aucune donnée'), 'line_count' => '-'));
-            }
-
-            return $lines;
-        }
-
-        /**
-         * @name stats_winchmen
-         * @global object $wpdb
-         * @param integer $year
-         * @return array
-         */
-        private function stats_winchmen($year)
-        {
-            global $wpdb;
-
-            $winchmen = '';
-            $table = $this->table_name('logs');
-
-            if (!empty($year)) {
-                if (is_numeric($year)) {
-                    $query = $wpdb->prepare(
-                        "SELECT winchman_name, COUNT(*) AS winchman_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND YEAR(takeoff) = %d "
-                        . "AND winchman_name IS NOT NULL "
-                        . "GROUP BY winchman_name;",
-                        $year
-                    );
-                } else {
-                    $query = "SELECT winchman_name, COUNT(*) AS winchman_count "
-                            . "FROM $table "
-                            . "WHERE deleted = 0 "
-                            . "AND winchman_name IS NOT NULL "
-                            . "GROUP BY winchman_name;";
-                }
-                $winchmen = $wpdb->get_results($query, ARRAY_A);
-            }
-            if (empty($winchmen)) {
-                $winchmen = array(array('winchman_name' => __('aucune donnée'), 'winchman_count' => '-'));
-            }
-
-            return $winchmen;
-        }
-
-        /**
-         * @name stats_pilots
-         * @global object $wpdb
-         * @param integer $year
-         * @return array
-         */
-        private function stats_pilots($year)
-        {
-            global $wpdb;
-
-            $pilots = '';
-            $table = $this->table_name('logs');
-
-            if (!empty($year)) {
-                if (is_numeric($year)) {
-                    $query = $wpdb->prepare(
-                        "SELECT pilot_name, COUNT(*) AS pilot_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND YEAR(takeoff) = %d "
-                        . "GROUP BY pilot_name;",
-                        $year
-                    );
-                } else {
-                    $query = "SELECT pilot_name, COUNT(*) AS pilot_count "
-                            . "FROM $table "
-                            . "WHERE deleted = 0 "
-                            . "GROUP BY pilot_name;";
-                }
-                $pilots = $wpdb->get_results($query, ARRAY_A);
-            }
-            if (empty($pilots)) {
-                $pilots = array(array('pilot_name' => __('aucune donnée'), 'pilot_count' => '-'));
-            }
-
-            return $pilots;
-        }
-
-        /**
-         * @name stats_passengers
-         * @global object $wpdb
-         * @param integer $year
-         * @return array
-         */
-        private function stats_passengers($year)
-        {
-            global $wpdb;
-
-            $passengers = '';
-            $table = $this->table_name('logs');
-
-            if (!empty($year)) {
-                if (is_numeric($year)) {
-                    $query = $wpdb->prepare(
-                        "SELECT site_name, COUNT(*) AS passenger_count "
-                        . "FROM $table "
-                        . "WHERE deleted = 0 "
-                        . "AND YEAR(takeoff) = %d "
-                        . "AND passenger_name IS NOT NULL "
-                        . "GROUP BY site_name;",
-                        $year
-                    );
-                } else {
-                    $query = "SELECT site_name, COUNT(*) AS passenger_count "
-                            . "FROM $table "
-                            . "WHERE deleted = 0 "
-                            . "AND passenger_name IS NOT NULL "
-                            . "GROUP BY site_name;";
-                }
-                $passengers = $wpdb->get_results($query, ARRAY_A);
-            }
-            if (empty($passengers)) {
-                $passengers = array(array('site_name' => __('aucune donnée'), 'passenger_count' => '-'));
-            }
-
-            return $passengers;
-        }
-
-        /**
-         * @name years_takeoff
-         * @global object $wpdb
-         * @return array
-         */
-        private function years_takeoff()
-        {
-            global $wpdb;
-            
-            $table = $this->table_name('logs');
-
-            $query = "SELECT YEAR(takeoff) AS valeur, YEAR(takeoff) AS libelle "
-                    . "FROM $table "
-                    . "WHERE deleted = 0 "
-                    . "GROUP BY YEAR(takeoff);";
-
-            return $wpdb->get_results($query, ARRAY_A);
-        }
-
-        /**
          * @name about
          * @global object $wpdb
          */
         public function about()
         {
+            require_once $this->plugin_dir . '/includes/paralog_statistic.php';
+
             $param_year = isset($_GET['annee']) ? $_GET['annee'] : '';
-            $demo_datas = isset($_GET['demo']) ? $_GET['demo'] : '0';
+            $demo_data = isset($_GET['demo']) ? $_GET['demo'] : '0';
             $export = isset($_GET['export']) ? $_GET['export'] : '0';
 
-            if ($demo_datas == '1') {
-                Paralog::insert_demo_datas();
+            if ($demo_data == '1') {
+                Paralog_Statistic::insert_demo_datas();
             }
             if ($export == '1') {
-                Paralog::export_csv($param_year);
+                Paralog_Statistic::export_csv($param_year);
             }
 
-            $years_list = $this->years_takeoff();
-            if (empty($years_list)) {
-                $demo_datas = '1';
-                $years = array(array('valeur' => '', 'libelle' => __('aucune donnée')));
-            } else {
-                $demo_datas = '0';
-                $years = array_merge(array(
-                    array('valeur' => '', 'libelle' => __('choisissez une année')),
-                    array('valeur' => '*', 'libelle' => __('toutes les années')),
-                ), $years_list);
-            }
-            $sites = $this->stats_sites($param_year);
-            $lines = $this->stats_lines($param_year);
-            $winchmen = $this->stats_winchmen($param_year);
-            $pilots = $this->stats_pilots($param_year);
-            $passengers = $this->stats_passengers($param_year);?>
-            <div class="wrap">
-                <h1><?php _e("À propos de", PL_DOMAIN) . " Paralog";?></h1>
-                <h2><?php _e("Journaux des décollages / treuillés", PL_DOMAIN);?></h2>
-                <div class="notice inline notice-info">
-                    <p><?php _e("Cette extension permet à toutes les personnes autorisées, de gérer les journaux des décollages / treuillés d'un ou plusieurs sites de vols. Ce programme a été initialement pensé pour les treuillés en plaine. Cependant, il peut très bien être utilisé sur les sites de décollages de relief.", PL_DOMAIN);?></p>
-                    <?php _e("Notions", PL_DOMAIN);?>
-                    <ul class="ul-square">
-                        <li><?php _e('Le site : correspond au lieu de manière générale <span class="PL_gris_clair">(ex: Aslonnes, Mont Bouquet, Annecy, Samoëns, etc.)</span>', PL_DOMAIN);?>.</li>
-                        <li><?php _e('La ligne : représente la ligne du treuil <span class="PL_gris_clair">(ex: Treuil 1B)</span>. Si celui-ci en possède plusieurs <span class="PL_gris_clair">(ex: Treuil 1B-L1, Treuil 1B-L2)</span> ou si le site possède plusieurs espaces de décollages <span class="PL_gris_clair">(ex: Déco Est, Déco Sud, Planfait, Montmin, Plateau des saix, 1600, La bourgeoise, etc.)</span>', PL_DOMAIN);?></li>
-                    </ul>
-                </div>
-                <form name="statistiques" method="get" action="">
-                    <input type="hidden" name="page" value="<?=self::admin_slug;?>" />
-                    <h2><?php _e("Statistiques", PL_DOMAIN);?></h2>
-                    <label><?php _e("Année", PL_DOMAIN);?> :
-                        <select name="annee" onchange="submit();">
-                            <?php foreach ($years as $year): ?>
-                                <option value="<?=$year['valeur'];?>"<?=($param_year == $year['valeur'] ? 'selected' : '')?>><?=$year['libelle'];?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </label>
-                    <?php
-                    if ($demo_datas == '1') {
-                        echo '<p>' . __('aucune donnée à visualiser ?', PL_DOMAIN) . '<button type="submit" name="demo" value="1" class="page-title-action">' . __('ajouter de données de démonstration', PL_DOMAIN) . '</button></p>';
-                    }
-                    if (!empty($param_year)) {
-                        echo '<p>' . __('exporter les données sélectionnées', PL_DOMAIN) . '<button type="submit" name="export" value="1" class="page-title-action">' . __('exporter', PL_DOMAIN) . '</button></p>';
-                    }?>
-                    <h3><?php _e("Les sites", PL_DOMAIN);?></h3>
-                    <table class="table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th><?php _e("Nom des sites", PL_DOMAIN);?></th>
-                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($sites as $site): ?>
-                                <tr>
-                                    <td><?=$site['site_name'];?></td>
-                                    <td><?=$site['site_count'];?></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                    <h3><?php _e("Les lignes", PL_DOMAIN);?></h3>
-                    <table class="table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th><?php _e("Nom des lignes", PL_DOMAIN);?></th>
-                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($lines as $line): ?>
-                                <tr>
-                                    <td><?=$line['line_name'];?></td>
-                                    <td><?=$line['line_count'];?></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                    <h3><?php _e("Les treuilleurs", PL_DOMAIN);?></h3>
-                    <table class="table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th><?php _e("Nom des treuilleurs", PL_DOMAIN);?></th>
-                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($winchmen as $winchman): ?>
-                                <tr>
-                                    <td><?=$winchman['winchman_name'];?></td>
-                                    <td><?=$winchman['winchman_count'];?></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                    <h3><?php _e("Les pilotes", PL_DOMAIN);?></h3>
-                    <table class="table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th><?php _e("Nom des pilotes", PL_DOMAIN);?></th>
-                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($pilots as $pilot): ?>
-                                <tr>
-                                    <td><?=$pilot['pilot_name'];?></td>
-                                    <td><?=$pilot['pilot_count'];?></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                    <h3><?php _e("Les passagers", PL_DOMAIN);?></h3>
-                    <table class="table widefat fixed striped">
-                        <thead>
-                            <tr>
-                                <th><?php _e("Nom des sites", PL_DOMAIN);?></th>
-                                <th><?php _e("Quantité", PL_DOMAIN);?><sup>*</sup></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($passengers as $passenger): ?>
-                                <tr>
-                                    <td><?=$passenger['site_name'];?></td>
-                                    <td><?=$passenger['passenger_count'];?></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                </form>
-                <p>*
-                    <?php _e('Nombre de décollages ou de treuillés');?>
-                </p>
-            </div>
-            <?php
-}
+            Paralog_Statistic::display_stats($param_year);
+        }
 
         /**
          * @name list_logs
@@ -853,24 +447,29 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Log();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un décollage / treuillé", PL_DOMAIN);?></a>
-                <?=$message;?>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des décollages / treuillés"); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter un décollage / treuillé", PL_DOMAIN); ?></a>
+                <?= $message; ?>
                 <form method="post">
-                    <input type="hidden" name="page" value="<?=$page?>">
+                    <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$class->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_log()
         {
@@ -888,24 +487,29 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Site();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des sites", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter un site", PL_DOMAIN);?></a>
-                <?=$message;?>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des sites", PL_DOMAIN); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter un site", PL_DOMAIN); ?></a>
+                <?= $message; ?>
                 <form method="post">
-                    <input type="hidden" name="page" value="<?=$page?>">
+                    <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     //$site->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_site()
         {
@@ -923,24 +527,29 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Line();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des lignes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une ligne", PL_DOMAIN);?></a>
-                <?=$message;?>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des lignes", PL_DOMAIN); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter une ligne", PL_DOMAIN); ?></a>
+                <?= $message; ?>
                 <form method="post">
-                    <input type="hidden" name="page" value="<?=$page?>">
+                    <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
-                        //$site->search_box('search', 'search_id');
-                    $class->display();?>
+                    //$site->search_box('search', 'search_id');
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_line()
         {
@@ -958,24 +567,29 @@ if (!class_exists('Paralog')) {
             $class = new Paralog_Person();
             $class->prepare_items();
             if ('delete' === $class->current_action()) {
-                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), count($_REQUEST['id'])) . '</p></div>';
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
             } else {
                 $message = '';
             }
             $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;?>
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e("Gestion des personnes", PL_DOMAIN);?></h1> <a href="<?=get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged");?>" class="page-title-action"><?php _e("Ajouter une personne", PL_DOMAIN);?></a>
-                <?=$message;?>
+                <h1 class="wp-heading-inline"><?php _e("Gestion des personnes", PL_DOMAIN); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter une personne", PL_DOMAIN); ?></a>
+                <?= $message; ?>
                 <form method="post">
-                    <input type="hidden" name="page" value="<?=$page?>">
+                    <input type="hidden" name="page" value="<?= $page ?>">
                     <?php
                     // $site->search_box('search', 'search_id');
-                    $class->display();?>
+                    $class->display();
+                    ?>
                 </form>
             </div>
             <?php
-}
+        }
 
         public function form_person()
         {
@@ -984,11 +598,99 @@ if (!class_exists('Paralog')) {
             $class->form_edit();
         }
 
+        /**
+         * @name list_activities
+         */
+        public function list_activities()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_activity.php';
+            $class = new Paralog_Activity();
+            $class->prepare_items();
+            if ('delete' === $class->current_action()) {
+                $count = is_array($_REQUEST['id']) ? count($_REQUEST['id']) : 1;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
+            } else {
+                $message = '';
+            }
+            $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
+            <div class="wrap">
+                <h1 class="wp-heading-inline"><?php _e("Gestion des activités", PL_DOMAIN); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter une activité", PL_DOMAIN); ?></a>
+                <?= $message; ?>
+                <form method="post">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                    <?php
+                    // $site->search_box('search', 'search_id');
+                    $class->display();
+                    ?>
+                </form>
+            </div>
+            <?php
+        }
+
+        /**
+         * @name form_activity
+         */
+        public function form_activity()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_activity.php';
+            $class = new Paralog_Activity();
+            $class->form_edit();
+        }
+
+        /**
+         * @name list_attendances
+         */
+        public function list_attendances()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_attendance.php';
+            $class = new Paralog_Attendance();
+            $class->prepare_items();
+            if ('delete' === $class->current_action()) {
+                $count = is_array($_REQUEST['date']) ? count($_REQUEST['date']) : null;
+                $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Élément(s) supprimé(s): %d', PL_DOMAIN), $count) . '</p></div>';
+            } else {
+                $message = '';
+            }
+            $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
+            $paged = isset($_REQUEST['paged']) ? $_REQUEST['paged'] : 1;
+            ?>
+            <div class="wrap">
+                <h1 class="wp-heading-inline"><?php _e("Gestion des présences", PL_DOMAIN); ?></h1> <a
+                        href="<?= get_admin_url(get_current_blog_id(), "admin.php?page=$page-form&paged=$paged"); ?>"
+                        class="page-title-action"><?php _e("Ajouter une présence", PL_DOMAIN); ?></a>
+                <?= $message; ?>
+                <form method="post">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                    <?php
+                    $class->display();
+                    ?>
+                </form>
+            </div>
+            <?php
+        }
+
+        /**
+         * @name form_attendance
+         */
+        public function form_attendance()
+        {
+            require_once $this->plugin_dir . '/includes/paralog_attendance.php';
+            $class = new Paralog_Attendance();
+            $class->form_edit();
+        }
+
+        /**
+         * @name add_options
+         */
         public static function add_options()
         {
             $option = 'per_page';
             $args = array(
-                'label' => __("nombre d'enregistrements"),
+                'label' => __("nombre d'enregistrements", PL_DOMAIN),
                 'default' => 15,
                 'option' => "items_$option",
             );
