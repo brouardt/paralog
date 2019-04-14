@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.5.0] - 2019-04-14
+## Ajout
+- Création de la gestion de qui et quand sera présent
+
 ## [1.4.9] - 2019-03-28
 ## Ajout
 - Création de la gestion des activités

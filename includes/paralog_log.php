@@ -14,7 +14,6 @@ if (!class_exists('Paralog_Table')) {
  */
 class Paralog_Log extends Paralog_Table
 {
-
     private $datetime_format = null;
 
     public function __construct()
@@ -24,35 +23,13 @@ class Paralog_Log extends Paralog_Table
             'plural' => __('personnes', PL_DOMAIN), //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
-        
+
         $this->setTable('logs');
         $this->setPrimary('log_id');
-        
+
         $this->datetime_format = get_option('date_format') . ' ' . get_option('time_format');
 
-        add_action('init',array($this, 'define_cookies'));
-    }
-
-    public function get_columns()
-    {
-        if (current_user_can('delete_others_posts')) {
-            $columns = array(
-                'cb' => '<input type="checkbox" />',
-            );
-        } else {
-            $columns = array();
-        }
-
-        $columns = array_merge($columns, array(
-            'takeoff' => __("Décollage", PL_DOMAIN),
-            'site_name' => __("Site", PL_DOMAIN),
-            'line_name' => __("Ligne", PL_DOMAIN),
-            'winchman_name' => __("Treuilleur", PL_DOMAIN),
-            'pilot_name' => __("Pilote", PL_DOMAIN),
-            'passenger_name' => __("Passager", PL_DOMAIN),
-        ));
-
-        return $columns;
+        add_action('init', array($this, 'define_cookies'));
     }
 
     public function column_takeoff($item)
@@ -89,28 +66,34 @@ class Paralog_Log extends Paralog_Table
         $per_page = $this->get_items_per_page('items_per_page', 10);
         $paged = isset($_REQUEST['paged']) ? ($per_page * max(0, intval($_REQUEST['paged']) - 1)) : 0;
         $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'log_id';
-        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
+        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array(
+                'asc',
+                'desc'
+            ))) ? $_REQUEST['order'] : 'desc';
 
         $table = $this->getTable();
 
-        $query = $wpdb->prepare(
-            "SELECT "
-            . "log_id, "
-            . "site_name, line_name, "
-            . "winchman_name, winchman_type, "
-            . "pilot_name, pilot_type, passenger_name, "
-            . "takeoff, "
-            . "user_id "
-            . "FROM $table "
-            . "WHERE deleted = 0 "
-            . "ORDER BY $orderby $order "
-            . "LIMIT %d OFFSET %d",
+        $query = $wpdb->prepare("SELECT " .
+            "`log_id`, " .
+            "`site_name`, " .
+            "`line_name`, " .
+            "`winchman_name`, " .
+            "`winchman_type`, " .
+            "`pilot_name`, " .
+            "`pilot_type`, " .
+            "`passenger_name`, " .
+            "`takeoff`, " .
+            "`user_id` " .
+            "FROM `$table` " .
+            "WHERE `deleted` = 0 " .
+            "ORDER BY `$orderby` $order " .
+            "LIMIT %d OFFSET %d",
             $per_page,
             $paged
         );
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE deleted = 0");
+        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM `$table` WHERE `deleted` = 0");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
@@ -119,20 +102,26 @@ class Paralog_Log extends Paralog_Table
         ));
     }
 
-    protected function column_default($item, $column_name)
+    public function get_columns()
     {
-        switch ($column_name) {
-            case 'site_name':
-            case 'line_name':
-            case 'passenger_name':
-                return $item[$column_name];
-            case 'winchman_name':
-                return $item[$column_name] . '<br><span style="font-size: smaller;color: ' . $this->color_person($item['winchman_type']) . '">' . $item['winchman_type'] . '</span>';
-            case 'pilot_name':
-                return $item[$column_name] . '<br><span style="font-size: smaller;color: ' . $this->color_person($item['pilot_type']) . '">' . $item['pilot_type'] . '</span>';
-            default:
-                return print_r($item, true); //Show the whole array for troubleshooting purposes
+        if (current_user_can('delete_others_posts')) {
+            $columns = array(
+                'cb' => '<input type="checkbox" />',
+            );
+        } else {
+            $columns = array();
         }
+
+        $columns = array_merge($columns, array(
+            'takeoff' => __("Décollage", PL_DOMAIN),
+            'site_name' => __("Site", PL_DOMAIN),
+            'line_name' => __("Ligne", PL_DOMAIN),
+            'winchman_name' => __("Treuilleur", PL_DOMAIN),
+            'pilot_name' => __("Pilote", PL_DOMAIN),
+            'passenger_name' => __("Passager", PL_DOMAIN),
+        ));
+
+        return $columns;
     }
 
     protected function get_sortable_columns()
@@ -201,7 +190,7 @@ class Paralog_Log extends Paralog_Table
                 if (trim($item['passenger_name'] == '')) {
                     $item['passenger_name'] = null;
                 }
-                
+
                 $row = $item;
                 unset($row['winchman_id'], $row['pilot_id'], $row['takeoff_date'], $row['takeoff_time']);
 
@@ -233,7 +222,13 @@ class Paralog_Log extends Paralog_Table
 
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
+                $item = $wpdb->get_row(
+                    $wpdb->prepare(
+                        "SELECT * FROM `$table` WHERE `$primary` = %d",
+                        $_REQUEST['id']
+                    ),
+                    ARRAY_A
+                );
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
@@ -246,132 +241,40 @@ class Paralog_Log extends Paralog_Table
                 $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.", PL_DOMAIN);
             }
         }
-        add_meta_box('log_form_meta_box', 'Journal', array($this, 'log_form_meta_box_handler'), 'log', 'normal', 'default');
+        add_meta_box('log_form_meta_box', 'Journal', array(
+            $this,
+            'log_form_meta_box_handler'
+        ), 'log', 'normal', 'default');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN)?> <a class="add-new-h2" href="<?=get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum()))?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
-            <?php if(!empty($information)):  ?>
-                <div id="information" class="notice notice-info is-dismissible"><p><?=$information?></div>
+            <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN) ?>
+                <a class="add-new-h2"
+                   href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+            </h1>
+            <?php if (!empty($information)): ?>
+                <div id="information" class="notice notice-info is-dismissible"><p><?= $information ?></div>
             <?php endif; ?>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?=$notice?></p></div>
-            <?php endif;?>
+                <div id="notice" class="error"><p><?= $notice ?></p></div>
+            <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?=$message?></p></div>
-            <?php endif;?>
+                <div id="message" class="updated"><p><?= $message ?></p></div>
+            <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?=wp_create_nonce(basename(__FILE__))?>"/>
-                <input type="hidden" name="<?= $primary ?>" value="<?=esc_attr($item[$primary])?>"/>
+                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
+                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('log', 'normal', $item)?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN);?>" id="submit" class="button-primary" name="submit">
+                            <?php do_meta_boxes('log', 'normal', $item) ?>
+                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
+                                   class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <?php
-    }
-
-    public function log_form_meta_box_handler($item)
-    {
-        $sites = $this->site_name_items();
-        $lines = $this->line_name_items();
-        $pilots = $this->pilot_name_items();
-        $winchmen = $this->winchman_name_items();
-        ?>
-        <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
-            <tbody>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="site_name"><?php _e('Nom du site', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <select id="site_name" name="site_name">
-                            <option value=""></option>
-                            <?php foreach ($sites as $site): ?>
-                            <option value="<?=esc_attr($site['name'])?>"<?=($site['name'] == $item['site_name'] ? ' selected' : '')?>><?=esc_html($site['name'])?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <select id="line_name" name="line_name">
-                            <option value=""></option>
-                            <?php foreach ($lines as $line): ?>
-                            <option value="<?=esc_attr($line['name'])?>"<?=($line['name'] == $item['line_name'] ? ' selected' : '')?>><?=esc_html($line['name'])?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="winchman_id"><?php _e('Nom du treuilleur', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <select id="winchman_id" name="winchman_id">
-                            <option value=""></option>
-                            <?php foreach ($winchmen as $winchman): ?>
-                            <option value="<?=$winchman['person_id']?>"<?=($winchman['name'] == $item['winchman_name'] ? ' selected' : '')?>><?=esc_html($winchman['name'])?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="pilot_id"><?php _e('Nom du pilote', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <select id="pilot_id" name="pilot_id">
-                            <option value=""></option>
-                            <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?=$pilot['person_id']?>"<?=($pilot['name'] == $item['pilot_name'] ? ' selected' : '')?>><?=esc_html($pilot['name'])?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="passenger_name"><?php _e('Nom du passager', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <input id="passenger_name" name="passenger_name" type="text" style="width: 95%" value="<?=esc_attr($item['passenger_name'])?>" size="50" maxlength="129" class="code" placeholder="<?php _e('ex: Joe-Henri BLACK', PL_DOMAIN)?>"/>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="total_flying_weight"><?php _e('Poid total volant (PTV)', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em" value="<?=esc_attr($item['total_flying_weight'])?>" size="5" maxlength="4" class="code" placeholder="<?php _e('ex: 123', PL_DOMAIN)?>"/>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="takeoff_date"><?php _e('Date', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <input id="takeoff_date" name="takeoff_date" type="date" value="<?=esc_attr($item['takeoff_date'])?>" class="code" /> 
-                    </td>
-                </tr>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN)?></label>
-                    </th>
-                    <td>
-                        <input id="takeoff_time" name="takeoff_time" type="time" step="1" min="00:00:00" max="23:59:59" value="<?=esc_attr($item['takeoff_time'])?>" class="code" />
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <?php
     }
 
@@ -400,16 +303,134 @@ class Paralog_Log extends Paralog_Table
     }
 
     /**
+     * @name get_cookie
+     *
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    private function get_cookie($name, $default = null)
+    {
+        return isset($_COOKIE[$name]) ? stripslashes($_COOKIE[$name]) : $default;
+    }
+
+    public function log_form_meta_box_handler($item)
+    {
+        $sites = $this->site_name_items();
+        $lines = $this->line_name_items();
+        $pilots = $this->pilot_name_items();
+        $winchmen = $this->winchman_name_items();
+        ?>
+        <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
+            <tbody>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="site_name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <select id="site_name" name="site_name">
+                        <option value=""></option>
+                        <?php foreach ($sites as $site): ?>
+                            <option value="<?= esc_attr($site['name']) ?>"<?= ($site['name'] == $item['site_name'] ? ' selected' : '') ?>><?= esc_html($site['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <select id="line_name" name="line_name">
+                        <option value=""></option>
+                        <?php foreach ($lines as $line): ?>
+                            <option value="<?= esc_attr($line['name']) ?>"<?= ($line['name'] == $item['line_name'] ? ' selected' : '') ?>><?= esc_html($line['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="winchman_id"><?php _e('Nom du treuilleur', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <select id="winchman_id" name="winchman_id">
+                        <option value=""></option>
+                        <?php foreach ($winchmen as $winchman): ?>
+                            <option value="<?= $winchman['person_id'] ?>"<?= ($winchman['name'] == $item['winchman_name'] ? ' selected' : '') ?>><?= esc_html($winchman['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="pilot_id"><?php _e('Nom du pilote', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <select id="pilot_id" name="pilot_id">
+                        <option value=""></option>
+                        <?php foreach ($pilots as $pilot): ?>
+                            <option value="<?= $pilot['person_id'] ?>"<?= ($pilot['name'] == $item['pilot_name'] ? ' selected' : '') ?>><?= esc_html($pilot['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="passenger_name"><?php _e('Nom du passager', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <input id="passenger_name" name="passenger_name" type="text" style="width: 95%"
+                           value="<?= esc_attr($item['passenger_name']) ?>" size="50" maxlength="129" class="code"
+                           placeholder="<?php _e('ex: Joe-Henri BLACK', PL_DOMAIN) ?>"/>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="total_flying_weight"><?php _e('Poid total volant (PTV)', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em"
+                           value="<?= esc_attr($item['total_flying_weight']) ?>" size="5" maxlength="4" class="code"
+                           placeholder="<?php _e('ex: 123', PL_DOMAIN) ?>"/>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="takeoff_date"><?php _e('Date', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <input id="takeoff_date" name="takeoff_date" type="date"
+                           value="<?= esc_attr($item['takeoff_date']) ?>" class="code"/>
+                </td>
+            </tr>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <input id="takeoff_time" name="takeoff_time" type="time" step="1" min="00:00:00" max="23:59:59"
+                           value="<?= esc_attr($item['takeoff_time']) ?>" class="code"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <?php
+    }
+
+    /**
      * @name define_cookies
      */
-    public function define_cookies() 
+    public function define_cookies()
     {
         $fields = array('site_name', 'line_name', 'winchman_name');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $expire = strtotime('+12 hours');
-            foreach($fields as $field) {
-                if( isset($_POST[$field])) {
+            foreach ($fields as $field) {
+                if (isset($_POST[$field])) {
                     $this->set_cookie('pl_' . $field, $_POST[$field], $expire);
                 }
             }
@@ -418,6 +439,7 @@ class Paralog_Log extends Paralog_Table
 
     /**
      * @name set_cookie
+     *
      * @param string $name
      * @param mixed $value
      */
@@ -426,15 +448,20 @@ class Paralog_Log extends Paralog_Table
         setcookie($name, $value, $expire, COOKIEPATH, COOKIE_DOMAIN);
     }
 
-    /**
-     * @name get_cookie
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    private function get_cookie($name, $default = null)
+    protected function column_default($item, $column_name)
     {
-        return isset($_COOKIE[$name]) ? stripslashes($_COOKIE[$name]) : $default;
+        switch ($column_name) {
+            case 'site_name':
+            case 'line_name':
+            case 'passenger_name':
+                return $item[$column_name];
+            case 'winchman_name':
+                return $item[$column_name] . '<br><span style="font-size: smaller;color: ' . $this->color_person($item['winchman_type']) . '">' . $item['winchman_type'] . '</span>';
+            case 'pilot_name':
+                return $item[$column_name] . '<br><span style="font-size: smaller;color: ' . $this->color_person($item['pilot_type']) . '">' . $item['pilot_type'] . '</span>';
+            default:
+                return print_r($item, true); //Show the whole array for troubleshooting purposes
+        }
     }
 
 }

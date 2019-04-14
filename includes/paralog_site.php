@@ -14,7 +14,6 @@ if (!class_exists('Paralog_Table')) {
  */
 class Paralog_Site extends Paralog_Table
 {
-
     public function __construct()
     {
         parent::__construct(array(
@@ -25,23 +24,6 @@ class Paralog_Site extends Paralog_Table
 
         $this->setTable('sites');
         $this->setPrimary('site_id');
-    }
-
-    public function get_columns()
-    {
-        if (current_user_can('delete_others_posts')) {
-            $columns = array(
-                'cb' => '<input type="checkbox" />',
-            );
-        } else {
-            $columns = array();
-        }
-
-        $columns = array_merge($columns, array(
-            'name' => __("Nom", PL_DOMAIN),
-        ));
-
-        return $columns;
     }
 
     public function column_name($item)
@@ -78,25 +60,27 @@ class Paralog_Site extends Paralog_Table
         $per_page = $this->get_items_per_page('items_per_page', 5);
         $paged = isset($_REQUEST['paged']) ? ($per_page * max(0, intval($_REQUEST['paged']) - 1)) : 0;
         $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'name';
-        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'asc';
+        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array(
+                'asc',
+                'desc'
+            ))) ? $_REQUEST['order'] : 'asc';
 
         $table = $this->getTable();
-        
-        $query = $wpdb->prepare(
-            "SELECT "
-            . "site_id, "
-            . "name, "
-            . "user_id "
-            . "FROM $table "
-            . "WHERE deleted = 0 "
-            . "ORDER BY $orderby $order "
-            . "LIMIT %d OFFSET %d",
+
+        $query = $wpdb->prepare("SELECT " .
+            "`site_id`, " .
+            "`name`, " .
+            "`user_id` " .
+            "FROM `$table` " .
+            "WHERE `deleted` = 0 " .
+            "ORDER BY `$orderby` $order " .
+            "LIMIT %d OFFSET %d",
             $per_page,
             $paged
         );
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM $table WHERE deleted = 0");
+        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM `$table` WHERE `deleted` = 0");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
@@ -105,14 +89,21 @@ class Paralog_Site extends Paralog_Table
         ));
     }
 
-    protected function column_default($item, $column_name)
+    public function get_columns()
     {
-        switch ($column_name) {
-            case 'name':
-                return $item[$column_name];
-            default:
-                return print_r($item, true); //Show the whole array for troubleshooting purposes
+        if (current_user_can('delete_others_posts')) {
+            $columns = array(
+                'cb' => '<input type="checkbox" />',
+            );
+        } else {
+            $columns = array();
         }
+
+        $columns = array_merge($columns, array(
+            'name' => __("Nom", PL_DOMAIN),
+        ));
+
+        return $columns;
     }
 
     protected function get_sortable_columns()
@@ -173,18 +164,29 @@ class Paralog_Site extends Paralog_Table
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             if (isset($_REQUEST['id'])) {
-                $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE $primary = %d", $_REQUEST['id']), ARRAY_A);
+                $item = $wpdb->get_row(
+                    $wpdb->prepare(
+                        "SELECT * FROM `$table` WHERE `$primary` = %d",
+                        $_REQUEST['id']
+                    ),
+                    ARRAY_A
+                );
                 if (!$item) {
                     $item = $default;
                     $notice = __('Donnée introuvable', PL_DOMAIN);
                 }
             }
         }
-        add_meta_box('site_form_meta_box', 'Donnée', array($this, 'site_form_meta_box_handler'), 'site', 'normal', 'default'); 
+        add_meta_box('site_form_meta_box', 'Donnée', array(
+            $this,
+            'site_form_meta_box_handler'
+        ), 'site', 'normal', 'default');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de site', PL_DOMAIN)?> <a class="add-new-h2" href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN)?></a></h1>
+            <h1><?php _e('Fiche de site', PL_DOMAIN) ?> <a class="add-new-h2"
+                                                           href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+            </h1>
             <?php if (!empty($notice)): ?>
                 <div id="notice" class="error"><p><?= $notice ?></p></div>
             <?php endif; ?>
@@ -198,38 +200,13 @@ class Paralog_Site extends Paralog_Table
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('site', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit" class="button-primary" name="submit">
+                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
+                                   class="button-primary" name="submit">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <?php
-    }
-
-    public function site_form_meta_box_handler($item)
-    {
-        ?>
-        <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
-            <tbody>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
-                    </th>
-                    <td>
-                        <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>" size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN) ?>" required>
-                    </td>
-                </tr>
-                <tr class="form-field">
-                    <th valign="top" scope="row">
-                        <label for="message"><?php _e('Message du site', PL_DOMAIN) ?></label>
-                    </th>
-                    <td>
-                        <textarea name="message" class="code" placeholder="<?php _e('Prevenir le propriétaire', PL_DOMAIN)?>"><?=esc_html($item['message'])?></textarea>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <?php
     }
 
@@ -246,5 +223,44 @@ class Paralog_Site extends Paralog_Table
         }
 
         return implode('<br />', $messages);
+    }
+
+    public function site_form_meta_box_handler($item)
+    {
+        ?>
+        <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
+            <tbody>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>"
+                           size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN) ?>"
+                           required>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="message"><?php _e('Message du site', PL_DOMAIN) ?></label>
+                </th>
+                <td>
+                    <textarea name="message" class="code"
+                              placeholder="<?php _e('Prevenir le propriétaire', PL_DOMAIN) ?>"><?= esc_html($item['message']) ?></textarea>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <?php
+    }
+
+    protected function column_default($item, $column_name)
+    {
+        switch ($column_name) {
+            case 'name':
+                return $item[$column_name];
+            default:
+                return print_r($item, true); //Show the whole array for troubleshooting purposes
+        }
     }
 }
