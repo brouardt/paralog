@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die('No direct access allowed');
+    wp_die('No direct access allowed', 'Security');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -157,35 +157,42 @@ class Paralog_Attendance extends Paralog_Table
                 $notice = $item_valid;
             }
         } else {
-            if (isset($_GET['date'])) {
-                $item['date'] = urldecode($_GET['date']);
+            $params = array('date', 'person_id');
+            foreach ($params as $param) {
+                if (isset($_GET[$param])) {
+                    $item[$param] = urldecode($_GET[$param]);
+                }
             }
         }
-        add_meta_box('attendance_form_meta_box', 'Présence', array(
+        add_meta_box('attendance_form_meta_box', __('Présence', PL_DOMAIN), array(
             $this,
             'attendance_form_meta_box_handler'
         ), 'attendance', 'normal', 'default');
         ?>
         <div class="wrap">
-            <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de présence', PL_DOMAIN) ?>
+            <div class="icon32 icon32-posts-post" id="icon-edit"></div>
+            <h1><?php _e('Fiche de présence', PL_DOMAIN); ?>
                 <a class="add-new-h2"
-                   href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-attendances&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+                   href="<?php echo get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-attendances&paged=%d', $this->get_pagenum())); ?>">
+                    <?php _e('retour à la liste', PL_DOMAIN); ?>
+                </a>
             </h1>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
+                <div id="notice" class="error"><p><?php echo $notice; ?></p></div>
             <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
+                <div id="message" class="updated"><p><?php echo $message; ?></p></div>
             <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
+                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
                             <?php do_meta_boxes('attendance', 'normal', $item); ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
-                                   class="button-primary" name="submit">
+                            <button type="submit" name="submit" value="save" class="button button-primary">
+                                <span class="fa fa-save"></span>
+                                <?php _e('Enregistrer', PL_DOMAIN); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -222,34 +229,35 @@ class Paralog_Attendance extends Paralog_Table
             __('oui', PL_DOMAIN),
             __('peut-être', PL_DOMAIN),
             __('non', PL_DOMAIN),
+            __('ne se prononce pas', PL_DOMAIN),
         );
         foreach ($types as $type):
             $pilots = $this->pilots_by_date_status($date, $type);
             $winchmen = $this->winchmen_by_date_status($date, $type);
             ?>
-            <h3><?php _e($type, PL_DOMAIN); ?></h3>
+            <h3><?php _e($type, PL_DOMAIN); ?></span></h3>
             <table class="table widefat fixed striped">
                 <thead>
                 <tr>
-                    <th><?php _e('Pilotes', PL_DOMAIN) ?> (<?= count($pilots) ?>)</th>
-                    <th><?php _e('Treuilleurs', PL_DOMAIN) ?> (<?= count($winchmen) ?>)</th>
+                    <th><?php _e('Pilotes', PL_DOMAIN); ?> (<?php echo count($pilots); ?>)</th>
+                    <th><?php _e('Treuilleurs', PL_DOMAIN); ?> (<?php echo count($winchmen); ?>)</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>
                         <?php foreach ($pilots as $pilot): ?>
-                            <?= $pilot['name']; ?>
-                            (<span style="color:<?= $this->color_person($pilot['type']); ?>">
-                            <?= $pilot['type']; ?>
+                            <?php echo $pilot['name']; ?>
+                            (<span style="color:<?php echo $this->color_person($pilot['type']); ?>">
+                            <?php echo $pilot['type']; ?>
                         </span>)<br/>
                         <?php endforeach; ?>
                     </td>
                     <td>
                         <?php foreach ($winchmen as $winchman): ?>
-                            <?= $winchman['name']; ?>
-                            (<span style="color:<?= $this->color_person($winchman['type']); ?>">
-                            <?= $winchman['type']; ?>
+                            <?php echo $winchman['name']; ?>
+                            (<span style="color:<?php echo $this->color_person($winchman['type']); ?>">
+                            <?php echo $winchman['type']; ?>
                         </span>)<br/>
                         <?php endforeach; ?>
                     </td>
@@ -266,22 +274,39 @@ class Paralog_Attendance extends Paralog_Table
 
         $table_attendance = Paralog::table_name('attendances');
         $table_person = Paralog::table_name('persons');
-        $query = $wpdb->prepare("SELECT " .
-            "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
-            "`tp`.`pilot_type` AS 'type' " .
-            "FROM " .
-            "`$table_attendance` AS ta, " .
-            "`$table_person` AS tp " .
-            "WHERE " .
-            "`ta`.`date` = %s " .
-            "AND `ta`.`attendance` = %s " .
-            "AND `ta`.`person_id` = `tp`.`person_id`" .
-            "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
-            array(
-                $date,
-                $status
-            )
-        );
+        if ($status != __('ne se prononce pas', PL_DOMAIN)) {
+            $query = $wpdb->prepare("SELECT " .
+                "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
+                "`tp`.`pilot_type` AS 'type' " .
+                "FROM " .
+                "`$table_attendance` AS ta, " .
+                "`$table_person` AS tp " .
+                "WHERE " .
+                "`ta`.`date` = %s " .
+                "AND `ta`.`attendance` = %s " .
+                "AND `ta`.`person_id` = `tp`.`person_id` " .
+                "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
+                array(
+                    $date,
+                    $status
+                )
+            );
+        } else {
+            $query = $wpdb->prepare("SELECT " .
+                "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
+                "`tp`.`pilot_type` AS 'type' " .
+                "FROM `$table_person` AS tp " .
+                "WHERE NOT EXISTS " .
+                "( " .
+                "SELECT `ta`.`person_id` " .
+                "FROM `$table_attendance` AS `ta` " .
+                "WHERE `ta`.`date` = %s " .
+                "AND `tp`.`person_id` = `ta`.`person_id` " .
+                ") " .
+                "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
+                $date
+            );
+        }
 //        echo $query;
         return $wpdb->get_results($query, ARRAY_A);
     }
@@ -292,24 +317,45 @@ class Paralog_Attendance extends Paralog_Table
 
         $table_attendance = Paralog::table_name('attendances');
         $table_person = Paralog::table_name('persons');
-        $query = $wpdb->prepare("SELECT " .
-            "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
-            "`tp`.`winchman_type` AS 'type' " .
-            "FROM " .
-            "`$table_attendance` AS ta, " .
-            "`$table_person` AS tp " .
-            "WHERE " .
-            "`ta`.`date` = %s " .
-            "AND `ta`.`attendance` = %s " .
-            "AND `ta`.`person_id` = `tp`.`person_id`" .
-            "AND `tp`.`winchman` LIKE %s " .
-            "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
-            array(
-                $date,
-                $status,
-                __('oui', PL_DOMAIN)
-            )
-        );
+        if ($status != __('ne se prononce pas', PL_DOMAIN)) {
+            $query = $wpdb->prepare("SELECT " .
+                "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
+                "`tp`.`winchman_type` AS 'type' " .
+                "FROM " .
+                "`$table_attendance` AS ta, " .
+                "`$table_person` AS tp " .
+                "WHERE " .
+                "`ta`.`date` = %s " .
+                "AND `ta`.`attendance` = %s " .
+                "AND `ta`.`person_id` = `tp`.`person_id` " .
+                "AND `tp`.`winchman` LIKE %s " .
+                "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
+                array(
+                    $date,
+                    $status,
+                    __('oui', PL_DOMAIN)
+                )
+            );
+        } else {
+            $query = $wpdb->prepare("SELECT " .
+                "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
+                "`tp`.`winchman_type` AS 'type' " .
+                "FROM `$table_person` AS tp " .
+                "WHERE `tp`.`winchman` LIKE %s " .
+                "AND NOT EXISTS " .
+                "( " .
+                "SELECT `ta`.`person_id` " .
+                "FROM `$table_attendance` AS `ta` " .
+                "WHERE `ta`.`date` = %s " .
+                "AND `tp`.`person_id` = `ta`.`person_id` " .
+                ") " .
+                "ORDER BY `tp`.`lastname` ASC, `tp`.`firstname` ASC",
+                array(
+                    __('oui', PL_DOMAIN),
+                    $date
+                )
+            );
+        }
 //        echo $query;
         return $wpdb->get_results($query, ARRAY_A);
     }
@@ -326,40 +372,45 @@ class Paralog_Attendance extends Paralog_Table
             <tbody>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="date"><?php _e("Date", PL_DOMAIN) ?></label>
+                    <label for="date"><?php _e("Date", PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <input id="date" name="date" type="date" value="<?= esc_attr($item['date']) ?>" class="code"/>
+                    <input id="date" name="date" type="date" value="<?php echo esc_attr($item['date']); ?>"
+                           class="code"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="person_id"><?php _e("Nom", PL_DOMAIN) ?></label>
+                    <label for="person_id"><?php _e("Nom", PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="person_id" name="person_id">
                         <option value=""></option>
                         <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?= $pilot['person_id'] ?>"<?= ($pilot['person_id'] == $item['person_id'] ? ' selected' : '') ?>><?= esc_html($pilot['name']) ?></option>
+                            <option value="<?php echo $pilot['person_id']; ?>"
+                                <?php echo($pilot['person_id'] == $item['person_id'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($pilot['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="attendance"><?php _e("Serez-vous présent ?", PL_DOMAIN) ?></label>
+                    <label for="attendance"><?php _e("Serez-vous présent ?", PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <div id="attendance">
-                        <input type="radio" name="attendance" value="<?= $oui; ?>"
-                            <?= ($oui === $item['attendance'] ? 'checked' : ''); ?>
-                        /> <?= $oui; ?>
-                        <input type="radio" name="attendance" value="<?= $peutetre; ?>"
-                            <?= ($peutetre === $item['attendance'] ? 'checked' : ''); ?>
-                        /> <?= $peutetre; ?>
-                        <input type="radio" name="attendance" value="<?= $non; ?>"
-                            <?= ($non === $item['attendance'] ? 'checked' : ''); ?>
-                        /> <?= $non; ?>
+                        <input type="radio" name="attendance" value="<?php echo $oui; ?>"
+                            <?php echo($oui === $item['attendance'] ? 'checked' : ''); ?>
+                        /> <?php echo $oui; ?>
+                        <input type="radio" name="attendance" value="<?php echo $peutetre; ?>"
+                            <?php echo($peutetre === $item['attendance'] ? 'checked' : ''); ?>
+                        /> <?php echo $peutetre; ?>
+                        <input type="radio" name="attendance" value="<?php echo $non; ?>"
+                            <?php echo($non === $item['attendance'] ? 'checked' : ''); ?>
+                        /> <?php echo $non; ?>
                     </div>
                 </td>
             </tr>
@@ -387,4 +438,5 @@ class Paralog_Attendance extends Paralog_Table
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
         }
     }
+
 }

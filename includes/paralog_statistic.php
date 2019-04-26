@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die('No direct access allowed');
+    wp_die('No direct access allowed', 'Security');
 }
 
 /**
@@ -299,7 +299,11 @@ class Paralog_Statistic
                 <label><?php _e("Année", PL_DOMAIN); ?> :
                     <select name="annee" onchange="submit();">
                         <?php foreach ($years as $year): ?>
-                            <option value="<?= $year['valeur']; ?>"<?= ($param_year == $year['valeur'] ? 'selected' : '') ?>><?= $year['libelle']; ?></option>
+                            <option value="<?php echo $year['valeur']; ?>"
+                                <?php echo ($param_year == $year['valeur'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo $year['libelle']; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -322,8 +326,8 @@ class Paralog_Statistic
                     <tbody>
                     <?php foreach ($sites as $site): ?>
                         <tr>
-                            <td><?= $site['site_name']; ?></td>
-                            <td><?= $site['site_count']; ?></td>
+                            <td><?php echo $site['site_name']; ?></td>
+                            <td><?php echo $site['site_count']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -339,8 +343,8 @@ class Paralog_Statistic
                     <tbody>
                     <?php foreach ($lines as $line): ?>
                         <tr>
-                            <td><?= $line['line_name']; ?></td>
-                            <td><?= $line['line_count']; ?></td>
+                            <td><?php echo $line['line_name']; ?></td>
+                            <td><?php echo $line['line_count']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -356,8 +360,8 @@ class Paralog_Statistic
                     <tbody>
                     <?php foreach ($winchmen as $winchman): ?>
                         <tr>
-                            <td><?= $winchman['winchman_name']; ?></td>
-                            <td><?= $winchman['winchman_count']; ?></td>
+                            <td><?php echo $winchman['winchman_name']; ?></td>
+                            <td><?php echo $winchman['winchman_count']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -373,8 +377,8 @@ class Paralog_Statistic
                     <tbody>
                     <?php foreach ($pilots as $pilot): ?>
                         <tr>
-                            <td><?= $pilot['pilot_name']; ?></td>
-                            <td><?= $pilot['pilot_count']; ?></td>
+                            <td><?php echo $pilot['pilot_name']; ?></td>
+                            <td><?php echo $pilot['pilot_count']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -390,8 +394,8 @@ class Paralog_Statistic
                     <tbody>
                     <?php foreach ($passengers as $passenger): ?>
                         <tr>
-                            <td><?= $passenger['site_name']; ?></td>
-                            <td><?= $passenger['passenger_count']; ?></td>
+                            <td><?php echo $passenger['site_name']; ?></td>
+                            <td><?php echo $passenger['passenger_count']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
