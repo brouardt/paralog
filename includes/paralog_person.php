@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die("No direct access allowed");
+    wp_die('No direct access allowed', 'Security');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -82,6 +82,8 @@ class Paralog_Person extends Paralog_Table
             "`person_id`, " .
             "`firstname`, " .
             "`lastname`, " .
+            "`email`, " .
+            "`raise`, " .
             "`pilot_type`, " .
             "`licence`, " .
             "`winchman`, " .
@@ -153,6 +155,8 @@ class Paralog_Person extends Paralog_Table
             'person_id' => 0,
             'firstname' => '',
             'lastname' => '',
+            'email' => null,
+            'raise' => 1,
             'pilot_type' => __('pilote', PL_DOMAIN),
             'licence' => '',
             'winchman' => __('non', PL_DOMAIN),
@@ -205,31 +209,35 @@ class Paralog_Person extends Paralog_Table
                 }
             }
         }
-        add_meta_box('person_form_meta_box', 'Donnée', array(
+        add_meta_box('person_form_meta_box', __('Personne', PL_DOMAIN), array(
             $this,
             'person_form_meta_box_handler'
         ), 'person', 'normal', 'default');
         ?>
         <div class="wrap">
-            <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de personnel', PL_DOMAIN) ?> <a class="add-new-h2"
-                                                                href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+            <div class="icon32 icon32-posts-post" id="icon-edit"></div>
+            <h1><?php _e('Fiche de personnel', PL_DOMAIN); ?>
+                <a class="add-new-h2" href="<?php echo get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-persons&paged=%d', $this->get_pagenum())); ?>">
+                    <?php _e('retour à la liste', PL_DOMAIN); ?>
+                </a>
             </h1>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
+                <div id="notice" class="error"><p><?php echo $notice; ?></p></div>
             <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
+                <div id="message" class="updated"><p><?php echo $message; ?></p></div>
             <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
+                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>"/>
+                <input type="hidden" name="<?php echo $primary; ?>" value="<?php echo esc_attr($item[$primary]); ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('person', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
-                                   class="button-primary" name="submit">
+                            <?php do_meta_boxes('person', 'normal', $item); ?>
+                            <button type="submit" name="submit" value="save" class="button button-primary">
+                                <span class="fa fa-save"></span>
+                                <?php _e('Enregistrer', PL_DOMAIN); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -278,71 +286,106 @@ class Paralog_Person extends Paralog_Table
             <tbody>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="firstname"><?php _e('Prénom', PL_DOMAIN) ?></label>
+                    <label for="firstname"><?php _e('Prénom', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="firstname" name="firstname" type="text" style="width: 95%"
-                           value="<?= esc_attr($item['firstname']) ?>" size="50" maxlength="64" class="code"
-                           placeholder="<?php _e('ex: Thierry', PL_DOMAIN) ?>" required>
+                           value="<?php echo esc_attr($item['firstname']); ?>" size="50" maxlength="64" class="code"
+                           placeholder="<?php _e('ex: Thierry', PL_DOMAIN); ?>" required>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="lastname"><?php _e('Nom', PL_DOMAIN) ?></label>
+                    <label for="lastname"><?php _e('Nom', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="lastname" name="lastname" type="text" style="width: 95%"
-                           value="<?= esc_attr($item['lastname']) ?>" size="50" maxlength="64" class="code"
-                           placeholder="<?php _e('ex: Brouard', PL_DOMAIN) ?>" required>
+                           value="<?php echo esc_attr($item['lastname']); ?>" size="50" maxlength="64" class="code"
+                           placeholder="<?php _e('ex: Brouard', PL_DOMAIN); ?>" required>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label><?php _e('Type de pilote', PL_DOMAIN) ?></label>
+                    <label><?php _e('Type de pilote', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <label><input name="pilot_type" type="radio"
-                                  value="<?= $pilote ?>"<?= ($item['pilot_type'] == $pilote ? ' checked' : '') ?>/> <?= $pilote ?>
+                    <label>
+                        <input name="pilot_type" type="radio" value="<?php echo $pilote; ?>"
+                            <?php echo ($item['pilot_type'] == $pilote ? 'checked' : ''); ?> />
+                        <?php echo $pilote; ?>
                     </label>
-                    <label><input name="pilot_type" type="radio"
-                                  value="<?= $eleve ?>"<?= ($item['pilot_type'] == $eleve ? ' checked' : '') ?>/> <?= $eleve ?>
+                    <label>
+                        <input name="pilot_type" type="radio" value="<?php echo $eleve; ?>"
+                            <?php echo ($item['pilot_type'] == $eleve ? 'checked' : ''); ?> />
+                        <?php echo $eleve; ?>
                     </label>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="licence"><?php _e('Licence', PL_DOMAIN) ?></label>
+                    <label for="licence"><?php _e('Licence', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="licence" name="licence" type="text" style="width: 95%"
-                           value="<?= esc_attr($item['licence']) ?>" size="50" maxlength="10" class="code"
-                           placeholder="<?php _e('ex: 0000000X', PL_DOMAIN) ?>">
+                           value="<?php echo esc_attr($item['licence']); ?>" size="50" maxlength="10" class="code"
+                           placeholder="<?php _e('ex: 0000000X', PL_DOMAIN); ?>">
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN) ?></label>
+                    <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <label><input name="winchman" type="radio"
-                                  value="<?= $oui ?>"<?= ($item['winchman'] == $oui ? ' checked' : '') ?>/> <?= $oui ?>
+                    <label>
+                        <input name="winchman" type="radio" value="<?php echo $oui; ?>"
+                            <?php echo ($item['winchman'] == $oui ? 'checked' : ''); ?> />
+                        <?php echo $oui; ?>
                     </label>
-                    <label><input name="winchman" type="radio"
-                                  value="<?= $non ?>"<?= ($item['winchman'] == $non ? ' checked' : '') ?>/> <?= $non ?>
+                    <label>
+                        <input name="winchman" type="radio" value="<?php echo $non; ?>"
+                            <?php echo ($item['winchman'] == $non ? 'checked' : ''); ?> />
+                        <?php echo $non ?>
                     </label>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN) ?></label>
+                    <label for="winchman_type"><?php _e('Type de treuilleur', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <label><input name="winchman_type" type="radio"
-                                  value="<?= $treuilleur ?>"<?= ($item['winchman_type'] == $treuilleur ? ' checked' : '') ?>/> <?= $treuilleur ?>
+                    <label>
+                        <input name="winchman_type" type="radio" value="<?php echo $treuilleur; ?>"
+                            <?php echo ($item['winchman_type'] == $treuilleur ? 'checked' : ''); ?> />
+                        <?php echo $treuilleur; ?>
                     </label>
-                    <label><input name="winchman_type" type="radio"
-                                  value="<?= $eleve ?>"<?= ($item['winchman_type'] == $eleve ? ' checked' : '') ?>/> <?= $eleve ?>
+                    <label>
+                        <input name="winchman_type" type="radio" value="<?php echo $eleve; ?>"
+                            <?php echo ($item['winchman_type'] == $eleve ? 'checked' : ''); ?> />
+                        <?php echo $eleve ?>
                     </label>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="email"><?php _e('E-mail', PL_DOMAIN); ?></label>
+                </th>
+                <td>
+                    <input id="email" name="email" type="email" style="width: 95%"
+                           value="<?php echo esc_attr($item['email']); ?>" size="50" maxlength="259" class="code"
+                           placeholder="<?php _e('toto@monmail.com', PL_DOMAIN); ?>" required>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label><?php _e('Abonnement aux courriels de présence des pilotes', PL_DOMAIN); ?></label>
+                </th>
+                <td>
+                    <input type="radio" name="raise" value="1"
+                        <?php echo ($item['raise'] == 1 ? 'checked' : ''); ?>
+                    /> <?php echo $oui; ?>
+                    <input type="radio" name="raise" value="0"
+                        <?php echo ($item['raise'] == 0 ? 'checked' : ''); ?>
+                    /> <?php echo $non; ?>
                 </td>
             </tr>
             </tbody>

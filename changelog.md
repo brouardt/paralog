@@ -2,9 +2,28 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
-## [1.5.0] - 2019-04-14
+## [1.6.5] - 2019-04-26
+## Ajout
+- Gestion des appels de classes avec spl_autoloader_register()
+
+## [1.6.1] - 2019-04-19
+## Ajout
+- Gestion des réglages
+## Modification
+- Élimination des shortcodes php
+- Remplacement des die() en wp_die()
+
+## [1.6.0] - 2019-04-15
+## Ajout
+- Gestion des abonnements de relance des pilotes, treuilleurs, élèves et moniteurs
+## Modification
+- Ajout des emails et bit d'abonnement aux rappels de présence
+
+## [1.5.1] - 2019-04-14
 ## Ajout
 - Création de la gestion de qui et quand sera présent
+## Modification
+- Protection des tables et champs
 
 ## [1.4.9] - 2019-03-28
 ## Ajout

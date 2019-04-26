@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die('No direct access allowed');
+    wp_die('No direct access allowed', 'Security');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -18,7 +18,6 @@ class Paralog_Activity extends Paralog_Table
 
     public function __construct()
     {
-        // (_[_en]\(['"][\w\s\d]+['"])(\))
         parent::__construct(array(
             'singular' => __('activité', PL_DOMAIN), //singular name of the listed records
             'plural' => __('activités', PL_DOMAIN), //plural name of the listed records
@@ -259,34 +258,36 @@ class Paralog_Activity extends Paralog_Table
                 $wpdb->delete($table_ap, array('activity_person_id' => $action_key[1]));
             }
         }
-        add_meta_box('activity_form_meta_box', 'Donnée', array(
+        add_meta_box('activity_form_meta_box', __('Activité', PL_DOMAIN), array(
             $this,
             'activity_form_meta_box_handler'
         ), 'activity', 'normal', 'default');
         ?>
         <div class="wrap">
-            <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e("Fiche d'activité", PL_DOMAIN) ?> <a class="add-new-h2"
-                                                              href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+            <div class="icon32 icon32-posts-post" id="icon-edit"></div>
+            <h1><?php _e("Fiche d'activité", PL_DOMAIN); ?>
+                <a class="add-new-h2" href="<?php echo get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-activities&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
             </h1>
             <?php if (!empty($information)): ?>
-                <div id="information" class="notice notice-info is-dismissible"><p><?= esc_html($information) ?></div>
+                <div id="information" class="notice notice-info is-dismissible"><p><?php echo esc_html($information); ?></div>
             <?php endif; ?>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
+                <div id="notice" class="error"><p><?php echo $notice; ?></p></div>
             <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
+                <div id="message" class="updated"><p><?php echo $message; ?></p></div>
             <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
+                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>"/>
+                <input type="hidden" name="<?php echo $primary; ?>" value="<?php echo esc_attr($item[$primary]); ?>"/>
                 <div class="metabox-holder" id="postactivity">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('activity', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
-                                   class="button-primary" name="submit">
+                            <?php do_meta_boxes('activity', 'normal', $item); ?>
+                            <button type="submit" name="submit" value="save" class="button button-primary">
+                                <span class="fa fa-save"></span>
+                                <?php _e('Enregistrer', PL_DOMAIN); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -370,21 +371,25 @@ class Paralog_Activity extends Paralog_Table
             <tbody>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="date"><?php _e('Date', PL_DOMAIN) ?></label>
+                    <label for="date"><?php _e('Date', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <input id="date" name="date" type="date" value="<?= esc_attr($item['date']) ?>" class="code"/>
+                    <input id="date" name="date" type="date" value="<?php echo esc_attr($item['date']); ?>" class="code"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="site_name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                    <label for="site_name"><?php _e('Nom du site', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="site_name" name="site_name">
                         <option value=""></option>
                         <?php foreach ($sites as $site): ?>
-                            <option value="<?= esc_attr($site['name']) ?>"<?= ($site['name'] == $item['site_name'] ? ' selected' : '') ?>><?= esc_html($site['name']) ?></option>
+                            <option value="<?php echo esc_attr($site['name']); ?>"
+                                <?php echo ($site['name'] == $item['site_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($site['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -392,48 +397,54 @@ class Paralog_Activity extends Paralog_Table
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN) ?></label>
+                    <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="line_name" name="line_name">
                         <option value=""></option>
                         <?php foreach ($lines as $line): ?>
-                            <option value="<?= esc_attr($line['name']) ?>"<?= ($line['name'] == $item['line_name'] ? ' selected' : '') ?>><?= esc_html($line['name']) ?></option>
+                            <option value="<?php echo esc_attr($line['name']); ?>"
+                                <?php echo ($line['name'] == $item['line_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($line['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="start_wind_orientation"><?php _e('Orientation du vent en début de séance', PL_DOMAIN) ?></label>
+                    <label for="start_wind_orientation"><?php _e('Orientation du vent en début de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="start_wind_orientation" name="start_wind_orientation">
                         <option value=""></option>
                         <?php foreach ($orientations as $orientation): ?>
-                            <option value="<?= esc_attr($orientation) ?>"<?= ($orientation == $item['start_wind_orientation'] ? ' selected' : '') ?>><?= esc_html($orientation) ?></option>
+                            <option value="<?php echo esc_attr($orientation); ?>"<?php echo ($orientation == $item['start_wind_orientation'] ? ' selected' : ''); ?>><?php echo esc_html($orientation); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="start_counter"><?php _e('Compteur en debut de séance', PL_DOMAIN) ?></label>
+                    <label for="start_counter"><?php _e('Compteur en debut de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <input type="number" name="start_counter" value="<?= $item['start_counter'] ?>"/>
+                    <input type="number" name="start_counter" value="<?php echo $item['start_counter']; ?>"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="start_gazoline"><?php _e('Niveau de carburant en debut de séance', PL_DOMAIN) ?></label>
+                    <label for="start_gazoline"><?php _e('Niveau de carburant en debut de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="start_gazoline" name="start_gazoline">
                         <option value=""></option>
                         <?php foreach ($levels as $level): ?>
-                            <option value="<?= esc_attr($level) ?>"<?= ($level == $item['start_gazoline'] ? ' selected' : '') ?>><?= esc_html($level) ?>
-                                %
+                            <option value="<?php echo esc_attr($level); ?>"
+                                <?php echo ($level == $item['start_gazoline'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($level); ?>&nbsp;%
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -441,44 +452,25 @@ class Paralog_Activity extends Paralog_Table
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="start_time"><?php _e('Heure du début de séance', PL_DOMAIN) ?></label>
+                    <label for="start_time"><?php _e('Heure du début de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input type="time" name="start_time" step="60" min="00:00" max="23:59"
-                           value="<?= $item['start_time'] ?>"/>
+                           value="<?php echo $item['start_time']; ?>"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="end_wind_orientation"><?php _e('Orientation du vent en fin de séance', PL_DOMAIN) ?></label>
+                    <label for="end_wind_orientation"><?php _e('Orientation du vent en fin de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="end_wind_orientation" name="end_wind_orientation">
                         <option value=""></option>
                         <?php foreach ($orientations as $orientation): ?>
-                            <option value="<?= esc_attr($orientation) ?>"<?= ($orientation == $item['end_wind_orientation'] ? ' selected' : '') ?>><?= esc_html($orientation) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-            </tr>
-            <tr class="form-field">
-                <th valign="top" scope="row">
-                    <label for="end_counter"><?php _e('Compteur en fin de séance', PL_DOMAIN) ?></label>
-                </th>
-                <td>
-                    <input type="number" name="end_counter" value="<?= $item['end_counter'] ?>"/>
-                </td>
-            </tr>
-            <tr class="form-field">
-                <th valign="top" scope="row">
-                    <label for="end_gazoline"><?php _e('Niveau de carburant en fin de séance', PL_DOMAIN) ?></label>
-                </th>
-                <td>
-                    <select id="end_gazoline" name="end_gazoline">
-                        <option value=""></option>
-                        <?php foreach ($levels as $level): ?>
-                            <option value="<?= esc_attr($level) ?>"<?= ($level == $item['end_gazoline'] ? ' selected' : '') ?>><?= esc_html($level) ?>
-                                %
+                            <option value="<?php echo esc_attr($orientation); ?>"
+                                <?php echo ($orientation == $item['end_wind_orientation'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($orientation); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -486,22 +478,49 @@ class Paralog_Activity extends Paralog_Table
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="end_time"><?php _e('Heure de fin de séance', PL_DOMAIN) ?></label>
+                    <label for="end_counter"><?php _e('Compteur en fin de séance', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <input type="time" name="end_time" step="60" min="00:00" max="23:59"
-                           value="<?= $item['end_time'] ?>"/>
+                    <input type="number" name="end_counter" value="<?php echo $item['end_counter']; ?>"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="instructor"><?php _e('Moniteur', PL_DOMAIN) ?></label>
+                    <label for="end_gazoline"><?php _e('Niveau de carburant en fin de séance', PL_DOMAIN); ?></label>
+                </th>
+                <td>
+                    <select id="end_gazoline" name="end_gazoline">
+                        <option value=""></option>
+                        <?php foreach ($levels as $level): ?>
+                            <option value="<?php echo esc_attr($level); ?>"
+                                <?php echo ($level == $item['end_gazoline'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($level) ?>&nbsp;%
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="end_time"><?php _e('Heure de fin de séance', PL_DOMAIN); ?></label>
+                </th>
+                <td>
+                    <input type="time" name="end_time" step="60" min="00:00" max="23:59"
+                           value="<?php echo $item['end_time']; ?>"/>
+                </td>
+            </tr>
+            <tr class="form-field">
+                <th valign="top" scope="row">
+                    <label for="instructor"><?php _e('Moniteur', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="instructor" name="instructor">
                         <option value=""></option>
                         <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?= $pilot['person_id'] ?>"><?= esc_html($pilot['name']) ?></option>
+                            <option value="<?php echo $pilot['person_id']; ?>">
+                                <?php echo esc_html($pilot['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                     <button type="submit" name="instructor_action" value="add:0" class="button button-primary">
@@ -516,23 +535,25 @@ class Paralog_Activity extends Paralog_Table
                     <?php foreach ($instructor_list as $instructor): ?>
                         <div>
                             <button type="submit" name="instructor_action"
-                                    value="remove:<?= $instructor['activity_person_id'] ?>" class="button">
+                                    value="remove:<?php echo $instructor['activity_person_id']; ?>" class="button">
                                 <span class="fa fa-trash"></span>
                             </button>
-                            <span><?= esc_html($instructor['person_name']) ?></span>
+                            <span><?php echo esc_html($instructor['person_name']); ?></span>
                         </div>
                     <?php endforeach; ?>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="plateform"><?php _e('Plateforme', PL_DOMAIN) ?></label>
+                    <label for="plateform"><?php _e('Plateforme', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="plateform" name="plateform">
                         <option value=""></option>
                         <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?= $pilot['person_id'] ?>"><?= esc_html($pilot['name']) ?></option>
+                            <option value="<?php echo $pilot['person_id']; ?>">
+                                <?php echo esc_html($pilot['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                     <button type="submit" name="plateform_action" value="add:0" class="button button-primary">
@@ -547,23 +568,25 @@ class Paralog_Activity extends Paralog_Table
                     <?php foreach ($plateform_list as $plateform): ?>
                         <div>
                             <button type="submit" name="plateform_action"
-                                    value="remove:<?= $plateform['activity_person_id'] ?>" class="button">
+                                    value="remove:<?php echo $plateform['activity_person_id']; ?>" class="button">
                                 <span class="fa fa-trash"></span>
                             </button>
-                            <span><?= esc_html($plateform['person_name']) ?></span>
+                            <span><?php echo esc_html($plateform['person_name']); ?></span>
                         </div>
                     <?php endforeach; ?>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN) ?></label>
+                    <label for="winchman"><?php _e('Treuilleur', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="winchman" name="winchman">
                         <option value=""></option>
                         <?php foreach ($winchmen as $winchman): ?>
-                            <option value="<?= $winchman['person_id'] ?>"><?= esc_html($winchman['name']) ?></option>
+                            <option value="<?php echo $winchman['person_id']; ?>">
+                                <?php echo esc_html($winchman['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                     <button type="submit" name="winchman_action" value="add:0" class="button button-primary">
@@ -578,36 +601,36 @@ class Paralog_Activity extends Paralog_Table
                     <?php foreach ($winchman_list as $winchman): ?>
                         <div>
                             <button type="submit" name="winchman_action"
-                                    value="remove:<?= $winchman['activity_person_id'] ?>" class="button">
+                                    value="remove:<?php echo $winchman['activity_person_id']; ?>" class="button">
                                 <span class="fa fa-trash"></span>
                             </button>
-                            <span><?= esc_html($winchman['person_name']) ?></span>
+                            <span><?php echo esc_html($winchman['person_name']); ?></span>
                         </div>
                     <?php endforeach; ?>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="winch_incident"><?php _e('Incident de treuil', PL_DOMAIN) ?></label>
+                    <label for="winch_incident"><?php _e('Incident de treuil', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <textarea name="winch_incident" class="code"><?= esc_html($item['winch_incident']) ?></textarea>
+                    <textarea name="winch_incident" class="code"><?php echo esc_html($item['winch_incident']); ?></textarea>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="fly_incident"><?php _e('Incident de vol', PL_DOMAIN) ?></label>
+                    <label for="fly_incident"><?php _e('Incident de vol', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <textarea name="fly_incident" class="code"><?= esc_html($item['fly_incident']) ?></textarea>
+                    <textarea name="fly_incident" class="code"><?php echo esc_html($item['fly_incident']); ?></textarea>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="comment"><?php _e('Commentaire', PL_DOMAIN) ?></label>
+                    <label for="comment"><?php _e('Commentaire', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <textarea name="comment" class="code"><?= esc_html($item['comment']) ?></textarea>
+                    <textarea name="comment" class="code"><?php echo esc_html($item['comment']); ?></textarea>
                 </td>
             </tr>
             </tbody>

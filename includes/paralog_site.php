@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die('No direct access allowed');
+    wp_die('No direct access allowed', 'Security');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -177,31 +177,35 @@ class Paralog_Site extends Paralog_Table
                 }
             }
         }
-        add_meta_box('site_form_meta_box', 'Donnée', array(
+        add_meta_box('site_form_meta_box', __('Site', PL_DOMAIN), array(
             $this,
             'site_form_meta_box_handler'
         ), 'site', 'normal', 'default');
         ?>
         <div class="wrap">
-            <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de site', PL_DOMAIN) ?> <a class="add-new-h2"
-                                                           href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+            <div class="icon32 icon32-posts-post" id="icon-edit"></div>
+            <h1><?php _e('Fiche de site', PL_DOMAIN); ?>
+                <a class="add-new-h2" href="<?php echo get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-sites&paged=%d', $this->get_pagenum())); ?>">
+                    <?php _e('retour à la liste', PL_DOMAIN); ?>
+                </a>
             </h1>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
+                <div id="notice" class="error"><p><?php echo $notice; ?></p></div>
             <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
+                <div id="message" class="updated"><p><?php echo $message; ?></p></div>
             <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
+                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>"/>
+                <input type="hidden" name="<?php echo $primary; ?>" value="<?php echo esc_attr($item[$primary]); ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('site', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
-                                   class="button-primary" name="submit">
+                            <?php do_meta_boxes('site', 'normal', $item); ?>
+                            <button type="submit" name="submit" value="save" class="button button-primary">
+                                <span class="fa fa-save"></span>
+                                <?php _e('Enregistrer', PL_DOMAIN); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -232,21 +236,21 @@ class Paralog_Site extends Paralog_Table
             <tbody>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                    <label for="name"><?php _e('Nom du site', PL_DOMAIN); ?></label>
                 </th>
                 <td>
-                    <input id="name" name="name" type="text" style="width: 95%" value="<?= esc_attr($item['name']) ?>"
-                           size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN) ?>"
+                    <input id="name" name="name" type="text" style="width: 95%" value="<?php echo esc_attr($item['name']); ?>"
+                           size="50" maxlength="64" class="code" placeholder="<?php _e('ex: annecy', PL_DOMAIN); ?>"
                            required>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="message"><?php _e('Message du site', PL_DOMAIN) ?></label>
+                    <label for="message"><?php _e('Message du site', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <textarea name="message" class="code"
-                              placeholder="<?php _e('Prevenir le propriétaire', PL_DOMAIN) ?>"><?= esc_html($item['message']) ?></textarea>
+                              placeholder="<?php _e('Prevenir le propriétaire', PL_DOMAIN); ?>"><?php echo esc_html($item['message']); ?></textarea>
                 </td>
             </tr>
             </tbody>

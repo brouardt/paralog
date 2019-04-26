@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    die('No direct access allowed');
+    wp_die('No direct access allowed', 'Security');
 }
 
 if (!class_exists('Paralog_Table')) {
@@ -241,35 +241,39 @@ class Paralog_Log extends Paralog_Table
                 $information = __("Si vous laissez les champs date et heure vide, lors de la sauvegarde, ceux-ci prendront automatiquement le date et l'heure courante.", PL_DOMAIN);
             }
         }
-        add_meta_box('log_form_meta_box', 'Journal', array(
+        add_meta_box('log_form_meta_box', __('Journal', PL_DOMAIN), array(
             $this,
             'log_form_meta_box_handler'
         ), 'log', 'normal', 'default');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-            <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN) ?>
+            <h1><?php _e('Fiche de décollage / treuillé', PL_DOMAIN); ?>
                 <a class="add-new-h2"
-                   href="<?= get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum())) ?>"><?php _e('retour à la liste', PL_DOMAIN) ?></a>
+                   href="<?php echo get_admin_url(get_current_blog_id(), sprintf('admin.php?page=paralog-logs&paged=%d', $this->get_pagenum())); ?>">
+                    <?php _e('retour à la liste', PL_DOMAIN); ?>
+                </a>
             </h1>
             <?php if (!empty($information)): ?>
-                <div id="information" class="notice notice-info is-dismissible"><p><?= $information ?></div>
+                <div id="information" class="notice notice-info is-dismissible"><p><?php echo $information; ?></div>
             <?php endif; ?>
             <?php if (!empty($notice)): ?>
-                <div id="notice" class="error"><p><?= $notice ?></p></div>
+                <div id="notice" class="error"><p><?php echo $notice; ?></p></div>
             <?php endif; ?>
             <?php if (!empty($message)): ?>
-                <div id="message" class="updated"><p><?= $message ?></p></div>
+                <div id="message" class="updated"><p><?php echo $message; ?></p></div>
             <?php endif; ?>
             <form id="form" method="post">
-                <input type="hidden" name="nonce" value="<?= wp_create_nonce(basename(__FILE__)) ?>"/>
-                <input type="hidden" name="<?= $primary ?>" value="<?= esc_attr($item[$primary]) ?>"/>
+                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>"/>
+                <input type="hidden" name="<?php echo $primary; ?>" value="<?php echo esc_attr($item[$primary]); ?>"/>
                 <div class="metabox-holder" id="postsite">
                     <div id="post-body">
                         <div id="post-body-content">
-                            <?php do_meta_boxes('log', 'normal', $item) ?>
-                            <input type="submit" value="<?php _e('Sauver', PL_DOMAIN); ?>" id="submit"
-                                   class="button-primary" name="submit">
+                            <?php do_meta_boxes('log', 'normal', $item); ?>
+                            <button type="submit" name="submit" value="save" class="button button-primary">
+                                <span class="fa fa-save"></span>
+                                <?php _e('Enregistrer', PL_DOMAIN); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -326,93 +330,109 @@ class Paralog_Log extends Paralog_Table
             <tbody>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="site_name"><?php _e('Nom du site', PL_DOMAIN) ?></label>
+                    <label for="site_name"><?php _e('Nom du site', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="site_name" name="site_name">
                         <option value=""></option>
                         <?php foreach ($sites as $site): ?>
-                            <option value="<?= esc_attr($site['name']) ?>"<?= ($site['name'] == $item['site_name'] ? ' selected' : '') ?>><?= esc_html($site['name']) ?></option>
+                            <option value="<?php echo esc_attr($site['name']); ?>"
+                                <?php echo ($site['name'] == $item['site_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($site['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN) ?></label>
+                    <label for="line_name"><?php _e('Nom de la ligne', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="line_name" name="line_name">
                         <option value=""></option>
                         <?php foreach ($lines as $line): ?>
-                            <option value="<?= esc_attr($line['name']) ?>"<?= ($line['name'] == $item['line_name'] ? ' selected' : '') ?>><?= esc_html($line['name']) ?></option>
+                            <option value="<?php echo esc_attr($line['name']); ?>"
+                                <?php echo ($line['name'] == $item['line_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($line['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="winchman_id"><?php _e('Nom du treuilleur', PL_DOMAIN) ?></label>
+                    <label for="winchman_id"><?php _e('Nom du treuilleur', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="winchman_id" name="winchman_id">
                         <option value=""></option>
                         <?php foreach ($winchmen as $winchman): ?>
-                            <option value="<?= $winchman['person_id'] ?>"<?= ($winchman['name'] == $item['winchman_name'] ? ' selected' : '') ?>><?= esc_html($winchman['name']) ?></option>
+                            <option value="<?php echo $winchman['person_id']; ?>"
+                                <?php echo ($winchman['name'] == $item['winchman_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($winchman['name']); ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="pilot_id"><?php _e('Nom du pilote', PL_DOMAIN) ?></label>
+                    <label for="pilot_id"><?php _e('Nom du pilote', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <select id="pilot_id" name="pilot_id">
                         <option value=""></option>
                         <?php foreach ($pilots as $pilot): ?>
-                            <option value="<?= $pilot['person_id'] ?>"<?= ($pilot['name'] == $item['pilot_name'] ? ' selected' : '') ?>><?= esc_html($pilot['name']) ?></option>
+                            <option value="<?php echo $pilot['person_id']; ?>"
+                                <?php echo ($pilot['name'] == $item['pilot_name'] ? 'selected' : ''); ?>
+                            >
+                                <?php echo esc_html($pilot['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="passenger_name"><?php _e('Nom du passager', PL_DOMAIN) ?></label>
+                    <label for="passenger_name"><?php _e('Nom du passager', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="passenger_name" name="passenger_name" type="text" style="width: 95%"
-                           value="<?= esc_attr($item['passenger_name']) ?>" size="50" maxlength="129" class="code"
-                           placeholder="<?php _e('ex: Joe-Henri BLACK', PL_DOMAIN) ?>"/>
+                           value="<?php echo esc_attr($item['passenger_name']); ?>" size="50" maxlength="129" class="code"
+                           placeholder="<?php _e('ex: Joe-Henri BLACK', PL_DOMAIN); ?>"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="total_flying_weight"><?php _e('Poid total volant (PTV)', PL_DOMAIN) ?></label>
+                    <label for="total_flying_weight"><?php _e('Poid total volant (PTV)', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="total_flying_weight" name="total_flying_weight" type="text" style="width: 5em"
-                           value="<?= esc_attr($item['total_flying_weight']) ?>" size="5" maxlength="4" class="code"
-                           placeholder="<?php _e('ex: 123', PL_DOMAIN) ?>"/>
+                           value="<?php echo esc_attr($item['total_flying_weight']); ?>" size="5" maxlength="4" class="code"
+                           placeholder="<?php _e('ex: 123', PL_DOMAIN); ?>"/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="takeoff_date"><?php _e('Date', PL_DOMAIN) ?></label>
+                    <label for="takeoff_date"><?php _e('Date', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="takeoff_date" name="takeoff_date" type="date"
-                           value="<?= esc_attr($item['takeoff_date']) ?>" class="code"/>
+                           value="<?php echo esc_attr($item['takeoff_date']); ?>" class="code"/>
                 </td>
             </tr>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
-                    <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN) ?></label>
+                    <label for="takeoff_time"><?php _e('Heure', PL_DOMAIN); ?></label>
                 </th>
                 <td>
                     <input id="takeoff_time" name="takeoff_time" type="time" step="1" min="00:00:00" max="23:59:59"
-                           value="<?= esc_attr($item['takeoff_time']) ?>" class="code"/>
+                           value="<?php echo esc_attr($item['takeoff_time']); ?>" class="code"/>
                 </td>
             </tr>
             </tbody>
