@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.6] - 2019-04-29
+## Ajout
+- Prise en compte d'une date de rappel pour l'envoi manuel.
+
 ## [1.6.5] - 2019-04-26
 ## Ajout
 - Gestion des appels de classes avec spl_autoloader_register()
