@@ -10,6 +10,10 @@ if (!defined('ABSPATH')) {
  */
 class Paralog_Options
 {
+    private const RAISE = 'paralog_raise';
+    private const RECURRENCE = 'weekly';
+
+
     /**
      * @name add_weekly_to_cron
      * @param $schedules
@@ -17,12 +21,13 @@ class Paralog_Options
      */
     public static function add_weekly_to_cron($schedules)
     {
-        if (!isset($schedules['weekly'])) {
-            $schedules['weekly'] = array(
-                'interval' => 604800, // 604800 seconds = 1 week
+        if (!isset($schedules[self::RECURRENCE])) {
+            $schedules[self::RECURRENCE] = array(
+                'interval' => 3600 * 24 * 7, // 3600s = 1h x 24h x 7j
                 'display' => 'Weekly',
             );
         }
+
         return $schedules;
     }
 
@@ -54,10 +59,17 @@ class Paralog_Options
                         $options[$key] = $item[$key];
                     }
                     update_option(PL_DOMAIN, $options, 'no');
+                    self::remove_cron();
+                    self::add_cron();
                     $message = __('Paramètres mis à jour', PL_DOMAIN);
                 }
                 if ($_REQUEST['submit'] === 'send') {
-                    self::raise_pilots();
+                    $date = filter_input(INPUT_POST, 'raise_date');
+                    if (self::raise_pilots($date)) {
+                        $message = __('Rappel envoyé', PL_DOMAIN);
+                    } else {
+                        $notice = __("Un problème empeche l'envoi de l'e-mail", PL_DOMAIN);
+                    }
                 }
             } else {
                 // if $item_valid not true it contains error message(s)
@@ -75,6 +87,8 @@ class Paralog_Options
             $this,
             'options_form_meta_box_handler',
         ), 'options', 'normal', 'default');
+        $date_raise = new DateTime('now');
+        $date_raise_min = $date_raise->modify('+1 day')->format('Y-m-d');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"></div>
@@ -83,8 +97,10 @@ class Paralog_Options
                 <?php _e("Vous pouvez utiliser des variables pour un traitement dynamique de l'information dans le sujet ou le message de votre e-mail.", PL_DOMAIN); ?>
                 <ul class="ul-square">
                     <li>%DATE_ATTENDANCE% = <?php _e("la date du lendemain.", PL_DOMAIN); ?></li>
-                    <li>%FORM_ATTENDANCE% = <?php _e("lien vers le formulaire de saisie pré-rempli.", PL_DOMAIN); ?></li>
-                    <li>%UNSUBSCRIBE_ATTENDANCE% = <?php _e("lien vers la fiche pilote pour modification de paramètres.", PL_DOMAIN); ?></li>
+                    <li>%FORM_ATTENDANCE%
+                        = <?php _e("lien vers le formulaire de saisie pré-rempli.", PL_DOMAIN); ?></li>
+                    <li>%UNSUBSCRIBE_ATTENDANCE%
+                        = <?php _e("lien vers la fiche pilote pour modification de paramètres.", PL_DOMAIN); ?></li>
                 </ul>
             </div>
             <?php if (!empty($notice)): ?>
@@ -105,8 +121,10 @@ class Paralog_Options
                             </button>
                             <button type="submit" name="submit" value="send" class="button button-secondary">
                                 <span class="fa fa-send"></span>
-                                <?php _e('Envoyer un rappel pour demain', PL_DOMAIN); ?>
+                                <?php _e('Envoyer un rappel pour le ', PL_DOMAIN); ?>
                             </button>
+                            <input type="date" name="raise_date" value="<?php echo esc_attr($date_raise_min); ?>"
+                                   min="<?php echo esc_attr($date_raise_min); ?>"/>
                         </div>
                     </div>
                 </div>
@@ -134,61 +152,85 @@ class Paralog_Options
         return implode('<br />', $messages);
     }
 
-    /**
-     * @throws Exception
-     */
-    public static function raise_pilots()
+    public static function remove_cron()
+    {
+        $timestamp = wp_next_scheduled(self::RAISE);
+        wp_unschedule_event($timestamp, self::RAISE);
+    }
+
+    public static function add_cron()
+    {
+        if (!wp_next_scheduled(self::RAISE)) {
+            $options = get_option(PL_DOMAIN);
+            $raise = 'next ' .
+                (isset($options['raise_day']) ? $options['raise_day'] : 'Friday') . ' ' .
+                (isset($options['raise_time']) ? $options['raise_time'] : '12:00 UTC') . ' ';
+            $timestamp = strtotime($raise);
+            wp_schedule_event($timestamp, self::RECURRENCE, self::RAISE);
+        }
+
+        add_action(self::RAISE, array(__CLASS__, 'raise_pilots'));
+    }
+
+    public static function raise_pilots($date = 'tomorrow')
     {
         global $wpdb;
 
         $options = get_option(PL_DOMAIN);
 
-        $table = Paralog::table_name('persons');
-        $query = "SELECT " .
-            "`person_id`, " .
-            "`firstname`, " .
-            "`lastname`, " .
-            "`email` " .
-            "FROM `$table` " .
-            "WHERE `deleted` = 0 " .
-            "AND `raise` = 1";
-        $recipients = $wpdb->get_results($query);
+        $start_period = new DateTime($options['activity_start']);
+        $now = new DateTime();
+        $end_period = new DateTime($options['activity_end']);
 
-        foreach ($recipients as $recipient) {
-            $to = ltrim("{$recipient->firstname} {$recipient->lastname} <{$recipient->email}>");
-            $date = new DateTime('now', new DateTimeZone(get_option('timezone_string')));
-            $date->modify('+1 day');
+        if ($now >= $start_period && $now <= $end_period) {
+            $table = Paralog::table_name('persons');
+            $query = "SELECT " .
+                "`person_id`, " .
+                "`firstname`, " .
+                "`lastname`, " .
+                "`email` " .
+                "FROM `$table` " .
+                "WHERE `deleted` = 0 " .
+                "AND `raise` = 1";
+            $recipients = $wpdb->get_results($query);
+
+            $date = new DateTime($date, new DateTimeZone(get_option('timezone_string')));
             $date_attendance = $date->format(get_option('date_format'));
-            $form_attendance = get_admin_url(
-                get_current_blog_id(),
-                sprintf(
-                    'admin.php?page=paralog-attendances-form&action=edit&date=%s&person_id=%d',
-                    $date->format('Y-m-d'),
-                    $recipient->person_id
-                )
-            );
-            $unsubscribe_attendance = get_admin_url(
-                get_current_blog_id(),
-                sprintf(
-                    'admin.php?page=paralog-persons-form&id=%d',
-                    $recipient->person_id
-                )
-            );
-            $subject = str_ireplace(
-                array('%DATE_ATTENDANCE%', '%FORM_ATTENDANCE%', '%UNSUBSCRIBE_ATTENDANCE%'),
-                array($date_attendance, $form_attendance, $unsubscribe_attendance),
-                $options['raise_subject']
-            );
-            $message = str_ireplace(
-                array('%DATE_ATTENDANCE%', '%FORM_ATTENDANCE%', '%UNSUBSCRIBE_ATTENDANCE%'),
-                array($date_attendance, $form_attendance, $unsubscribe_attendance),
-                $options['raise_message']
-            );
-            /*
-             * envoi du mail
-             */
-            wp_mail($to, $subject, $message);
+
+            foreach ($recipients as $recipient) {
+                $to = ltrim("{$recipient->firstname} {$recipient->lastname} <{$recipient->email}>");
+                $form_attendance = get_admin_url(
+                    get_current_blog_id(),
+                    sprintf(
+                        'admin.php?page=paralog-attendances-form&action=edit&date=%s&person_id=%d',
+                        $date->format('Y-m-d'),
+                        $recipient->person_id
+                    )
+                );
+                $unsubscribe_attendance = get_admin_url(
+                    get_current_blog_id(),
+                    sprintf(
+                        'admin.php?page=paralog-persons-form&id=%d',
+                        $recipient->person_id
+                    )
+                );
+                $subject = str_ireplace(
+                    array('%DATE_ATTENDANCE%', '%FORM_ATTENDANCE%', '%UNSUBSCRIBE_ATTENDANCE%'),
+                    array($date_attendance, $form_attendance, $unsubscribe_attendance),
+                    $options['raise_subject']
+                );
+                $message = str_ireplace(
+                    array('%DATE_ATTENDANCE%', '%FORM_ATTENDANCE%', '%UNSUBSCRIBE_ATTENDANCE%'),
+                    array($date_attendance, $form_attendance, $unsubscribe_attendance),
+                    $options['raise_message']
+                );
+                /*
+                 * envoi du mail
+                 */
+                return wp_mail($to, $subject, $message);
+            }
         }
+        return false;
     }
 
     public function options_form_meta_box_handler($item)
@@ -203,30 +245,30 @@ class Paralog_Options
             'Sunday' => __('Dimanche', PL_DOMAIN),
         );
         $times = array(
-            '00:00 am' => __('00', PL_DOMAIN),
-            '01:00 am' => __('01', PL_DOMAIN),
-            '02:00 am' => __('02', PL_DOMAIN),
-            '03:00 am' => __('03', PL_DOMAIN),
-            '04:00 am' => __('04', PL_DOMAIN),
-            '05:00 am' => __('05', PL_DOMAIN),
-            '06:00 am' => __('06', PL_DOMAIN),
-            '07:00 am' => __('07', PL_DOMAIN),
-            '08:00 am' => __('08', PL_DOMAIN),
-            '09:00 am' => __('09', PL_DOMAIN),
-            '10:00 am' => __('10', PL_DOMAIN),
-            '11:00 am' => __('11', PL_DOMAIN),
-            '12:00 am' => __('12', PL_DOMAIN),
-            '01:00 pm' => __('13', PL_DOMAIN),
-            '02:00 pm' => __('14', PL_DOMAIN),
-            '03:00 pm' => __('15', PL_DOMAIN),
-            '04:00 pm' => __('16', PL_DOMAIN),
-            '05:00 pm' => __('17', PL_DOMAIN),
-            '06:00 pm' => __('18', PL_DOMAIN),
-            '07:00 pm' => __('19', PL_DOMAIN),
-            '08:00 pm' => __('20', PL_DOMAIN),
-            '09:00 pm' => __('21', PL_DOMAIN),
-            '10:00 pm' => __('22', PL_DOMAIN),
-            '11:00 pm' => __('23', PL_DOMAIN)
+            '00:00 UTC' => __("00:00 UTC", PL_DOMAIN),
+            '01:00 UTC' => __("01:00 UTC", PL_DOMAIN),
+            '02:00 UTC' => __("02:00 UTC", PL_DOMAIN),
+            '03:00 UTC' => __("03:00 UTC", PL_DOMAIN),
+            '04:00 UTC' => __("04:00 UTC", PL_DOMAIN),
+            '05:00 UTC' => __("05:00 UTC", PL_DOMAIN),
+            '06:00 UTC' => __("06:00 UTC", PL_DOMAIN),
+            '07:00 UTC' => __("07:00 UTC", PL_DOMAIN),
+            '08:00 UTC' => __("08:00 UTC", PL_DOMAIN),
+            '09:00 UTC' => __("09:00 UTC", PL_DOMAIN),
+            '10:00 UTC' => __("10:00 UTC", PL_DOMAIN),
+            '11:00 UTC' => __("11:00 UTC", PL_DOMAIN),
+            '12:00 UTC' => __("12:00 UTC", PL_DOMAIN),
+            '13:00 UTC' => __("13:00 UTC", PL_DOMAIN),
+            '14:00 UTC' => __("14:00 UTC", PL_DOMAIN),
+            '15:00 UTC' => __("15:00 UTC", PL_DOMAIN),
+            '16:00 UTC' => __("16:00 UTC", PL_DOMAIN),
+            '17:00 UTC' => __("17:00 UTC", PL_DOMAIN),
+            '18:00 UTC' => __("18:00 UTC", PL_DOMAIN),
+            '19:00 UTC' => __("19:00 UTC", PL_DOMAIN),
+            '20:00 UTC' => __("20:00 UTC", PL_DOMAIN),
+            '21:00 UTC' => __("21:00 UTC", PL_DOMAIN),
+            '22:00 UTC' => __("22:00 UTC", PL_DOMAIN),
+            '23:00 UTC' => __("23:00 UTC", PL_DOMAIN)
         );
         ?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
@@ -287,7 +329,7 @@ class Paralog_Options
                 </th>
                 <td>
                     <input type="text" name="raise_subject" value="<?php echo esc_html($item['raise_subject']); ?>"
-                           class="code" />
+                           class="code"/>
                 </td>
             </tr>
             <tr class="form-field">

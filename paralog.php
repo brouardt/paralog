@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.6.5
+ * Version:           1.6.6
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -37,7 +37,7 @@ spl_autoload_register(function ($class) {
 });
 
 if (!class_exists('Paralog')) {
-    define('PL_VERSION', '1.6.5');
+    define('PL_VERSION', '1.6.6');
     define('PL_DB_VERSION', '2.5');
     define('PL_DOMAIN', 'paralog');
     define('PL_ADMIN_SLUG', 'paralog-admin');
@@ -304,15 +304,9 @@ if (!class_exists('Paralog')) {
                 update_option(PL_DOMAIN, $options, 'no');
             }
             /*
-             * cron
+             * CRON
              */
-            if (!wp_next_scheduled('paralog_raise')) {
-                $day = isset($options['raise_day']) ? $options['raise_day'] : 'Friday';
-                $raise = 'Next ' . $day . ' ' . $options['raise_time'] . ' ' . get_option('timezone_string');
-                $timestamp = strtotime($raise);
-                wp_schedule_event($timestamp, 'weekly', 'paralog_raise');
-            }
-            add_action('paralog_raise', array('Paralog_Options', 'raise_pilots'));
+            Paralog_Options::add_cron();
         }
 
         /**
@@ -327,8 +321,7 @@ if (!class_exists('Paralog')) {
 
             update_option(PL_DOMAIN, $options, 'no');
 
-            $timestamp = wp_next_scheduled('paralog_raise');
-            wp_unschedule_event($timestamp, 'paralog_raise');
+            Paralog_Options::remove_cron();
         }
 
         /**
