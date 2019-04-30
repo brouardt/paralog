@@ -2,6 +2,12 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.7] - 2019-04-30
+## Correction
+- Envoi e-mails multiple
+## Modification
+- Traduction
+
 ## [1.6.6] - 2019-04-29
 ## Ajout
 - Prise en compte d'une date de rappel pour l'envoi manuel.
