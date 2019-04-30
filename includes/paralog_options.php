@@ -42,7 +42,7 @@ class Paralog_Options
 			'activity_start' => null,
 			'activity_end' => null,
 			'raise_day' => 'Friday',
-			'raise_time' => '12:00 am',
+			'raise_time' => '12:00 UTC',
 			'raise_subject' => '',
 			'raise_message' => '',
 		);
@@ -109,14 +109,14 @@ class Paralog_Options
 			<?php if ( ! empty( $notice ) ): ?>
                 <div id="notice" class="error">
                     <p>
-                        <?php echo $notice; ?>
+						<?php echo $notice; ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $message ) ): ?>
                 <div id="message" class="updated">
                     <p>
-                        <?php echo $message; ?>
+						<?php echo $message; ?>
                     </p>
                 </div>
 			<?php endif; ?>
@@ -171,16 +171,18 @@ class Paralog_Options
 
 	public static function add_cron()
 	{
-		if ( ! wp_next_scheduled( self::RAISE ) ) {
-			$options = get_option( PL_DOMAIN );
-			$raise = 'next ' .
-			         ( isset( $options['raise_day'] ) ? $options['raise_day'] : 'Friday' ) . ' ' .
-			         ( isset( $options['raise_time'] ) ? $options['raise_time'] : '12:00 UTC' ) . ' ';
-			$timestamp = strtotime( $raise );
-			wp_schedule_event( $timestamp, self::RECURRENCE, self::RAISE );
-		}
+		$options = get_option( PL_DOMAIN );
 
-		add_action( self::RAISE, array( __CLASS__, 'raise_pilots' ) );
+		if ( isset( $options['raise_day'] ) && $options['raise_day'] != '' ) {
+			if ( ! wp_next_scheduled( self::RAISE ) ) {
+
+				$raise = 'next ' . $options['raise_day'] .
+				         ( isset( $options['raise_time'] ) ? $options['raise_time'] : '12:00 UTC' );
+				$timestamp = strtotime( $raise );
+				wp_schedule_event( $timestamp, self::RECURRENCE, self::RAISE );
+			}
+			add_action( self::RAISE, array( __CLASS__, 'raise_pilots' ) );
+		}
 	}
 
 	public static function raise_pilots( $date = 'tomorrow' )
@@ -256,7 +258,7 @@ class Paralog_Options
 	public function options_form_meta_box_handler( $item )
 	{
 		$days = array(
-			'None' => __( 'Aucun', PL_DOMAIN ),
+			'' => __( 'Aucun', PL_DOMAIN ),
 			'Monday' => __( 'Lundi', PL_DOMAIN ),
 			'Tuesday' => __( 'Mardi', PL_DOMAIN ),
 			'Wednesday' => __( 'Mercredi', PL_DOMAIN ),
@@ -266,8 +268,6 @@ class Paralog_Options
 			'Sunday' => __( 'Dimanche', PL_DOMAIN ),
 		);
 		$times = array(
-
-			'None' => __( 'Aucun', PL_DOMAIN ),
 			'00:00 UTC' => __( "00:00 UTC", PL_DOMAIN ),
 			'01:00 UTC' => __( "01:00 UTC", PL_DOMAIN ),
 			'02:00 UTC' => __( "02:00 UTC", PL_DOMAIN ),

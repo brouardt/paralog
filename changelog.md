@@ -2,9 +2,12 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.11] - 2019-04-30
+# Modification
+- Tri de la vue des présences par date décroissante (défaut) 
+
 ## [1.6.10] - 2019-04-30
 ## Modification
-- Ajout de required
 - Arrangement de code
 
 ## [1.6.9] - 2019-04-30

@@ -280,14 +280,14 @@ class Paralog_Log extends Paralog_Table
 			<?php if ( ! empty( $notice ) ): ?>
                 <div id="notice" class="error">
                     <p>
-                        <?php echo $notice; ?>
+						<?php echo $notice; ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $message ) ): ?>
                 <div id="message" class="updated">
                     <p>
-                        <?php echo $message; ?>
+						<?php echo $message; ?>
                     </p>
                 </div>
 			<?php endif; ?>
@@ -303,6 +303,15 @@ class Paralog_Log extends Paralog_Table
                                 <span class="fa fa-save"></span>
 								<?php _e( 'Enregistrer', PL_DOMAIN ); ?>
                             </button>
+                            <a href="<?php echo get_admin_url(
+								get_current_blog_id(),
+								sprintf(
+									'admin.php?page=paralog-logs-form&paged=%d',
+									$this->get_pagenum()
+								) ); ?>" class="button button-secondary">
+                                <span class="fa fa-plus"></span>
+								<?php _e( "Ajouter un décollage / treuillé", PL_DOMAIN ); ?>
+                            </a>
                         </div>
                     </div>
                 </div>
