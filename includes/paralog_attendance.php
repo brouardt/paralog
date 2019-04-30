@@ -318,7 +318,7 @@ class Paralog_Attendance extends Paralog_Table
 
         $table_attendance = Paralog::table_name('attendances');
         $table_person = Paralog::table_name('persons');
-        if ($status != __('ne se prononce pas', PL_DOMAIN)) {
+        if ($status != __('ne se prononce pas encore', PL_DOMAIN)) {
             $query = $wpdb->prepare("SELECT " .
                 "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
                 "`tp`.`winchman_type` AS 'type' " .
