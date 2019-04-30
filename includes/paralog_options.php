@@ -65,8 +65,9 @@ class Paralog_Options
                 }
                 if ($_REQUEST['submit'] === 'send') {
                     $date = filter_input(INPUT_POST, 'raise_date');
-                    if (self::raise_pilots($date)) {
-                        $message = __('Rappel envoyé', PL_DOMAIN);
+					$count = self::raise_pilots($date);
+                    if ($count) {
+                        $message = "$count " . __('rappel(s) envoyé(s)', PL_DOMAIN);
                     } else {
                         $notice = __("Un problème empeche l'envoi de l'e-mail", PL_DOMAIN);
                     }
@@ -87,8 +88,8 @@ class Paralog_Options
             $this,
             'options_form_meta_box_handler',
         ), 'options', 'normal', 'default');
-        $date_raise = new DateTime('now');
-        $date_raise_min = $date_raise->modify('+1 day')->format('Y-m-d');
+        $date_raise = new DateTime('tomorrow');
+        $date_raise_min = $date_raise->format('Y-m-d');
         ?>
         <div class="wrap">
             <div class="icon32 icon32-posts-post" id="icon-edit"></div>
@@ -196,7 +197,8 @@ class Paralog_Options
 
             $date = new DateTime($date, new DateTimeZone(get_option('timezone_string')));
             $date_attendance = $date->format(get_option('date_format'));
-
+			
+			$count = 0;
             foreach ($recipients as $recipient) {
                 $to = ltrim("{$recipient->firstname} {$recipient->lastname} <{$recipient->email}>");
                 $form_attendance = get_admin_url(
@@ -227,8 +229,10 @@ class Paralog_Options
                 /*
                  * envoi du mail
                  */
-                return wp_mail($to, $subject, $message);
+                wp_mail($to, $subject, $message);
+				$count++;
             }
+			return $count;
         }
         return false;
     }
