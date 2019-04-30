@@ -59,6 +59,7 @@ class Paralog_Attendance extends Paralog_Table
             "`date`, " .
             "COUNT(*) AS 'quantity' " .
             "FROM `$table` " .
+			"GROUP BY `date` " .
             "LIMIT %d OFFSET %d",
             $per_page,
             $paged
@@ -229,7 +230,7 @@ class Paralog_Attendance extends Paralog_Table
             __('oui', PL_DOMAIN),
             __('peut-être', PL_DOMAIN),
             __('non', PL_DOMAIN),
-            __('ne se prononce pas', PL_DOMAIN),
+            __('ne se prononce pas encore', PL_DOMAIN),
         );
         foreach ($types as $type):
             $pilots = $this->pilots_by_date_status($date, $type);
@@ -274,7 +275,7 @@ class Paralog_Attendance extends Paralog_Table
 
         $table_attendance = Paralog::table_name('attendances');
         $table_person = Paralog::table_name('persons');
-        if ($status != __('ne se prononce pas', PL_DOMAIN)) {
+        if ($status != __('ne se prononce pas encore', PL_DOMAIN)) {
             $query = $wpdb->prepare("SELECT " .
                 "CONCAT_WS(' ', `tp`.`firstname`, `tp`.`lastname`) AS 'name', " .
                 "`tp`.`pilot_type` AS 'type' " .
