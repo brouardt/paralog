@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.8] - 2019-04-30
+## Correction
+- Affichage de la vue des présences groupées par date
+
 ## [1.6.7] - 2019-04-30
 ## Correction
 - Envoi e-mails multiple

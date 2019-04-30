@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Paralog\n"
-"POT-Creation-Date: 2019-04-30 09:03+0200\n"
-"PO-Revision-Date: 2019-04-30 09:04+0200\n"
+"POT-Creation-Date: 2019-04-30 09:29+0200\n"
+"PO-Revision-Date: 2019-04-30 09:29+0200\n"
 "Last-Translator: Thierry Brouard <thierry@brouard.pro>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -39,12 +39,12 @@ msgid "Supprimer"
 msgstr "Supprimer"
 
 #: includes/paralog_activity.php:109 includes/paralog_activity.php:374
-#: includes/paralog_attendance.php:89 includes/paralog_attendance.php:375
+#: includes/paralog_attendance.php:90 includes/paralog_attendance.php:376
 #: includes/paralog_log.php:421
 msgid "Date"
 msgstr "Date"
 
-#: includes/paralog_activity.php:110 includes/paralog_attendance.php:384
+#: includes/paralog_activity.php:110 includes/paralog_attendance.php:385
 #: includes/paralog_line.php:104 includes/paralog_person.php:299
 #: includes/paralog_site.php:103
 msgid "Nom"
@@ -58,7 +58,7 @@ msgstr "Treuil"
 msgid "Activité enregistrée"
 msgstr "Activité enregistrée"
 
-#: includes/paralog_activity.php:180 includes/paralog_attendance.php:153
+#: includes/paralog_activity.php:180 includes/paralog_attendance.php:154
 #: includes/paralog_line.php:159 includes/paralog_log.php:203
 #: includes/paralog_person.php:181 includes/paralog_site.php:149
 msgid "Un erreur est apparue lors de la sauvegarde"
@@ -107,13 +107,13 @@ msgstr "Activité"
 msgid "Fiche d'activité"
 msgstr "Fiche d'activité"
 
-#: includes/paralog_activity.php:269 includes/paralog_attendance.php:177
+#: includes/paralog_activity.php:269 includes/paralog_attendance.php:178
 #: includes/paralog_line.php:199 includes/paralog_log.php:254
 #: includes/paralog_person.php:221 includes/paralog_site.php:189
 msgid "retour à la liste"
 msgstr "retour à la liste"
 
-#: includes/paralog_activity.php:289 includes/paralog_attendance.php:194
+#: includes/paralog_activity.php:289 includes/paralog_attendance.php:195
 #: includes/paralog_line.php:217 includes/paralog_log.php:275
 #: includes/paralog_options.php:121 includes/paralog_person.php:239
 #: includes/paralog_site.php:207
@@ -238,38 +238,38 @@ msgstr "présence"
 msgid "présences"
 msgstr "présences"
 
-#: includes/paralog_attendance.php:90 includes/paralog_statistic.php:323
+#: includes/paralog_attendance.php:91 includes/paralog_statistic.php:323
 #: includes/paralog_statistic.php:340 includes/paralog_statistic.php:357
 #: includes/paralog_statistic.php:374 includes/paralog_statistic.php:391
 msgid "Quantité"
 msgstr "Quantité"
 
-#: includes/paralog_attendance.php:151
+#: includes/paralog_attendance.php:152
 msgid "Présence enregistrée"
 msgstr "Présence enregistrée"
 
-#: includes/paralog_attendance.php:167
+#: includes/paralog_attendance.php:168
 msgid "Présence"
 msgstr "Présence"
 
-#: includes/paralog_attendance.php:174
+#: includes/paralog_attendance.php:175
 msgid "Fiche de présence"
 msgstr "Fiche de présence"
 
-#: includes/paralog_attendance.php:210
+#: includes/paralog_attendance.php:211
 msgid "La date est obligatoire"
 msgstr "La date est obligatoire"
 
-#: includes/paralog_attendance.php:213 includes/paralog_log.php:296
+#: includes/paralog_attendance.php:214 includes/paralog_log.php:296
 msgid "Le nom du pilote est obligatoire"
 msgstr "Le nom du pilote est obligatoire"
 
-#: includes/paralog_attendance.php:216
+#: includes/paralog_attendance.php:217
 msgid "Le choix de présence est obligatoire"
 msgstr "Le choix de présence est obligatoire"
 
-#: includes/paralog_attendance.php:229 includes/paralog_attendance.php:336
-#: includes/paralog_attendance.php:354 includes/paralog_attendance.php:365
+#: includes/paralog_attendance.php:230 includes/paralog_attendance.php:337
+#: includes/paralog_attendance.php:355 includes/paralog_attendance.php:366
 #: includes/paralog_person.php:264 includes/paralog_person.php:282
 #: includes/paralog_statistic.php:71 includes/paralog_statistic.php:75
 #: includes/paralog_statistic.php:82 includes/paralog_table.php:211
@@ -277,32 +277,36 @@ msgstr "Le choix de présence est obligatoire"
 msgid "oui"
 msgstr "oui"
 
-#: includes/paralog_attendance.php:230 includes/paralog_attendance.php:367
+#: includes/paralog_attendance.php:231 includes/paralog_attendance.php:368
 #: paralog.php:292
 msgid "peut-être"
 msgstr "peut-être"
 
-#: includes/paralog_attendance.php:231 includes/paralog_attendance.php:366
+#: includes/paralog_attendance.php:232 includes/paralog_attendance.php:367
 #: includes/paralog_person.php:162 includes/paralog_person.php:283
 #: includes/paralog_statistic.php:79 includes/paralog_statistic.php:86
 #: paralog.php:245 paralog.php:246 paralog.php:291
 msgid "non"
 msgstr "non"
 
-#: includes/paralog_attendance.php:232 includes/paralog_attendance.php:277
-#: includes/paralog_attendance.php:320
-msgid "ne se prononce pas"
-msgstr "ne se prononce pas"
+#: includes/paralog_attendance.php:233 includes/paralog_attendance.php:278
+#| msgid "ne se prononce pas"
+msgid "ne se prononce pas encore"
+msgstr "ne se prononce pas encore"
 
-#: includes/paralog_attendance.php:242
+#: includes/paralog_attendance.php:243
 msgid "Pilotes"
 msgstr "Pilotes"
 
-#: includes/paralog_attendance.php:243
+#: includes/paralog_attendance.php:244
 msgid "Treuilleurs"
 msgstr "Treuilleurs"
 
-#: includes/paralog_attendance.php:401
+#: includes/paralog_attendance.php:321
+msgid "ne se prononce pas"
+msgstr "ne se prononce pas"
+
+#: includes/paralog_attendance.php:402
 msgid "Serez-vous présent ?"
 msgstr "Serez-vous présent ?"
 
@@ -452,7 +456,6 @@ msgid "lien vers la fiche pilote pour modification de paramètres."
 msgstr "lien vers la fiche pilote pour modification de paramètres."
 
 #: includes/paralog_options.php:125
-#| msgid "Envoyer un rappel pour demain"
 msgid "Envoyer un rappel pour le "
 msgstr "Envoyer un rappel pour le "
 
