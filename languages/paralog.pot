@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Paralog\n"
-"POT-Creation-Date: 2019-04-29 19:04+0200\n"
+"POT-Creation-Date: 2019-04-30 09:02+0200\n"
 "PO-Revision-Date: 2018-01-02 20:13+0100\n"
 "Last-Translator: Thierry Brouard <thierry@brouard.pro>\n"
 "Language-Team: \n"
@@ -115,7 +115,7 @@ msgstr ""
 
 #: includes/paralog_activity.php:289 includes/paralog_attendance.php:194
 #: includes/paralog_line.php:217 includes/paralog_log.php:275
-#: includes/paralog_options.php:120 includes/paralog_person.php:239
+#: includes/paralog_options.php:121 includes/paralog_person.php:239
 #: includes/paralog_site.php:207
 msgid "Enregistrer"
 msgstr ""
@@ -411,195 +411,195 @@ msgstr ""
 msgid "Paramètres mis à jour"
 msgstr ""
 
-#: includes/paralog_options.php:69
-msgid "Rappel envoyé"
+#: includes/paralog_options.php:70
+msgid "rappel(s) envoyé(s)"
 msgstr ""
 
-#: includes/paralog_options.php:71
+#: includes/paralog_options.php:72
 msgid "Un problème empeche l'envoi de l'e-mail"
 msgstr ""
 
-#: includes/paralog_options.php:86
+#: includes/paralog_options.php:87
 msgid "Paramètre"
 msgstr ""
 
-#: includes/paralog_options.php:95 paralog.php:438
+#: includes/paralog_options.php:96 paralog.php:438
 msgid "Réglages"
 msgstr ""
 
-#: includes/paralog_options.php:97
+#: includes/paralog_options.php:98
 msgid "Vous pouvez utiliser des variables pour un traitement dynamique de l'information dans le sujet ou le message de votre e-mail."
 msgstr ""
 
-#: includes/paralog_options.php:99
+#: includes/paralog_options.php:100
 msgid "la date du lendemain."
 msgstr ""
 
-#: includes/paralog_options.php:101
+#: includes/paralog_options.php:102
 msgid "lien vers le formulaire de saisie pré-rempli."
 msgstr ""
 
-#: includes/paralog_options.php:103
+#: includes/paralog_options.php:104
 msgid "lien vers la fiche pilote pour modification de paramètres."
 msgstr ""
 
-#: includes/paralog_options.php:124
+#: includes/paralog_options.php:125
 msgid "Envoyer un rappel pour le "
 msgstr ""
 
-#: includes/paralog_options.php:141
+#: includes/paralog_options.php:142
 msgid "Le début d'activité est nécessaire"
 msgstr ""
 
-#: includes/paralog_options.php:145
+#: includes/paralog_options.php:146
 msgid "La fin d'activité est nécessaire"
 msgstr ""
 
-#: includes/paralog_options.php:239
+#: includes/paralog_options.php:243
 msgid "Lundi"
 msgstr ""
 
-#: includes/paralog_options.php:240
+#: includes/paralog_options.php:244
 msgid "Mardi"
 msgstr ""
 
-#: includes/paralog_options.php:241
+#: includes/paralog_options.php:245
 msgid "Mercredi"
 msgstr ""
 
-#: includes/paralog_options.php:242
+#: includes/paralog_options.php:246
 msgid "Jeudi"
 msgstr ""
 
-#: includes/paralog_options.php:243
+#: includes/paralog_options.php:247
 msgid "Vendredi"
 msgstr ""
 
-#: includes/paralog_options.php:244
+#: includes/paralog_options.php:248
 msgid "Samedi"
 msgstr ""
 
-#: includes/paralog_options.php:245
+#: includes/paralog_options.php:249
 msgid "Dimanche"
 msgstr ""
 
-#: includes/paralog_options.php:248
+#: includes/paralog_options.php:252
 msgid "00:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:249
+#: includes/paralog_options.php:253
 msgid "01:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:250
+#: includes/paralog_options.php:254
 msgid "02:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:251
+#: includes/paralog_options.php:255
 msgid "03:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:252
+#: includes/paralog_options.php:256
 msgid "04:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:253
+#: includes/paralog_options.php:257
 msgid "05:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:254
+#: includes/paralog_options.php:258
 msgid "06:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:255
+#: includes/paralog_options.php:259
 msgid "07:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:256
+#: includes/paralog_options.php:260
 msgid "08:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:257
+#: includes/paralog_options.php:261
 msgid "09:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:258
+#: includes/paralog_options.php:262
 msgid "10:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:259
+#: includes/paralog_options.php:263
 msgid "11:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:260
+#: includes/paralog_options.php:264
 msgid "12:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:261
+#: includes/paralog_options.php:265
 msgid "13:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:262
+#: includes/paralog_options.php:266
 msgid "14:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:263
+#: includes/paralog_options.php:267
 msgid "15:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:264
+#: includes/paralog_options.php:268
 msgid "16:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:265
+#: includes/paralog_options.php:269
 msgid "17:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:266
+#: includes/paralog_options.php:270
 msgid "18:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:267
+#: includes/paralog_options.php:271
 msgid "19:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:268
+#: includes/paralog_options.php:272
 msgid "20:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:269
+#: includes/paralog_options.php:273
 msgid "21:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:270
+#: includes/paralog_options.php:274
 msgid "22:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:271
+#: includes/paralog_options.php:275
 msgid "23:00 UTC"
 msgstr ""
 
-#: includes/paralog_options.php:278
+#: includes/paralog_options.php:282
 msgid "Date de début d'activité"
 msgstr ""
 
-#: includes/paralog_options.php:287
+#: includes/paralog_options.php:291
 msgid "Date de fin d'activité"
 msgstr ""
 
-#: includes/paralog_options.php:296
+#: includes/paralog_options.php:300
 msgid "Jour du rappel"
 msgstr ""
 
-#: includes/paralog_options.php:312
+#: includes/paralog_options.php:316
 msgid "Heure du rappel"
 msgstr ""
 
-#: includes/paralog_options.php:328
+#: includes/paralog_options.php:332
 msgid "Sujet de rappel"
 msgstr ""
 
-#: includes/paralog_options.php:337
+#: includes/paralog_options.php:341
 msgid "Message de rappel"
 msgstr ""
 
