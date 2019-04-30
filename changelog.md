@@ -2,6 +2,15 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.10] - 2019-04-30
+## Modification
+- Ajout de required
+- Arrangement de code
+
+## [1.6.9] - 2019-04-30
+## Ajout
+- Ajout d'un bouton nouveau décollage
+
 ## [1.6.8] - 2019-04-30
 ## Correction
 - Affichage de la vue des présences groupées par date
