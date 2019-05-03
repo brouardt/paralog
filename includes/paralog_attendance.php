@@ -84,7 +84,7 @@ class Paralog_Attendance extends Paralog_Table
 
         $this->items = $wpdb->get_results($query, ARRAY_A);
 
-        $total_items = $wpdb->get_var("SELECT COUNT(*) FROM `$table` GROUP BY `date`");
+        $total_items = $wpdb->get_var("SELECT COUNT(DISTINCT(`date`)) FROM `$table`");
 
         $this->set_pagination_args(array(
             'total_items' => $total_items,
