@@ -2,6 +2,18 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.13] - 2019-05-04
+## Ajout
+- Affichage des personnes non abonnés aux présences pilotes
+
+## [1.6.12] - 2019-05-03
+## Correction de bug
+- Mauvais calcul du nombre de présence
+
+## [1.6.11.1] - 2019-05-03
+## Wording
+- Modification du texte 'Once Weekly' par '1 fois par semaine'
+
 ## [1.6.11] - 2019-04-30
 # Modification
 - Tri de la vue des présences par date décroissante (défaut) 

@@ -294,21 +294,21 @@ class Paralog_Activity extends Paralog_Table
 			<?php if ( ! empty( $information ) ): ?>
                 <div id="information" class="notice notice-info is-dismissible">
                     <p>
-                        <?php echo esc_html( $information ); ?>
+						<?php echo esc_html( $information ); ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $notice ) ): ?>
                 <div id="notice" class="error">
                     <p>
-                        <?php echo $notice; ?>
+						<?php echo $notice; ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $message ) ): ?>
                 <div id="message" class="updated">
                     <p>
-                        <?php echo $message; ?>
+						<?php echo $message; ?>
                     </p>
                 </div>
 			<?php endif; ?>

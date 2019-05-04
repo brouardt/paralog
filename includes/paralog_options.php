@@ -26,7 +26,7 @@ class Paralog_Options
 		if ( ! isset( $schedules[ self::RECURRENCE ] ) ) {
 			$schedules[ self::RECURRENCE ] = array(
 				'interval' => 3600 * 24 * 7, // 3600s = 1h x 24h x 7j
-				'display' => 'Weekly',
+				'display' => __( 'Une fois par semaine', PL_DOMAIN )
 			);
 		}
 
