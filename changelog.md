@@ -2,6 +2,10 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.13] - 2019-05-04
+## Ajout
+- Affichage des personnes non abonnés aux présences pilotes
+
 ## [1.6.12] - 2019-05-03
 ## Correction de bug
 - Mauvais calcul du nombre de présence

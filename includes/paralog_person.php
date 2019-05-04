@@ -143,6 +143,7 @@ class Paralog_Person extends Paralog_Table
 			'licence' => __( "Licence", PL_DOMAIN ),
 			'winchman' => __( "Treuilleur", PL_DOMAIN ),
 			'winchman_type' => __( "Statut treuilleur", PL_DOMAIN ),
+			'raise' => __( 'Abo. présence', PL_DOMAIN )
 		) );
 
 		return $columns;
@@ -156,6 +157,7 @@ class Paralog_Person extends Paralog_Table
 			'licence' => array( 'licence', false ),
 			'winchman' => array( 'winchman', false ),
 			'winchman_type' => array( 'winchman_type', false ),
+			'raise' => array( 'raise', true ),
 		);
 
 		return $sortable_columns;
@@ -250,14 +252,14 @@ class Paralog_Person extends Paralog_Table
 			<?php if ( ! empty( $notice ) ): ?>
                 <div id="notice" class="error">
                     <p>
-                        <?php echo $notice; ?>
+						<?php echo $notice; ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $message ) ): ?>
                 <div id="message" class="updated">
                     <p>
-                        <?php echo $message; ?>
+						<?php echo $message; ?>
                     </p>
                 </div>
 			<?php endif; ?>
@@ -449,6 +451,8 @@ class Paralog_Person extends Paralog_Table
 			case 'winchman':
 			case 'winchman_type':
 				return $item[ $column_name ];
+			case 'raise':
+				return ( $item[ $column_name ] == 1 ) ? __( 'Oui', PL_DOMAIN ) : __( 'Non', PL_DOMAIN );
 			default:
 				return print_r( $item, true ); //Show the whole array for troubleshooting purposes
 		}

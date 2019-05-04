@@ -212,14 +212,14 @@ class Paralog_Site extends Paralog_Table
 			<?php if ( ! empty( $notice ) ): ?>
                 <div id="notice" class="error">
                     <p>
-                        <?php echo $notice; ?>
+						<?php echo $notice; ?>
                     </p>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty( $message ) ): ?>
                 <div id="message" class="updated">
                     <p>
-                        <?php echo $message; ?>
+						<?php echo $message; ?>
                     </p>
                 </div>
 			<?php endif; ?>
@@ -266,7 +266,7 @@ class Paralog_Site extends Paralog_Table
             <tr class="form-field">
                 <th valign="top" scope="row">
                     <label for="name">
-                        <?php _e( 'Nom du site', PL_DOMAIN ); ?>
+						<?php _e( 'Nom du site', PL_DOMAIN ); ?>
                     </label>
                 </th>
                 <td>
@@ -280,7 +280,7 @@ class Paralog_Site extends Paralog_Table
             <tr class="form-field">
                 <th valign="top" scope="row">
                     <label for="message">
-                        <?php _e( 'Message du site', PL_DOMAIN ); ?>
+						<?php _e( 'Message du site', PL_DOMAIN ); ?>
                     </label>
                 </th>
                 <td>
