@@ -36,8 +36,6 @@ class Paralog_Options
 		$notice = '';
 
 		$default = array(
-//			'activity_start' => null,
-//			'activity_end' => null,
 			'activity' => 1,
 			'raise_day' => 'Friday',
 			'raise_time' => '12:00 UTC',
@@ -144,22 +142,17 @@ class Paralog_Options
 
 	private function form_validate( $item )
 	{
-		/*$messages = array();
+		$messages = array();
 
-		if ( empty( $item['activity_start'] ) ) {
-			$messages[] = __( "Le début d'activité est nécessaire", PL_DOMAIN );
-		}
-
-		if ( empty( $item['activity_end'] ) ) {
-			$messages[] = __( "La fin d'activité est nécessaire", PL_DOMAIN );
-		}
+		if( $item['activity'] == '' ) {
+            $messages[] = __( "Le rappel est à définir", PL_DOMAIN );
+        }
 
 		if ( empty( $messages ) ) {
 			return true;
 		}
 
-		return implode( '<br />', $messages );*/
-		return true;
+		return implode( '<br />', $messages );
 	}
 
 	public static function remove_cron()
@@ -190,11 +183,6 @@ class Paralog_Options
 
 		$options = get_option( PL_DOMAIN );
 
-//		$start_period = new DateTime( $options['activity_start'] );
-//		$now = new DateTime();
-//		$end_period = new DateTime( $options['activity_end'] );
-
-//		if ( $now >= $start_period && $now <= $end_period ) {
 		if ( $options['activity'] == 1 ) {
 			$table = Paralog::table_name( 'persons' );
 			$query = "SELECT " .
@@ -296,28 +284,6 @@ class Paralog_Options
 		?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
-            <!--<tr class="form-field">
-                <th valign="top" scope="row">
-                    <label for="activity_start">
-						<?php /*_e( "Date de début d'activité", PL_DOMAIN ); */?>
-                    </label>
-                </th>
-                <td>
-                    <input id="activity_start" name="activity_start" type="date"
-                           value="<?php /*echo esc_attr( $item['activity_start'] ) */?>" class="code" required/>
-                </td>
-            </tr>
-            <tr class="form-field">
-                <th valign="top" scope="row">
-                    <label for="activity_end">
-						<?php /*_e( "Date de fin d'activité", PL_DOMAIN ) */?>
-                    </label>
-                </th>
-                <td>
-                    <input id="activity_end" name="activity_end" type="date"
-                           value="<?php /*echo esc_attr( $item['activity_end'] ) */?>" class="code" required/>
-                </td>
-            </tr>-->
             <tr>
                 <th valign="top" scope="row">
                     <label>
@@ -327,10 +293,14 @@ class Paralog_Options
                 <td>
                     <input id="activity_1" name="activity" type="radio"
                            value="1" <?php echo ($item['activity'] == 1 ? 'selected': ''); ?> class="code" />
-                    &nbsp;<label for="activity_1"><?php _e('Oui', PL_DOMAIN); ?></label>
+                    <label for="activity_1">
+                        <?php _e('Oui', PL_DOMAIN); ?>
+                    </label>
                     <input id="activity_0" name="activity" type="radio"
                            value="0" <?php echo ($item['activity'] == 0 ? 'selected': ''); ?> class="code" />
-                    &nbsp;<label for="activity_0"><?php _e('Non', PL_DOMAIN); ?></label>
+                    <label for="activity_0">
+                        <?php _e('Non', PL_DOMAIN); ?>
+                    </label>
                 </td>
             </tr>
             <tr class="form-field">
