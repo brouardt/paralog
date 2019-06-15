@@ -8,7 +8,7 @@
  * Plugin Name:       Paralog
  * Plugin URI:        https://thierry.brouard.pro/2018/01/paralog/
  * Description:       Gestion des journaux de décollages / treuillés avec les sites, les lignes, les pilotes, les élèves et les treuilleurs
- * Version:           1.6.13
+ * Version:           1.6.14
  * Author:            Thierry Brouard <thierry@brouard.pro>
  * Author URI:        https://thierry.brouard.pro/
  * License:           GPL-2.0+
@@ -37,7 +37,7 @@ spl_autoload_register( function ( $class ) {
 } );
 
 if ( ! class_exists( 'Paralog' ) ) {
-	define( 'PL_VERSION', '1.6.13' );
+	define( 'PL_VERSION', '1.6.14' );
 	define( 'PL_DB_VERSION', '2.5' );
 	define( 'PL_DOMAIN', 'paralog' );
 	define( 'PL_ADMIN_SLUG', 'paralog-admin' );
@@ -60,9 +60,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			'attendances',
 		);
 
-		/**
-		 * @name __construct
-		 */
 		public function __construct()
 		{
 			$this->plugin_dir = untrailingslashit(
@@ -90,17 +87,11 @@ if ( ! class_exists( 'Paralog' ) ) {
 			register_uninstall_hook( __FILE__, array( __CLASS__, 'on_uninstall' ) );
 		}
 
-		/**
-		 * @name lang
-		 */
 		public function load_language()
 		{
 			load_plugin_textdomain( PL_DOMAIN, false, $this->plugin_dir . '/languages' );
 		}
 
-		/**
-		 * @name register_styles
-		 */
 		public function register_styles()
 		{
 			wp_register_style( PL_DOMAIN, plugins_url( 'paralog/css/style.css' ) );
@@ -122,7 +113,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 		}
 
 		/**
-		 * @name on_activation
 		 * @global object $wpdb
 		 * @global string $charset_collate
 		 */
@@ -321,9 +311,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			Paralog_Options::add_cron();
 		}
 
-		/**
-		 * @name on_deactivation
-		 */
 		public static function on_deactivation()
 		{
 			$options = get_option( PL_DOMAIN );
@@ -337,7 +324,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 		}
 
 		/**
-		 * @name on_uninstall
 		 * @global object $wpdb
 		 */
 		public static function on_uninstall()
@@ -352,9 +338,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			delete_option( PL_DOMAIN );
 		}
 
-		/**
-		 * @name paralog_menu
-		 */
 		public function paralog_menu()
 		{
 			$allowed_group = 'edit_posts';
@@ -503,7 +486,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 		}
 
 		/**
-		 * @name admin_paralog_bar_menu
 		 * @global object wp_admin_bar
 		 */
 		public function admin_paralog_bar_menu()
@@ -519,7 +501,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 		}
 
 		/**
-		 * @name about
 		 * @global object $wpdb
 		 */
 		public function about()
@@ -544,9 +525,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_logs
-		 */
 		public function list_logs()
 		{
 			$class = new Paralog_Log();
@@ -587,9 +565,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_sites
-		 */
 		public function list_sites()
 		{
 			$class = new Paralog_Site();
@@ -630,9 +605,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_lines
-		 */
 		public function list_lines()
 		{
 			$class = new Paralog_Line();
@@ -673,9 +645,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_persons
-		 */
 		public function list_persons()
 		{
 			$class = new Paralog_Person();
@@ -716,9 +685,6 @@ if ( ! class_exists( 'Paralog' ) ) {
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_activities
-		 */
 		public function list_activities()
 		{
 			$class = new Paralog_Activity();
@@ -753,18 +719,12 @@ if ( ! class_exists( 'Paralog' ) ) {
 			<?php
 		}
 
-		/**
-		 * @name form_activity
-		 */
 		public function form_activity()
 		{
 			$class = new Paralog_Activity();
 			$class->form_edit();
 		}
 
-		/**
-		 * @name list_attendances
-		 */
 		public function list_attendances()
 		{
 			$class = new Paralog_Attendance();
@@ -799,18 +759,12 @@ if ( ! class_exists( 'Paralog' ) ) {
 			<?php
 		}
 
-		/**
-		 * @name form_attendance
-		 */
 		public function form_attendance()
 		{
 			$class = new Paralog_Attendance();
 			$class->form_edit();
 		}
 
-		/**
-		 * @name add_options
-		 */
 		public static function add_options()
 		{
 			$option = 'per_page';

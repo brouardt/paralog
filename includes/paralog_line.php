@@ -3,9 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	wp_die( 'No direct access allowed', 'Security' );
 }
 
-if ( ! class_exists( 'Paralog_Table' ) ) {
+/*if ( ! class_exists( 'Paralog_Table' ) ) {
 	require_once plugin_dir_path( __FILE__ ) . '/paralog_table.php';
-}
+}*/
 
 /**
  * @package Paralog_Line

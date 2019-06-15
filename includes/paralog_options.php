@@ -15,10 +15,7 @@ class Paralog_Options
 
 
 	/**
-	 * @name add_weekly_to_cron
-	 *
 	 * @param $schedules
-	 *
 	 * @return array
 	 */
 	public static function add_weekly_to_cron( $schedules )
@@ -39,8 +36,9 @@ class Paralog_Options
 		$notice = '';
 
 		$default = array(
-			'activity_start' => null,
-			'activity_end' => null,
+//			'activity_start' => null,
+//			'activity_end' => null,
+			'activity' => 1,
 			'raise_day' => 'Friday',
 			'raise_time' => '12:00 UTC',
 			'raise_subject' => '',
@@ -135,7 +133,7 @@ class Paralog_Options
 								<?php _e( 'Envoyer un rappel pour le ', PL_DOMAIN ); ?>
                             </button>
                             <input type="date" name="raise_date" value="<?php echo esc_attr( $date_raise_min ); ?>"
-                                   min="<?php echo esc_attr( $date_raise_min ); ?>"/>
+                                   min="<?php echo esc_attr( $date_raise_min ); ?>" />
                         </div>
                     </div>
                 </div>
@@ -146,7 +144,7 @@ class Paralog_Options
 
 	private function form_validate( $item )
 	{
-		$messages = array();
+		/*$messages = array();
 
 		if ( empty( $item['activity_start'] ) ) {
 			$messages[] = __( "Le début d'activité est nécessaire", PL_DOMAIN );
@@ -160,7 +158,8 @@ class Paralog_Options
 			return true;
 		}
 
-		return implode( '<br />', $messages );
+		return implode( '<br />', $messages );*/
+		return true;
 	}
 
 	public static function remove_cron()
@@ -191,11 +190,12 @@ class Paralog_Options
 
 		$options = get_option( PL_DOMAIN );
 
-		$start_period = new DateTime( $options['activity_start'] );
-		$now = new DateTime();
-		$end_period = new DateTime( $options['activity_end'] );
+//		$start_period = new DateTime( $options['activity_start'] );
+//		$now = new DateTime();
+//		$end_period = new DateTime( $options['activity_end'] );
 
-		if ( $now >= $start_period && $now <= $end_period ) {
+//		if ( $now >= $start_period && $now <= $end_period ) {
+		if ( $options['activity'] == 1 ) {
 			$table = Paralog::table_name( 'persons' );
 			$query = "SELECT " .
 			         "`person_id`, " .
@@ -296,32 +296,47 @@ class Paralog_Options
 		?>
         <table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
             <tbody>
-            <tr class="form-field">
+            <!--<tr class="form-field">
                 <th valign="top" scope="row">
                     <label for="activity_start">
-						<?php _e( "Date de début d'activité", PL_DOMAIN ); ?>
+						<?php /*_e( "Date de début d'activité", PL_DOMAIN ); */?>
                     </label>
                 </th>
                 <td>
                     <input id="activity_start" name="activity_start" type="date"
-                           value="<?php echo esc_attr( $item['activity_start'] ) ?>" class="code" required/>
+                           value="<?php /*echo esc_attr( $item['activity_start'] ) */?>" class="code" required/>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
                     <label for="activity_end">
-						<?php _e( "Date de fin d'activité", PL_DOMAIN ) ?>
+						<?php /*_e( "Date de fin d'activité", PL_DOMAIN ) */?>
                     </label>
                 </th>
                 <td>
                     <input id="activity_end" name="activity_end" type="date"
-                           value="<?php echo esc_attr( $item['activity_end'] ) ?>" class="code" required/>
+                           value="<?php /*echo esc_attr( $item['activity_end'] ) */?>" class="code" required/>
+                </td>
+            </tr>-->
+            <tr>
+                <th valign="top" scope="row">
+                    <label>
+			            <?php _e( "Rappel de l'activité", PL_DOMAIN ); ?>
+                    </label>
+                </th>
+                <td>
+                    <input id="activity_1" name="activity" type="radio"
+                           value="1" <?php echo ($item['activity'] == 1 ? 'selected': ''); ?> class="code" />
+                    &nbsp;<label for="activity_1"><?php _e('Oui', PL_DOMAIN); ?></label>
+                    <input id="activity_0" name="activity" type="radio"
+                           value="0" <?php echo ($item['activity'] == 0 ? 'selected': ''); ?> class="code" />
+                    &nbsp;<label for="activity_0"><?php _e('Non', PL_DOMAIN); ?></label>
                 </td>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
                     <label for="raise_day">
-						<?php _e( "Jour du rappel", PL_DOMAIN ) ?>
+						<?php _e( "Jour du rappel", PL_DOMAIN ); ?>
                     </label>
                 </th>
                 <td>

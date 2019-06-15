@@ -3,9 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	wp_die( 'No direct access allowed', 'Security' );
 }
 
-if ( ! class_exists( 'Paralog_Table' ) ) {
+/*if ( ! class_exists( 'Paralog_Table' ) ) {
 	require_once plugin_dir_path( __FILE__ ) . '/paralog_table.php';
-}
+}*/
 
 /**
  * @package Paralog_Activity
@@ -352,14 +352,12 @@ class Paralog_Activity extends Paralog_Table
 	}
 
 	/**
-	 * @name person_activity
-	 *
 	 * @param Integer id_activity
 	 * @param Integer id_person
 	 * @param String type
 	 * @param String name_type
 	 *
-	 * @return Array
+	 * @return array
 	 */
 	private function person_activity( $id_activity, $id_person, $type, $name_type )
 	{
@@ -432,7 +430,6 @@ class Paralog_Activity extends Paralog_Table
 						<?php endforeach; ?>
                     </select>
                 </td>
-            </tr>
             </tr>
             <tr class="form-field">
                 <th valign="top" scope="row">
@@ -710,11 +707,9 @@ class Paralog_Activity extends Paralog_Table
 	}
 
 	/**
-	 * @name instructor_list
+	 * @param integer id
 	 *
-	 * @param Integer id
-	 *
-	 * @return Array
+	 * @return array
 	 */
 	private function instructor_list( $id )
 	{
@@ -749,11 +744,9 @@ class Paralog_Activity extends Paralog_Table
 	}
 
 	/**
-	 * @name plateform_list
-	 *
 	 * @param Integer id
 	 *
-	 * @return Array
+	 * @return array
 	 */
 	private function plateform_list( $id )
 	{
@@ -761,11 +754,9 @@ class Paralog_Activity extends Paralog_Table
 	}
 
 	/**
-	 * @name winchman_list
-	 *
 	 * @param Integer id
 	 *
-	 * @return Array
+	 * @return array
 	 */
 	private function winchman_list( $id )
 	{

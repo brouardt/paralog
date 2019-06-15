@@ -3,9 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	wp_die( 'No direct access allowed', 'Security' );
 }
 
-if ( ! class_exists( 'Paralog_Table' ) ) {
+/*if ( ! class_exists( 'Paralog_Table' ) ) {
 	require_once plugin_dir_path( __FILE__ ) . '/paralog_table.php';
-}
+}*/
 
 /**
  * @package Paralog_Log
@@ -345,8 +345,6 @@ class Paralog_Log extends Paralog_Table
 	}
 
 	/**
-	 * @name get_cookie
-	 *
 	 * @param string $name
 	 * @param mixed $default
 	 *
@@ -492,9 +490,6 @@ class Paralog_Log extends Paralog_Table
 		<?php
 	}
 
-	/**
-	 * @name define_cookies
-	 */
 	public function define_cookies()
 	{
 		$fields = array( 'site_name', 'line_name', 'winchman_name' );
@@ -510,8 +505,6 @@ class Paralog_Log extends Paralog_Table
 	}
 
 	/**
-	 * @name set_cookie
-	 *
 	 * @param string $name
 	 * @param mixed $value
 	 */

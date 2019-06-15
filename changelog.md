@@ -2,6 +2,11 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.14] - 2019-06-15
+## Modification
+- Désactivation des limites d'alertes de présence pilote par date
+- Ajout d'un état on/off de rappel de présence pilote.
+
 ## [1.6.13] - 2019-05-04
 ## Ajout
 - Affichage des personnes non abonnés aux présences pilotes
