@@ -291,14 +291,14 @@ class Paralog_Options
                     </label>
                 </th>
                 <td>
-                    <input id="activity_1" name="activity" type="radio"
-                           value="1" <?php echo ($item['activity'] == 1 ? 'selected': ''); ?> class="code" />
-                    <label for="activity_1">
+                    <label>
+                        <input name="activity" type="radio"
+                               value="1" <?php echo ($item['activity'] == 1 ? 'checked': ''); ?> class="code" />
                         <?php _e('Oui', PL_DOMAIN); ?>
                     </label>
-                    <input id="activity_0" name="activity" type="radio"
-                           value="0" <?php echo ($item['activity'] == 0 ? 'selected': ''); ?> class="code" />
-                    <label for="activity_0">
+                    <label>
+                        <input name="activity" type="radio"
+                               value="0" <?php echo ($item['activity'] == 0 ? 'checked': ''); ?> class="code" />
                         <?php _e('Non', PL_DOMAIN); ?>
                     </label>
                 </td>
@@ -313,7 +313,7 @@ class Paralog_Options
                     <select id="raise_day" name="raise_day">
 						<?php foreach ( $days as $key => $value ): ?>
                             <option value="<?php echo esc_attr( $key ); ?>"
-								<?php echo( $key == $item['raise_day'] ? 'selected' : '' ); ?>>
+								<?php echo ( $key == $item['raise_day'] ? 'selected' : '' ); ?>>
 								<?php echo esc_html( $value ); ?>
                             </option>
 						<?php endforeach; ?>
@@ -330,7 +330,7 @@ class Paralog_Options
                     <select id="raise_time" name="raise_time">
 						<?php foreach ( $times as $key => $value ): ?>
                             <option value="<?php echo esc_attr( $key ); ?>"
-								<?php echo( $key == $item['raise_time'] ? 'selected' : '' ); ?>>
+								<?php echo ( $key == $item['raise_time'] ? 'selected' : '' ); ?>>
 								<?php echo esc_html( $value ); ?>
                             </option>
 						<?php endforeach; ?>
