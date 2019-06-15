@@ -2,6 +2,14 @@
 Contributors: brouardt  
 Author URI: https://github.com/brouardt/paralog  
 
+## [1.6.16] - 2019-06-15
+## Correction
+- checked au lieu de selected sur un radio
+
+## [1.6.15] - 2019-06-15
+## Modification
+- Nettoyage + version
+
 ## [1.6.14] - 2019-06-15
 ## Modification
 - Désactivation des limites d'alertes de présence pilote par date
