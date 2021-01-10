@@ -146,7 +146,7 @@ class Paralog_Activity extends Paralog_Table
 
 		$table = $this->getTable();
 		$table_ap = Paralog::table_name( 'activities_persons' );
-		$table_si = PAralog::table_name( 'sites' );
+		$table_si = Paralog::table_name( 'sites' );
 		$primary = $this->getPrimary();
 
 		$message = '';
